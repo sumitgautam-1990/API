@@ -43,6 +43,15 @@ namespace GnssMetadata
 			_comments( rhs._comments), _artifacts(rhs._artifacts)
 		{}
 
+		const AttributedObject& operator=( const AttributedObject& rhs)
+		{
+			_id = rhs._id;
+			_bIsReference = rhs._bIsReference;
+			_comments = rhs._comments;
+			_artifacts = rhs._artifacts;
+			return *this;
+		}
+
 		void Id( const String& id )
 		{
 			_id = id;
@@ -78,6 +87,24 @@ namespace GnssMetadata
 		AnyUriList& Artifacts( ) 
 		{
 			return _artifacts;
+		}
+
+		/**
+		 * Adds a comment to the object.
+		 */
+		void AddComment( const String& sComment, Comment::CommentFormat fmt = Comment::text )
+		{
+			Comment cmt( sComment, fmt);
+			_comments.push_back( cmt);
+		}
+
+		/**
+		 * Adds an artifact to the object.
+		 */
+		void AddArtifact( const String& sArtifact)
+		{
+			AnyUri uri( sArtifact);
+			_artifacts.push_back( uri);
 		}
 
 		/**

@@ -58,12 +58,26 @@ namespace GnssMetadata
 			
 		}
 
+		SubFrame( size_t size, WordEndian endian = Undefined, size_t words =1, WordAlignment align = Unspecified)
+			: _alignment( align), _endian( endian), _size(size), _words(words)
+		{
+		}
+
 		SubFrame( const SubFrame& rhs) 
 		: _alignment( rhs._alignment ), _endian(rhs._endian), 
 			_size(rhs._size), _words( rhs._words)
 		{
 			
 		}
+
+		/**
+		 * Returns true if Subframe state is not in default configuration.
+		 */
+		bool IsDefined() const 
+		{
+			return _alignment != Unspecified || _endian != Undefined || _size > 0;
+		}
+
 		/**
 		 * Gets the word alignment for the subframe.
 		 */

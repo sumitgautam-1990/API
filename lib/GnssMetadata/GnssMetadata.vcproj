@@ -287,6 +287,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\AnyUriTranslator.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\AttributedObject.cpp"
 				>
 			</File>
@@ -307,11 +311,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\DatafileTranslator.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Date.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Duration.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\DurationTranslator.cpp"
 				>
 			</File>
 			<File
@@ -335,11 +347,31 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\MetadataTranslator.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\OscillatorTranslator.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\RfConfigTranslator.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Session.cpp"
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\SessionTranslator.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Stream.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\StreamTranslator.cpp"
 				>
 			</File>
 			<File
@@ -348,6 +380,10 @@
 			</File>
 			<File
 				RelativePath=".\System.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\SystemTranslator.cpp"
 				>
 			</File>
 			<File
@@ -366,6 +402,10 @@
 			>
 			<File
 				RelativePath="..\..\include\GnssMetadata\AnyUri.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\AnyUriTranslator.h"
 				>
 			</File>
 			<File
@@ -397,11 +437,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\DatafileTranslator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\GnssMetadata\Date.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\include\GnssMetadata\Duration.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\DurationTranslator.h"
 				>
 			</File>
 			<File
@@ -425,7 +473,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\MetadataTranslator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\GnssMetadata\Oscillator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\OscillatorTranslator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\RfConfigTranslator.h"
 				>
 			</File>
 			<File
@@ -437,7 +497,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\SessionTranslator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\GnssMetadata\Stream.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\StreamTranslator.h"
 				>
 			</File>
 			<File
@@ -449,11 +517,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\SystemTranslator.h"
+				>
+			</File>
+			<File
 				RelativePath=".\targetver.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\include\GnssMetadata\Xml\Translator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\XmlDefs.h"
 				>
 			</File>
 			<File

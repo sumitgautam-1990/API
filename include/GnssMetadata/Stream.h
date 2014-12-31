@@ -30,7 +30,7 @@ namespace GnssMetadata
 	/**
 	 * A stream is defined as a series of binary values that are derived from samples by multiple channels packed into a specified frame and subframe format.
 	 */
-	class Stream: AttributedObject
+	class Stream: public AttributedObject
 	{
 		
 	public:
@@ -56,7 +56,8 @@ namespace GnssMetadata
 			
 		};
 	public:
-		Stream( const String& id) : AttributedObject( id){}
+		Stream( const String& id) : AttributedObject( id),
+			_alignment( Undefined), _format( IQ), _packedbits(0), _quantization(8), _rateFactor(1) {}
 		Stream() : _alignment( Undefined), _format( IQ), _packedbits(0), _quantization(8), _rateFactor(1) {}
 		Stream(const Stream& rhs) 
 			: AttributedObject( rhs),
@@ -65,6 +66,23 @@ namespace GnssMetadata
 			_format(rhs._format),_packedbits(rhs._packedbits), 
 			_quantization(rhs._quantization), _rateFactor(rhs._rateFactor)
 		{}	
+
+		const Stream& operator=( const Stream& rhs)
+		{
+			if( &rhs == this)
+				return *this;
+			AttributedObject::operator =(rhs);
+			_alignment = rhs._alignment; 
+			_channel = rhs._channel; 
+			_delayBias = rhs._delayBias; 
+			_encoding = rhs._encoding; 
+			_format = rhs._format;
+			_packedbits = rhs._packedbits; 
+			_quantization = rhs._quantization; 
+			_rateFactor = rhs._rateFactor;
+
+			return *this;
+		}
 
 		StreamAlignment Alignment( ) const
 		{

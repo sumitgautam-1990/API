@@ -36,9 +36,22 @@ namespace GnssMetadata
 		{
 		}
 
+		Frame(size_t countSubFrames, size_t sizeHeader = 0, size_t sizeFooter =0): _count(countSubFrames), 
+			_sizeHeader(sizeHeader), _sizeFooter(sizeFooter)
+		{
+		}
+
 		Frame(const Frame& rhs): _count(rhs._count), 
 			_sizeHeader(rhs._sizeHeader), _sizeFooter(rhs._sizeFooter)
 		{
+		}
+
+		/**
+		 * Returns true if Frame state is not in default configuration.
+		 */
+		bool IsDefined() const 
+		{
+			return _count > 1 || _sizeHeader > 0 || _sizeFooter > 0;
 		}
 
 		/**
