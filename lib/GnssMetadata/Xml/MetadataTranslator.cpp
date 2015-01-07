@@ -16,11 +16,11 @@
  * GNU General Public License for more details.
  */
 
-
+#include "XmlDefs.h"
 #include "MetadataTranslator.h"
 #include <GnssMetadata/Metadata.h>
 #include <GnssMetadata/Xml/XmlProcessor.h>
-#include "XmlDefs.h"
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -30,7 +30,7 @@ using namespace tinyxml2;
 
 /******************************************************************************
 * Metadata Nodes definition
-/*****************************************************************************/
+******************************************************************************/
 NODELIST_BEGIN( _MetadataNodes)
 	NODELIST_ENTRY( "include", TE_ANYURI)
 	NODELIST_ENTRY( "datafile", TE_DATAFILE)
@@ -48,7 +48,7 @@ MetadataTranslator::MetadataTranslator()
 /**
  * Reads a node from the document and parses into metadata.
  */
-bool MetadataTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor )
+bool MetadataTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* /*pAdaptor*/ )
 {
 	//Parse the datafiles
 	bool  bRetVal = true;
@@ -57,10 +57,10 @@ bool MetadataTranslator::OnRead( Context & ctxt, const XMLElement & elem, Access
 
 	bRetVal &= ReadList<AnyUri>(metadata.Includes(), "include", ctxt, elem);
 	bRetVal &= ReadList<DataFile>(metadata.DataFiles(), "datafile", ctxt, elem);
-	bRetVal &= ReadList<Session>(metadata.Sessions(), "session", ctxt, elem);
-	bRetVal &= ReadList<Channel>(metadata.Channels(), "channel", ctxt, elem);
-	bRetVal &= ReadList<System>(metadata.Systems(), "system", ctxt, elem);
-	bRetVal &= ReadList<Stream>(metadata.Streams(), "stream", ctxt, elem);
+    bRetVal &= ReadList<Session>(metadata.Sessions(), "session", ctxt, elem);
+    bRetVal &= ReadList<Channel>(metadata.Channels(), "channel", ctxt, elem);
+    bRetVal &= ReadList<System>(metadata.Systems(), "system", ctxt, elem);
+    bRetVal &= ReadList<Stream>(metadata.Streams(), "stream", ctxt, elem);
 
 	//Parse Artifacts and Comments.
 	bRetVal &= ReadAttributedObject( metadata, ctxt, elem, false);

@@ -56,7 +56,7 @@ namespace GnssMetadata
 			const tinyxml2::XMLElement* pelem = elem.FirstChildElement(pszName); 
 			for( ;pelem != NULL; pelem = pelem->NextSiblingElement(pszName)) 
 			{ 
-				ListAdaptor<typename A> adapt( list ); 
+                ListAdaptor<A> adapt( list );
 				bRetVal &= ReadElement( *(ctxt.pContainer), ctxt, *pelem, &adapt); 
 			} 
 			return bRetVal;
@@ -66,10 +66,11 @@ namespace GnssMetadata
 		 * Helper function writes a list of attributed elements.
 		 */
 		template< typename A>
-		void WriteList( const std::list<A>& list, const char* pszName, Context& ctxt, tinyxml2::XMLElement & elem)
+        void WriteList( const std::list<A>& list, const char* pszName, Context& ctxt, tinyxml2::XMLElement & elem)
 		{
-			std::list<A>::const_iterator iter = list.begin();
-			for(; iter != list.end(); iter++)
+            typename  std::list<A> ::const_iterator iter = list.begin();
+
+            for(; iter != list.end(); iter++)
 			{
 				WriteElement( &(*iter), pszName, ctxt, elem);
 			}

@@ -22,17 +22,9 @@
 using namespace GnssMetadata;
 
 /**
- * Calculates the size of the subframe by calculating the word size and adding the specified padding.
- */
-void CalculateSize( const Datafile* pDatafile, const int bytesPadding = 0 )
-{
-	throw NotImplementedException();
-	
-}
-/**
  * Returns a string representation of the object.
  */
-String SubFrame::toString( const String & sFormat )
+String SubFrame::toString( const String & /*sFormat*/ )
 {
 	return String("Subframe toString not implmented yet.");
 }

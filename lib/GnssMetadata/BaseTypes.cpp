@@ -16,4 +16,4 @@
  */
 
 
-#include "..\..\include\GnssMetadata\BaseTypes.h"
+#include <GnssMetadata/BaseTypes.h>

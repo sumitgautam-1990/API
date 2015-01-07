@@ -20,44 +20,73 @@
 
 using namespace GnssMetadata;
 
-void Example1();
-void Example2();
+void ReadXmlFile(const char* pszFilename);
+void WriteXmlFile(const char* pszFilename);
 
 
-int main(int, char**)
+int main(int argc, char** argv)
 {
-	Example1();
-	Example2();
+    //Get the filename if specified.
+    const char* pszFilename = "141230-gps-4msps.xml";
+    if( argc > 1) pszFilename = argv[1];
+
+    printf("GNSS Metadata XML file translation test\n");
+    printf("\n");
+    printf("Application demonstrates writing and reading an XML file\n");
+    printf("Program creates an metadata file using the API and then parses it.\n");
+    printf("\n");
+    printf("Command line\n");
+    printf("GnssMetadataTestApp [xmlfile (default: '14230-gps-4msps.xml')]\n");
+
+    WriteXmlFile(pszFilename);
+    ReadXmlFile(pszFilename);
 	return 0;
 }
 
 /**
  * Loads and saves a metadata file.   
  */
- void Example1()
+ void ReadXmlFile(const char* pszFilename)
 {
-	Metadata md;
-	XmlProcessor xproc;
-	if( xproc.Load( "testmetadata1.xml", false, md) )
-	{
-		printf("Xml Processed successfully.\n");
+    printf("\nReading GNSS Metadata to xml file: %s\n", pszFilename);
 
-		//Save the metadata to another file.
-		xproc.Save("metadataout.xml", md);
-	}
+	Metadata md;
+    XmlProcessor xproc;
+
+    try
+    {
+        if( xproc.Load( pszFilename, false, md) )
+        {
+            printf("Xml Processed successfully.\n");
+
+
+        }
+    }
+    catch( ApiException& e)
+    {
+        printf("An error occurred while saving the xml file: %s\n", e.what() );
+    }
+    catch( std::exception& ge)
+    {
+        printf("Unknown Exception Occured: %s\n", ge.what() );
+    }
+
+
 }
 
-void Example2()
+void WriteXmlFile(const char* pszFilename)
 {
-	////////////////////////////////
+    printf("\nWriting GNSS Metadata to xml file: %s\n", pszFilename);
+
+    ////////////////////////////////
 	//Define information about the datafile.
 
 	//UTC:    30-Dec-2014 22:38:54
 	//GPS:    1825/254334.906
 	Date dt0( 254334.906, 1825);
 	size_t offset = 588;
-	String sfile = "141230-gps-4msps.bds";
-	String sfilemd = "141230-gps-4msps.xml";
+    String sfile = "141230-gps-4msps.bds";
+    String sfilemd = pszFilename;
 
 	////////////////////////////////
 	//Define the Session and System.

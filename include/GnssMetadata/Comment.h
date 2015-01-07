@@ -41,13 +41,13 @@ namespace GnssMetadata
 		 * Standard constructor.
 		 */
 		Comment( const String& value, CommentFormat format)
-			: _value( value), _format( format)
+			: _format( format), _value( value)
 		{
 			
 		}
 
 		Comment( const Comment& rhs)
-			: _value( rhs._value), _format( rhs._format)
+			: _format( rhs._format), _value( rhs._value)
 		{}
 
 		/**
@@ -61,7 +61,7 @@ namespace GnssMetadata
 		/**
 		 * Sets the comment value and format.
 		 */
-		void Value( const String& value, const CommentFormat format )
+		void Value( const String& value, const CommentFormat /*format*/ )
 		{
 			_value = value;
 		}

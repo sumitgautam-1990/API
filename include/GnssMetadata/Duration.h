@@ -69,14 +69,12 @@ namespace GnssMetadata
 		virtual String toString( const String & sFormat = DefaultFormat );
 
 	private:
-		DurationFormat _format;
-		
 		/**
 		 * The duration  value.
 		 */
 		double _value;
 		
-		
+		DurationFormat _format;		
 	};
 	
 }

@@ -18,6 +18,7 @@
 
 #ifndef XMLDEFS_H_H
 #define XMLDEFS_H_H
+
 #include<list>
 
 #define METADATA_NAMESPACE "http://www.ion.org/XMLSchema/GnssMetadata.xsd"
@@ -88,14 +89,15 @@ namespace GnssMetadata
 			(_pobj->*_func)(rval);
 		}
 	private:
-		fncset _func;
 		Tobj* _pobj; 
+		fncset _func;
+	  
 	};
 
 	template< typename Tobj>
 	struct ListAdaptor : public AccessorAdaptorBase
 	{
-		typedef std::list< typename Tobj> List;
+		typedef std::list< Tobj> List;
 		ListAdaptor( List& list) : _list( list){}
 
 		virtual void set( void* pval)

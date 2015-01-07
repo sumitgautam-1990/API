@@ -27,8 +27,11 @@
 		time_t tv_sec;
 		long tv_nsec;
 	};
+	
+	#define GMTIME( ptm, pt) gmtime_s(ptm, pt)	
 #else
 	#include <time.h>
+	#define GMTIME( ptm, pt) gmtime_r(pt, ptm)
 #endif
 
 
@@ -52,15 +55,15 @@ namespace GnssMetadata
 
 		const Date& operator=( const Date& rhs);
 
-		void TmPtr(struct tm* ptm) const { gmtime_s( ptm, &_dt.tv_sec);}
-		int Year() const 		{ struct tm _tm; gmtime_s(&_tm, &_dt.tv_sec); return _tm.tm_year + 1900;}
-		int Month() const 		{ struct tm _tm; gmtime_s(&_tm, &_dt.tv_sec); return _tm.tm_mon + 1; }
-		int Day() const			{ struct tm _tm; gmtime_s(&_tm, &_dt.tv_sec); return _tm.tm_mday; }
-		int DayOfYear() const	{ struct tm _tm; gmtime_s(&_tm, &_dt.tv_sec); return _tm.tm_yday; }
-		int DayOfWeek() const	{ struct tm _tm; gmtime_s(&_tm, &_dt.tv_sec); return _tm.tm_wday; }
-		int Hour() const		{ struct tm _tm; gmtime_s(&_tm, &_dt.tv_sec); return _tm.tm_hour; }
-		int Minute() const		{ struct tm _tm; gmtime_s(&_tm, &_dt.tv_sec); return _tm.tm_min;  }
-		double Second() const	{ struct tm _tm; gmtime_s(&_tm, &_dt.tv_sec); return _tm.tm_sec;  }
+		void TmPtr(struct tm* ptm) const { GMTIME( ptm, &_dt.tv_sec);}
+		int Year() const 		{ struct tm _tm; GMTIME(&_tm, &_dt.tv_sec); return _tm.tm_year + 1900;}
+		int Month() const 		{ struct tm _tm; GMTIME(&_tm, &_dt.tv_sec); return _tm.tm_mon + 1; }
+		int Day() const			{ struct tm _tm; GMTIME(&_tm, &_dt.tv_sec); return _tm.tm_mday; }
+		int DayOfYear() const	{ struct tm _tm; GMTIME(&_tm, &_dt.tv_sec); return _tm.tm_yday; }
+		int DayOfWeek() const	{ struct tm _tm; GMTIME(&_tm, &_dt.tv_sec); return _tm.tm_wday; }
+		int Hour() const		{ struct tm _tm; GMTIME(&_tm, &_dt.tv_sec); return _tm.tm_hour; }
+		int Minute() const		{ struct tm _tm; GMTIME(&_tm, &_dt.tv_sec); return _tm.tm_min;  }
+		double Second() const	{ struct tm _tm; GMTIME(&_tm, &_dt.tv_sec); return _tm.tm_sec;  }
 
 		/**
 		 * Seconds since GPS 0

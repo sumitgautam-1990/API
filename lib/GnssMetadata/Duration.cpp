@@ -17,7 +17,12 @@
  */
 
 #include <GnssMetadata/Duration.h>
+#include <stdio.h>
 using namespace GnssMetadata;
+
+#if defined (LINUX)
+    #define _snprintf snprintf
+#endif
 
 /**
  *  Returns a string representation of the object.

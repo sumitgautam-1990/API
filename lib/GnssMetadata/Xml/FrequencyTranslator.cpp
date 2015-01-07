@@ -27,9 +27,9 @@ using namespace GnssMetadata;
 using namespace tinyxml2;
 
 static const char* _szfmts[] = {"Hz","MHz", "GHz", "Ratio"};
-Frequency::FrequencyFormat ToFormat( const char* pszFmt)
+static Frequency::FrequencyFormat ToFormat( const char* pszFmt)
 {
-	for( int i = 0; i < sizeof( _szfmts); i++)
+    for( unsigned int i = 0; i < sizeof( _szfmts); i++)
 	{
 		if( strcmp( _szfmts[i], pszFmt) == 0)
 			return (Frequency::FrequencyFormat)i;
@@ -46,7 +46,7 @@ FrequencyTranslator::FrequencyTranslator()
 /**
  * Reads a node from the document and parses into metadata.
  */
-bool FrequencyTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor )
+bool FrequencyTranslator::OnRead( Context & /*ctxt*/, const XMLElement & elem, AccessorAdaptorBase* pAdaptor )
 {
 	//The node as been tested as a Frequency Translator
 	if( pAdaptor != NULL)
@@ -83,7 +83,7 @@ bool FrequencyTranslator::OnRead( Context & ctxt, const XMLElement & elem, Acces
 /**
  * Write the current object 
  */
-void FrequencyTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem )
+void FrequencyTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & /*ctxt*/, tinyxml2::XMLNode & elem )
 {
 	const Frequency* pfreq = dynamic_cast< const Frequency*>(pObject);
 	if( pfreq == NULL) 

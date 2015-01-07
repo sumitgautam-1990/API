@@ -18,6 +18,8 @@
 
 #include <GnssMetadata/Date.h>
 #include <stdio.h>
+#include <string.h>
+#include <math.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 	#include <Windows.h>
@@ -98,7 +100,7 @@ Date::Date(int year, int mon, int day, int hour, int min, double sec)
 : _secLeap(0)
 {
 	_dt.tv_sec = UtcYmdhmsToTime_T(year,mon-1,day,hour,min,(int)sec);
-	_dt.tv_nsec = (long)((sec - (long)sec)*1e9);
+    _dt.tv_nsec = (long)((sec - floor(sec))*BILLION_VALUE);
 }
 Date::Date(time_t time, double fracsec)
 : _secLeap(0)
@@ -112,7 +114,7 @@ Date::Date( double secGps, int wkGps, int secLeap )
 	time_t tsecGps = (time_t) secGps;
 	_dt.tv_sec = (time_t)(wkGps*SECONDS_IN_WEEK) + tsecGps + (time_t) _secLeap;
 	_dt.tv_sec += GPS0;
-	_dt.tv_nsec = (long)((secGps - tsecGps)*1e9);
+    _dt.tv_nsec = (long)((secGps - (double)tsecGps)*BILLION_VALUE);
 }
 
 Date::Date( const char* pszDate)
@@ -121,12 +123,12 @@ Date::Date( const char* pszDate)
 	double sec;
 
 	//2012-10-12T00:06:12.314532
-	_snscanf( pszDate, strlen( pszDate), 
+    sscanf( pszDate,
 		"%d-%d-%dT%d:%d:%lf",
 		&yr, &mo, &day, &hr, &min, &sec);
 
 	_dt.tv_sec = UtcYmdhmsToTime_T(yr,mo-1,day,hr,min,(int)sec);
-	_dt.tv_nsec = (long)((sec - (long)sec)*1e9);
+    _dt.tv_nsec = (long)((sec - floor(sec))*BILLION_VALUE);
 
 }
 
@@ -144,12 +146,12 @@ const Date& Date::operator=( const Date& rhs)
 /**
  * Returns a string representation of the object.
  */
-String Date::toString( const String & sFormat )
+String Date::toString( const String & /*sFormat*/ )
 {
 	char buff[64];
 	struct tm utc;
 	TmPtr(&utc);
-	double dsec = utc.tm_sec + _dt.tv_nsec*1e-9;
+    double dsec = (double)utc.tm_sec + (double)_dt.tv_nsec*1e-9;
 
 	//2012-10-12T00:06:12.314532Z
 	sprintf(buff, "%4d-%02d-%02dT%02d:%02d:%0.9lfZ",
@@ -175,5 +177,5 @@ void Date::ToGpsWeekSec( int *pwkGps, double *psecGps) const
 	gt.tv_sec -= (GPS0 + _secLeap);
 	*pwkGps = (int) (gt.tv_sec / SECONDS_IN_WEEK);
 	*psecGps = (double)(gt.tv_sec - (time_t)(SECONDS_IN_WEEK*(*pwkGps))); 
-	*psecGps += (gt.tv_nsec*1e-9);
+    *psecGps += ((double)gt.tv_nsec*1e-9);
 }

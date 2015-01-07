@@ -18,12 +18,26 @@
 
 
 #include <GnssMetadata/Location.h>
+#include <stdio.h>
+#include <math.h>
 using namespace GnssMetadata;
+
+#if defined (LINUX)
+    #define _snprintf snprintf
+#endif
+
+/**
+ * Returns true if is defined, meaning non-zero value.
+ */
+bool Location::IsDefined() const
+{
+    return fabs(_latitude) > 0.0 || fabs(_longitude) > 0.0 || fabs(_height) > 0.0;
+}
 
 /**
  * Returns a string representation of the object.
  */
-String GnssMetadata::Location::toString( const String& sFormat )
+String Location::toString( const String& sFormat )
 {
 	char buff[256];
 	const String& sfmt = (sFormat == DefaultFormat) ? "%0.7lf deg., %0.7lf deg., %0.3lf m" : sFormat;

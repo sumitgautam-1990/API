@@ -24,7 +24,7 @@ using namespace GnssMetadata;
 /**
  * Returns a string representation of the object.
  */
-String Metadata::toString( const String & sFormat )
+String Metadata::toString( const String & /*sFormat*/ )
 {
 	return "Metadata Object";
 }

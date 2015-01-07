@@ -28,9 +28,9 @@ using namespace tinyxml2;
 
 // Alignment Values
 static const char* _szAlignFmts[] = {"Left","Right", "Undefined"};
-Stream::StreamAlignment ToAlignmentFormat( const char* pszFmt)
+static Stream::StreamAlignment ToAlignmentFormat( const char* pszFmt)
 {
-	for( int i = 0; i < sizeof( _szAlignFmts); i++)
+    for( unsigned  int i = 0; i < sizeof( _szAlignFmts); i++)
 	{
 		if( strcmp( _szAlignFmts[i], pszFmt) == 0)
 			return (Stream::StreamAlignment)i;
@@ -41,9 +41,9 @@ Stream::StreamAlignment ToAlignmentFormat( const char* pszFmt)
 // Sample Format Values
 static const char* _szSampleFmts[] = {"IF","IFn","IQ",
 	"IQn","InQ","InQn","QI","QIn","QnI","QnIn"};
-Stream::SampleFormat ToSampleFormat( const char* pszFmt)
+static Stream::SampleFormat ToSampleFormat( const char* pszFmt)
 {
-	for( int i = 0; i < sizeof( _szSampleFmts); i++)
+    for( unsigned int i = 0; i < sizeof( _szSampleFmts); i++)
 	{
 		if( strcmp( _szSampleFmts[i], pszFmt) == 0)
 			return (Stream::SampleFormat)i;

@@ -22,7 +22,7 @@ using namespace GnssMetadata;
 /**
  * Returns a string representation of the object.
  */
-String Frame::toString( const String & sFormat )
+String Frame::toString( const String & /*sFormat*/ )
 {
 	return String("Frame toString not implmented yet.");
 }

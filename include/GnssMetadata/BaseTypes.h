@@ -49,7 +49,7 @@ namespace GnssMetadata
 	/**
 	 * Standard API exception
 	 */
-	class ApiException : public std::exception
+	class ApiException : public std::runtime_error
 	{
 	public:
 		enum ErrorType
@@ -62,11 +62,11 @@ namespace GnssMetadata
 		};
 	public:
 		ApiException( const char *const& _What, ErrorType errType = Unspecified )
-			: std::exception( _What), _error(errType)
+			: std::runtime_error( _What), _error(errType)
 		{
 		}
 
-		ApiException( const exception& _That) : std::exception( _That),
+		ApiException( const std::runtime_error& _That) : std::runtime_error( _That),
 			_error( Unspecified)
 		{
 		}
@@ -83,7 +83,7 @@ namespace GnssMetadata
 	public:
 		ArgumentException( const char *const& _What = "Argument Error",
 			ErrorType errType = ArgumentError)
-			: ApiException( _What)
+			: ApiException( _What, errType)
 		{
 		}
 	};

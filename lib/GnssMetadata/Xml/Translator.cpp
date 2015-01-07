@@ -25,7 +25,7 @@ using namespace tinyxml2;
 
 /******************************************************************************
 * Translator Implementation
-/*****************************************************************************/
+******************************************************************************/
 
 /**
  * Processes the current element within the context of the attributed object, delegates
@@ -56,7 +56,7 @@ void Translator::WriteElement( const Object * pObject, pcstr pszName, Context & 
  * Reads the attributed object id, comments, and artifacts.
  */
 bool Translator::ReadAttributedObject( AttributedObject& aobj, 
-		Context& ctxt, const tinyxml2::XMLElement & elem, bool bIdAttributeRequired )
+        Context& /*ctxt*/, const tinyxml2::XMLElement & elem, bool bIdAttributeRequired )
 {
 	//Grab the ID.
 	pcstr szid = elem.Attribute("id");
@@ -93,7 +93,7 @@ bool Translator::ReadAttributedObject( AttributedObject& aobj,
 /**
  * Writes the attributed object id, comments, and artifacts.
  */
-void Translator::WriteAttributedObject(const AttributedObject& aobj, Context& ctxt, tinyxml2::XMLElement & elem, bool bIdAttributeRequired)
+void Translator::WriteAttributedObject(const AttributedObject& aobj, Context& /*ctxt*/, tinyxml2::XMLElement & elem, bool bIdAttributeRequired)
 {
 	//Write the ID.
 	if( aobj.Id().length() > 0 )

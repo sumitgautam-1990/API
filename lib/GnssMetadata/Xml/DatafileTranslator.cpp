@@ -30,7 +30,7 @@ using namespace tinyxml2;
 static const char* _szEndian[] = {"Big","Little", "Undefined"};
 SubFrame::WordEndian ToEndian( const char* pszFmt)
 {
-	for( int i = 0; i < sizeof( _szEndian); i++)
+    for( unsigned int i = 0; i < sizeof( _szEndian); i++)
 	{
 		if( strcmp( _szEndian[i], pszFmt) == 0)
 			return (SubFrame::WordEndian)i;
@@ -42,7 +42,7 @@ SubFrame::WordEndian ToEndian( const char* pszFmt)
 static const char* _szWordAlignment[] = {"Left","Right","Unspecified"};
 SubFrame::WordAlignment ToWordAlignment( const char* pszFmt)
 {
-	for( int i = 0; i < sizeof( _szWordAlignment); i++)
+    for( unsigned int i = 0; i < sizeof( _szWordAlignment); i++)
 	{
 		if( strcmp( _szWordAlignment[i], pszFmt) == 0)
 			return (SubFrame::WordAlignment)i;
@@ -104,7 +104,8 @@ bool DatafileTranslator::OnRead( Context & ctxt, const XMLElement & elem, Access
 		//Parse owner
 		pchild = elem.FirstChildElement("owner");
 		datafile.Owner( (pchild != NULL) ? pchild->GetText():"");
-		//Parse copyright
+
+        //Parse copyright
 		pchild = elem.FirstChildElement("copyright");
 		datafile.Copyright((pchild != NULL) ? pchild->GetText():"");
 
@@ -112,14 +113,14 @@ bool DatafileTranslator::OnRead( Context & ctxt, const XMLElement & elem, Access
 		pchild = elem.FirstChildElement("createDate");
 		datafile.CreateDate( Date(pchild->GetText()));
 
-		//Parse modDate
+        //Parse modDate
 		pchild = elem.FirstChildElement("modDate");
 		if( pchild != NULL)	datafile.ModDate( Date(pchild->GetText()));
 
 		//Parse session
 		pchild = elem.FirstChildElement("session");
 		AccessorAdaptor<DataFile, Session> adpt( &datafile, &DataFile::Session);
-		bRetVal &= ReadElement( datafile, ctxt, *pchild, &adpt);
+        bRetVal &= ReadElement( datafile, ctxt, *pchild, &adpt);
 
 		//Parse rate
 		pchild = elem.FirstChildElement("rate");

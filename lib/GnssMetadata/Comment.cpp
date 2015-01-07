@@ -25,7 +25,7 @@ using namespace GnssMetadata;
  *  Returns a string representation of the object.
  *  
  */
-String Comment::toString( const String & sFormat )
+String Comment::toString( const String & /*sFormat*/)
 {
 	return _value;
 }

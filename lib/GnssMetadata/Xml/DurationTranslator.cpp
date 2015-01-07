@@ -28,9 +28,9 @@ using namespace tinyxml2;
 
 
 static const char* _szfmts[] = {"sec","msec", "usec", "nsec", "psec"};
-Duration::DurationFormat ToFormat( const char* pszFmt)
+static Duration::DurationFormat ToFormat( const char* pszFmt)
 {
-	for( int i = 0; i < sizeof( _szfmts); i++)
+    for( unsigned int i = 0; i < sizeof( _szfmts); i++)
 	{
 		if( strcmp( _szfmts[i], pszFmt) == 0)
 			return (Duration::DurationFormat)i;
@@ -46,7 +46,7 @@ DurationTranslator::DurationTranslator()
 /**
  * Reads a node from the document and parses into metadata.
  */
-bool DurationTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor )
+bool DurationTranslator::OnRead( Context & /*ctxt*/, const XMLElement & elem, AccessorAdaptorBase* pAdaptor )
 {
 	if( pAdaptor != NULL)
 	{
@@ -68,7 +68,7 @@ bool DurationTranslator::OnRead( Context & ctxt, const XMLElement & elem, Access
 /**
  * Write the current object 
  */
-void DurationTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem )
+void DurationTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & /*ctxt*/, tinyxml2::XMLNode & elem )
 {
 	const Duration* pdur = dynamic_cast< const Duration*>(pObject);
 	if( pdur == NULL) 

@@ -19,12 +19,14 @@
 
 #include "AnyUriTranslator.h"
 #include <GnssMetadata/AnyUri.h>
-#include "XmlDefs.h"
+
 #include <string.h>
 #include <stdlib.h>
 
 using namespace GnssMetadata;
 using namespace tinyxml2;
+
+#include "XmlDefs.h"
 
 
 AnyUriTranslator::AnyUriTranslator() 
@@ -35,7 +37,7 @@ AnyUriTranslator::AnyUriTranslator()
 /**
  * Reads a node from the document and parses into metadata.
  */
-bool AnyUriTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor )
+bool AnyUriTranslator::OnRead( Context & /*ctxt*/, const XMLElement & elem, AccessorAdaptorBase* pAdaptor )
 {
 	if( pAdaptor == NULL)
 		return false;
@@ -47,7 +49,7 @@ bool AnyUriTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accessor
 /**
  * Write the current object 
  */
-void AnyUriTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem )
+void AnyUriTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & /*ctxt*/, tinyxml2::XMLNode & elem )
 {
 	const AnyUri* puri = dynamic_cast< const AnyUri*>(pObject);
 	if( puri == NULL) 

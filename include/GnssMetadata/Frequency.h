@@ -86,12 +86,12 @@ namespace GnssMetadata
 		virtual String toString( const String& sFormat =  DefaultFormat );
 		
 	private:
-		FrequencyFormat _format;
-		
 		/**
 		 * The frequency value.
 		 */
 		ValueType _value;
+
+		FrequencyFormat _format;
 		
 		
 	};

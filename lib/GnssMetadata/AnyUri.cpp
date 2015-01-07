@@ -24,7 +24,7 @@ using namespace GnssMetadata;
  *  Returns a string representation of the object.
  *  
  */
-String AnyUri::toString( const String & sFormat)
+String AnyUri::toString( const String & /*sFormat*/)
 {
 	return _value;
 }

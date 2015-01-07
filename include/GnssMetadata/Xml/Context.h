@@ -37,15 +37,15 @@ namespace GnssMetadata
 		{
 		}
 
-		/** 
-		 * Pointer to the parent translator
-		 */
-		Translator* pParent;
-		
 		/**
 		 * XmlProcessor Reference.
 		 */
 		XmlProcessor& proc;
+
+		/** 
+		 * Pointer to the parent translator
+		 */
+		Translator* pParent;
 		
 		/**
 		 * Pointer to the attributed object being operated on.

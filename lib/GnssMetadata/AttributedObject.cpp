@@ -30,7 +30,7 @@ const String Object::DefaultFormat = "";
  *  Returns a string representation of the object.
  *  
  */
-String AttributedObject::toString( const String & sFormat  )
+String AttributedObject::toString( const String & /*sFormat*/  )
 {
 	return _id;
 }

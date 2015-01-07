@@ -125,7 +125,8 @@ void ChannelTranslator::OnWrite( const Object * pObject, pcstr pszName, Context 
 		WriteElement( &pchannel->DelayBias(), "delaybias", ctxt, *pelemc);
 
 		//System
-		WriteElement( &pchannel->System(), "system", ctxt, *pelemc);
+        const System& sys = pchannel->System();
+        WriteElement( &sys, "system", ctxt, *pelemc);
 	}
 	
 	//Fill out id, artifacts, and comments last in accordance

@@ -42,6 +42,11 @@ namespace GnssMetadata
 			: _latitude(rhs._latitude), _longitude(rhs._longitude), _height( rhs._height)
 		{}
 
+        /**
+         * Returns true if is defined, meaning non-zero value.
+         */
+        bool IsDefined() const;
+
 		/**
 		 * Sets the latitude in meters.
 		 */
@@ -100,10 +105,6 @@ namespace GnssMetadata
 		virtual String toString( const String& sFormat =  DefaultFormat );
 		
 	private:
-		/**
-		 * Height in meters
-		 */
-		double _height;
 		
 		/**
 		 * Latitude in degrees.
@@ -115,7 +116,10 @@ namespace GnssMetadata
 		 */
 		double _longitude;
 		
-		
+		/**
+		 * Height in meters
+		 */
+		double _height;		
 	};
 	
 }

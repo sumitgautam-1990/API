@@ -17,7 +17,9 @@
  */
 
 
+
 #include <GnssMetadata/Xml/XmlProcessor.h>
+#include "XmlDefs.h"
 #include "AnyUriTranslator.h"
 #include "MetadataTranslator.h"
 #include "StreamTranslator.h"
@@ -29,7 +31,6 @@
 #include "SessionTranslator.h"
 #include "RfConfigTranslator.h"
 #include "OscillatorTranslator.h"
-#include "XmlDefs.h"
 using namespace GnssMetadata;
 using namespace tinyxml2;
 
@@ -37,7 +38,7 @@ using namespace tinyxml2;
 
 /******************************************************************************
 * Translator Lookup Implementation
-/*****************************************************************************/
+******************************************************************************/
 
 
 
@@ -50,17 +51,17 @@ static struct TranslatorEntry
 	Translator& translator;
 } _Translators[] =  
 {
-	TE_ANYURI, *(new AnyUriTranslator()),
-	TE_FREQUENCY, *(new FrequencyTranslator()),
-	TE_DURATION, *(new DurationTranslator()),
-	TE_STREAM, *(new StreamTranslator()),
-	TE_CHANNEL, *(new ChannelTranslator()),
-	TE_DATAFILE, *(new DatafileTranslator()),
-	TE_SYSTEM, *(new SystemTranslator()),
-	TE_SESSION, *(new SessionTranslator()),
-	TE_RFCONFIG, *(new RfConfigTranslator()),
-	TE_OSCILLATOR, *(new OscillatorTranslator()), 
-	TE_METADATA, *(new MetadataTranslator())
+    {TE_ANYURI, *(new AnyUriTranslator())},
+    {TE_FREQUENCY, *(new FrequencyTranslator())},
+    {TE_DURATION, *(new DurationTranslator())},
+    {TE_STREAM, *(new StreamTranslator())},
+    {TE_CHANNEL, *(new ChannelTranslator())},
+    {TE_DATAFILE, *(new DatafileTranslator())},
+    {TE_SYSTEM, *(new SystemTranslator())},
+    {TE_SESSION, *(new SessionTranslator())},
+    {TE_RFCONFIG, *(new RfConfigTranslator())},
+    {TE_OSCILLATOR, *(new OscillatorTranslator())},
+    {TE_METADATA, *(new MetadataTranslator())}
 };
 #define COUNT_TRANSLATORS (sizeof(_Translators)/sizeof(TranslatorEntry))
 
@@ -97,13 +98,13 @@ TranslatorId TranslatorIdFromElemName( const char* szNodeName, NodeEntry* pNodes
 
 /******************************************************************************
 * XmlProcessor Implementation
-/*****************************************************************************/
+******************************************************************************/
 
 
 /**
  * Returns a string representation of the object.
  */
-String XmlProcessor::toString( const String & sFormat )
+String XmlProcessor::toString( const String & /*sFormat*/ )
 {
 	return "XmlProcessor";
 }
@@ -114,22 +115,23 @@ String XmlProcessor::toString( const String & sFormat )
 bool XmlProcessor::Load( const char* szFilename, const bool bProcessIncludes, Metadata & metadata )
 {
 	tinyxml2::XMLDocument doc;
-	XMLError err = doc.LoadFile( szFilename);
-	if( err != XML_SUCCESS)
-		throw TranslationException( "Tiny XML Parsing Error", err);
 
-	//Find the metadata element. There should be only one per file.
+    XMLError err = doc.LoadFile( szFilename);
+	if( err != XML_SUCCESS)
+        throw TranslationException( "Tiny XML Parsing Error", err);
+
+    //Find the metadata element. There should be only one per file.
 	const XMLElement* pmetadata = doc.FirstChildElement( "metadata");
 	if( pmetadata == NULL)
 		throw TranslationException("Metadata element not found in file");
-
 
 	Context ctxt( *this, NULL, &metadata);
 	Translator& trans = TranslatorFromId( TE_METADATA);
 
 	//Note the metadata translator does not create 
 	//a new metadata object.
-	bool bRetVal = trans.OnRead( ctxt, *pmetadata, NULL);
+
+    bool bRetVal = trans.OnRead( ctxt, *pmetadata, NULL);
 	if( bRetVal && bProcessIncludes)
 	{
 		//Todo, process includes.
@@ -176,7 +178,7 @@ bool XmlProcessor::ReadElement( Context & ctxt, const tinyxml2::XMLElement & ele
 	}
 	else //Do a global lookup.  
 	{
-		for( int i = 0; i < COUNT_TRANSLATORS && id == TE_END; i++)
+        for( unsigned int i = 0; i < COUNT_TRANSLATORS && id == TE_END; i++)
 		{
 			NodeEntry* pNodes = _Translators[i].translator.GetAllowedNodes();
 			if(pNodes == NULL) continue;
@@ -206,7 +208,7 @@ void XmlProcessor::WriteElement( const Object * pObject, const char* pszName, Co
 	}
 	else //Do a global lookup.  
 	{
-		for( int i = 0; i < COUNT_TRANSLATORS && id == TE_END; i++)
+        for( unsigned int i = 0; i < COUNT_TRANSLATORS && id == TE_END; i++)
 		{
 			NodeEntry* pNodes = _Translators[i].translator.GetAllowedNodes();
 			if(pNodes == NULL) continue;

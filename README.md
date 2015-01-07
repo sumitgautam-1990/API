@@ -25,7 +25,24 @@ The API currently builds using Visual Studio 2008 solution.  This can be upgrade
 This will show a solution framework comprised of applications and libraries.  Build the solution for a specified target (e.g. DEBUG x64).  Execute the TestApp, which demonstrates reading, writing, and creating metadata files using the API.
 
 ### Linux ###
-To be developed.
+
+To clone the repository.  open terminal window change directory to your development root and execute the following commands:
+
+```
+    git clone  --recursive git://github.com/IonMetadataWorkingGroup/API
+    cd API
+```
+Build the libraries using CMAKE and install using the following commands. Within the API
+directory.
+
+```
+    mkdir build
+    cmake ..
+
+    make
+
+    sudo make install
+```
 
 ## API Documentation ##
 Ultimately, the API will be documented using oxygen or other code documentation tools.   Interim documentation can be found at [Metadata Object Model](./doc) in the doc directory.

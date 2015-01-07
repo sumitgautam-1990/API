@@ -55,7 +55,7 @@ bool SessionTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accesso
 		return false;
 	Session session;
 
-	bool retval = false;
+    //bool retval = false;
 
 	//Parse the AttributedObject Elements.
 	if( !ReadAttributedObject( session, ctxt, elem))
@@ -69,39 +69,42 @@ bool SessionTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accesso
 	{
 		//Parse scenario
 		pchild = elem.FirstChildElement("scenario");
-		pszValue = (pchild != NULL) ? pchild->GetText() : "";
+        pszValue = (pchild != NULL && pchild->GetText() != NULL) ? pchild->GetText() : "";
 		session.Scenario(pszValue );
 
 		//Parse campaign
 		pchild = elem.FirstChildElement("campaign");
-		pszValue = (pchild != NULL) ? pchild->GetText() : "";
+        pszValue = (pchild != NULL && pchild->GetText() != NULL) ? pchild->GetText() : "";
 		session.Campaign(pszValue );
-		
+
 		//Parse location
 		pchild = elem.FirstChildElement("location");
 		try
 		{
-			double lat = atof( pchild->Attribute("lat"));
-			double lon = atof( pchild->Attribute("lon"));
-			double height= atof( pchild->Attribute("height"));
-			Location loc(lat, lon, height);
-			session.Location( loc);
+            if( pchild != NULL)
+            {
+                double lat = atof( pchild->Attribute("lat"));
+                double lon = atof( pchild->Attribute("lon"));
+                double height= atof( pchild->Attribute("height"));
+                Location loc(lat, lon, height);
+                session.Location( loc);
+            }
 		}
 		catch(...)
 		{
 			throw TranslationException("Couldn't parse Location element");
 		}
 
-		//Parse contact
+        //Parse contact
 		pchild = elem.FirstChildElement("contact");
-		pszValue = (pchild != NULL) ? pchild->GetText() : "";
+        pszValue = (pchild != NULL && pchild->GetText() != NULL) ? pchild->GetText() : "";
 		session.Contact(pszValue );
 
 		//Parse poc
 		pchild = elem.FirstChildElement("poc");
-		pszValue = (pchild != NULL) ? pchild->GetText() : "";
-		session.Poc(pszValue );
-	}
+        pszValue = (pchild != NULL && pchild->GetText() != NULL) ? pchild->GetText() : "";
+        session.Poc( pszValue );
+    }
 
 	//Lastly set the session on the specified object.
 	pAdaptor->set( &session);
@@ -124,37 +127,52 @@ void SessionTranslator::OnWrite( const Object * pObject, pcstr pszName, Context 
 		XMLElement* pelem;
 
 		//Write scenario
-		pelem = elem.GetDocument()->NewElement( "scenario");
-		pelem->SetText( psession->Scenario().c_str());
-		pelemc->InsertEndChild(pelem);
-		
+        if( psession->Scenario().length() > 0)
+        {
+            pelem = elem.GetDocument()->NewElement( "scenario");
+            pelem->SetText( psession->Scenario().c_str());
+            pelemc->InsertEndChild(pelem);
+        }
+
 		//Write campaign
-		pelem = elem.GetDocument()->NewElement( "campaign");
-		pelem->SetText( psession->Campaign().c_str());
-		pelemc->InsertEndChild(pelem);
+        if( psession->Campaign().length() > 0)
+        {
+            pelem = elem.GetDocument()->NewElement( "campaign");
+            pelem->SetText( psession->Campaign().c_str());
+            pelemc->InsertEndChild(pelem);
+        }
 
-		//Write location
-		pelem = elem.GetDocument()->NewElement( "location");
-		char buff[128];
-		const Location& llh = psession->Location();
-		sprintf(buff,"%0.8lf", llh.Latitude());
-		pelem->SetAttribute("lat", buff);
-		sprintf(buff,"%0.8lf", llh.Longitude());
-		pelem->SetAttribute("lon", buff);
-		sprintf(buff,"%0.3lf", llh.Height());
-		pelem->SetAttribute("height", buff);
-		pelemc->InsertEndChild(pelem);
+        //Write location
+        if( psession->Location().IsDefined())
+        {
+            pelem = elem.GetDocument()->NewElement( "location");
+            char buff[128];
+            const Location& llh = psession->Location();
+            sprintf(buff,"%0.8lf", llh.Latitude());
+            pelem->SetAttribute("lat", buff);
+            sprintf(buff,"%0.8lf", llh.Longitude());
+            pelem->SetAttribute("lon", buff);
+            sprintf(buff,"%0.3lf", llh.Height());
+            pelem->SetAttribute("height", buff);
+            pelemc->InsertEndChild(pelem);
+        }
 
-		//Write conact
-		pelem = elem.GetDocument()->NewElement( "contact");
-		pelem->SetText( psession->Contact().c_str());
-		pelemc->InsertEndChild(pelem);
+        //Write conact
+        if( psession->Contact().length() > 0)
+        {
+            pelem = elem.GetDocument()->NewElement( "contact");
+            pelem->SetText( psession->Contact().c_str());
+            pelemc->InsertEndChild(pelem);
+        }
 
-		//Write poc
-		pelem = elem.GetDocument()->NewElement( "poc");
-		pelem->SetText( psession->Poc().c_str());
-		pelemc->InsertEndChild(pelem);
-	}
+        //Write poc
+        if( psession->Poc().length() > 0)
+        {
+            pelem = elem.GetDocument()->NewElement( "poc");
+            pelem->SetText( psession->Poc().c_str());
+            pelemc->InsertEndChild(pelem);
+        }
+    }
 	
 	//Fill out id, artifacts, and comments last in accordance
 	//with schema.

@@ -39,7 +39,7 @@ NODELIST_END
 static const char* _szTypes[] = {"Processor","Receiver", "Simulator", "Undefined"};
 System::SystemType ToSystemType( const char* pszFmt)
 {
-	for( int i = 0; i < sizeof( _szTypes); i++)
+    for( unsigned int i = 0; i < sizeof( _szTypes); i++)
 	{
 		if( strcmp( _szTypes[i], pszFmt) == 0)
 			return (System::SystemType)i;
@@ -86,13 +86,19 @@ bool SystemTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accessor
 
 		//Parse RfConfig
 		pchild = elem.FirstChildElement("rfconfig");
-		AccessorAdaptor<System, RfConfiguration> adpt( &system, &System::Rfconfig);
-		retval = ReadElement( system, ctxt, *pchild, &adpt);
+		if( pchild != NULL)
+		{
+			AccessorAdaptor<System, RfConfiguration> adpt( &system, &System::Rfconfig);
+			retval = ReadElement( system, ctxt, *pchild, &adpt);
+		}
 
 		//Parse Oscillator
 		pchild = elem.FirstChildElement("oscillator");
-		AccessorAdaptor<System, Oscillator> adpt1( &system, &System::Oscillator);
-		retval &= ReadElement( system, ctxt, *pchild, &adpt1);
+		if( pchild != NULL)
+		{
+			AccessorAdaptor<System, Oscillator> adpt1( &system, &System::Oscillator);
+			retval &= ReadElement( system, ctxt, *pchild, &adpt1);
+		}
 	}
 
 	//Lastly set the channel on the specified object.
