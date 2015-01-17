@@ -1,5 +1,5 @@
 /**
- * File: Channel.h
+ * File: Band.h
  * Author: M.B. Mathews
  *  
  * Copyright(c) 2014 Institute of Navigation
@@ -16,36 +16,36 @@
  * GNU General Public License for more details.
  */
 
-#ifndef CHANNEL_H_H
-#define CHANNEL_H_H
+#ifndef BAND_H_H
+#define BAND_H_H
 
 #include "AttributedObject.h"
 #include "Frequency.h"
 #include "Duration.h"
-#include "System.h"
 #include "BaseTypes.h"
 #include <list>
 
 namespace GnssMetadata
 {
 	/**
-	 * Channel defines a finite spectrum of bandwidth that has been translated and processed in some manner resulting in a translated frequency output. Formerly known as band.
+	 * Band defines a finite spectrum of bandwidth that has been translated and processed in some manner resulting in a translated frequency output. Formerly known as band.
 	 */
-	class Channel: public AttributedObject
+	class Band: public AttributedObject
 	{
 		
 	public:
-		Channel( const String& id) : AttributedObject( id), _inverted(false){}
-		Channel() : _inverted(false) {}
-		Channel(const Channel& rhs) 
-			: AttributedObject( rhs), _centerFrequency(rhs._centerFrequency),
+		Band( const String& id) : AttributedObject( id), _inverted(false){}
+		Band() : _inverted(false) {}
+		Band(const Band& rhs) 
+			: AttributedObject( rhs), 
+			_centerFrequency(rhs._centerFrequency),
 			_translatedFrequency( rhs._translatedFrequency), 
 			_delayBias( rhs._delayBias),
 			_inverted( rhs._inverted),
-			_system( rhs._system)
+			_bandwidth( rhs._bandwidth)
 		{}	
 
-		const Channel& operator=( const Channel& rhs)
+		const Band& operator=( const Band& rhs)
 		{
 			if( &rhs == this)
 				return *this;
@@ -54,7 +54,7 @@ namespace GnssMetadata
 			_translatedFrequency = rhs._translatedFrequency;
 			_delayBias = rhs._delayBias;
 			_inverted = rhs._inverted;
-			_system = rhs._system;
+			_bandwidth = rhs._bandwidth;
 			return *this;
 		}
 
@@ -105,17 +105,18 @@ namespace GnssMetadata
 		{
 			_inverted = inverted;
 		}
-		void System( const GnssMetadata::System& system )
+
+		const Frequency& Bandwidth( ) const
 		{
-			_system = system;
+			return _bandwidth;
 		}
-		GnssMetadata::System System( ) const
+		Frequency& Bandwidth( ) 
 		{
-			return _system;
+			return _bandwidth;
 		}
-		GnssMetadata::System& System( )
+		void Bandwidth( const Frequency& bandwidth)
 		{
-			return _system;
+			_bandwidth = bandwidth;
 		}
 
 		/**
@@ -134,13 +135,12 @@ namespace GnssMetadata
 		 */
 		bool _inverted;
 		
-		GnssMetadata::System _system;
-		
+		Frequency _bandwidth;		
 		
 		
 	};
 
-	typedef std::list<Channel> ChannelList;
+	typedef std::list<Band> BandList;
 }
 
 

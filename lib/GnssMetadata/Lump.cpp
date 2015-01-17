@@ -1,5 +1,5 @@
 /**
- * File: Channel.cpp
+ * File: SubFrame.cpp
  * Author: M.B. Mathews
  *  
  * Copyright(c) 2014 Institute of Navigation
@@ -15,14 +15,16 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-#include <GnssMetadata/Channel.h>
-using namespace GnssMetadata;
 
+
+
+#include <GnssMetadata/Lump.h>
+using namespace GnssMetadata;
 
 /**
  * Returns a string representation of the object.
  */
-String Channel::toString( const String & sFormat )
+String Lump::toString( const String & /*sFormat*/ )
 {
-	return AttributedObject::toString(sFormat);
+	return String("Lump toString not implmented yet.");
 }

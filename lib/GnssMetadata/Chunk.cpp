@@ -1,5 +1,5 @@
 /**
- * File: Frame.cpp
+ * File: Chunk.cpp
  * Author: M.B. Mathews
  *  
  * Copyright(c) 2014 Institute of Navigation
@@ -16,13 +16,13 @@
  * GNU General Public License for more details.
  */
 
-#include <GnssMetadata/Frame.h>
+#include <GnssMetadata/Chunk.h>
 using namespace GnssMetadata;
 
 /**
  * Returns a string representation of the object.
  */
-String Frame::toString( const String & /*sFormat*/ )
+String Chunk::toString( const String & /*sFormat*/ )
 {
-	return String("Frame toString not implmented yet.");
+	return String("Chunk toString not implmented yet.");
 }

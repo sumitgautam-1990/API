@@ -20,7 +20,7 @@
 #define STREAM_H_H
 
 #include "AttributedObject.h"
-#include "Channel.h"
+#include "Band.h"
 #include "Duration.h"
 #include "BaseTypes.h"
 #include <list>
@@ -61,10 +61,11 @@ namespace GnssMetadata
 		Stream() : _alignment( Undefined), _format( IQ), _packedbits(0), _quantization(8), _rateFactor(1) {}
 		Stream(const Stream& rhs) 
 			: AttributedObject( rhs),
-			_alignment(rhs._alignment), _channel(rhs._channel), 
-			_delayBias(rhs._delayBias), _encoding(rhs._encoding), 
+			_alignment(rhs._alignment), 
+			_encoding(rhs._encoding), 
 			_format(rhs._format),_packedbits(rhs._packedbits), 
-			_quantization(rhs._quantization), _rateFactor(rhs._rateFactor)
+			_quantization(rhs._quantization), _rateFactor(rhs._rateFactor),
+			_bandlist(rhs._bandlist)
 		{}	
 
 		const Stream& operator=( const Stream& rhs)
@@ -73,13 +74,12 @@ namespace GnssMetadata
 				return *this;
 			AttributedObject::operator =(rhs);
 			_alignment = rhs._alignment; 
-			_channel = rhs._channel; 
-			_delayBias = rhs._delayBias; 
 			_encoding = rhs._encoding; 
 			_format = rhs._format;
 			_packedbits = rhs._packedbits; 
 			_quantization = rhs._quantization; 
 			_rateFactor = rhs._rateFactor;
+			_bandlist = rhs._bandlist; 
 
 			return *this;
 		}
@@ -91,32 +91,6 @@ namespace GnssMetadata
 		void Alignment( const StreamAlignment alignment )
 		{
 			_alignment = alignment;
-		}
-
-		const GnssMetadata::Channel& Channel( ) const
-		{
-			return _channel;
-		}
-		GnssMetadata::Channel& Channel( )
-		{
-			return _channel;
-		}
-		void Channel( const GnssMetadata::Channel& channel )
-		{
-			_channel = channel;
-		}
-
-		const Duration& DelayBias( ) const
-		{
-			return _delayBias;
-		}
-		Duration& DelayBias( )
-		{
-			return _delayBias;
-		}
-		void DelayBias( const Duration& delayBias )
-		{
-			_delayBias = delayBias;
 		}
 
 		String Encoding( ) const
@@ -163,6 +137,15 @@ namespace GnssMetadata
 			_rateFactor = rateFactor;
 		}
 
+		const GnssMetadata::BandList& Bands( ) const
+		{
+			return _bandlist;
+		}
+		GnssMetadata::BandList& Bands( )
+		{
+			return _bandlist;
+		}
+
 		/**
 		 *  Returns a string representation of the object.
 		 *  
@@ -171,10 +154,6 @@ namespace GnssMetadata
 		
 	private:
 		StreamAlignment _alignment;
-		
-		GnssMetadata::Channel _channel;
-		
-		Duration _delayBias;
 		
 		String _encoding;
 		
@@ -192,6 +171,7 @@ namespace GnssMetadata
 		 */
 		size_t _rateFactor;
 		
+		GnssMetadata::BandList _bandlist;
 		
 	};
 	typedef std::list<Stream> StreamList;	

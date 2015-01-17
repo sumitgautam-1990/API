@@ -1,5 +1,5 @@
 /**
- * File: SubFrame.cpp
+ * File: Band.cpp
  * Author: M.B. Mathews
  *  
  * Copyright(c) 2014 Institute of Navigation
@@ -15,16 +15,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-
-
-
-#include <GnssMetadata/SubFrame.h>
+#include <GnssMetadata/Band.h>
 using namespace GnssMetadata;
+
 
 /**
  * Returns a string representation of the object.
  */
-String SubFrame::toString( const String & /*sFormat*/ )
+String Band::toString( const String & sFormat )
 {
-	return String("Subframe toString not implmented yet.");
+	return AttributedObject::toString(sFormat);
 }

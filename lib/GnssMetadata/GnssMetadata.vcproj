@@ -295,11 +295,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Channel.cpp"
+				RelativePath=".\Band.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Block.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Xml\ChannelTranslator.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Chunk.cpp"
 				>
 			</File>
 			<File
@@ -327,10 +335,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Frame.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Frequency.cpp"
 				>
 			</File>
@@ -340,6 +344,10 @@
 			</File>
 			<File
 				RelativePath=".\Location.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Lump.cpp"
 				>
 			</File>
 			<File
@@ -372,10 +380,6 @@
 			</File>
 			<File
 				RelativePath=".\Xml\StreamTranslator.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SubFrame.cpp"
 				>
 			</File>
 			<File
@@ -413,15 +417,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\GnssMetadata\Band.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\GnssMetadata\BaseTypes.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\GnssMetadata\Channel.h"
+				RelativePath="..\..\include\GnssMetadata\Block.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Xml\ChannelTranslator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\GnssMetadata\Chunk.h"
 				>
 			</File>
 			<File
@@ -453,10 +465,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\GnssMetadata\Frame.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\GnssMetadata\Frequency.h"
 				>
 			</File>
@@ -466,6 +474,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\GnssMetadata\Location.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\GnssMetadata\Lump.h"
 				>
 			</File>
 			<File
@@ -506,10 +518,6 @@
 			</File>
 			<File
 				RelativePath=".\Xml\StreamTranslator.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\GnssMetadata\SubFrame.h"
 				>
 			</File>
 			<File
