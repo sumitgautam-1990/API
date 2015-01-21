@@ -307,7 +307,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\BlockTranslator.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Chunk.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\ChunkTranslator.cpp"
 				>
 			</File>
 			<File
@@ -351,7 +359,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\LaneTranslator.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Lump.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\LumpTranslator.cpp"
 				>
 			</File>
 			<File
@@ -449,7 +465,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\BlockTranslator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\GnssMetadata\Chunk.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\ChunkTranslator.h"
 				>
 			</File>
 			<File
@@ -497,7 +521,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\LaneTranslator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\GnssMetadata\Lump.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\LumpTranslator.h"
 				>
 			</File>
 			<File

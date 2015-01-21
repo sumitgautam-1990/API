@@ -92,13 +92,13 @@ bool StreamTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accessor
 	else
 	{
 		//Parse ratefactor
-		ReadFirstElement("ratefactor", elem, true, (size_t) 0);
+		stream.RateFactor(ReadFirstElement("ratefactor", elem, true, (size_t) 0));
 
 		//Parse quantization
-		ReadFirstElement("quantization", elem, true, (size_t) 0);
+		stream.Quantization(ReadFirstElement("quantization", elem, true, (size_t) 0));
 
 		//Parse packedbits
-		ReadFirstElement("packedbits", elem, true, stream.Quantization());
+		stream.Packedbits(ReadFirstElement("packedbits", elem, true, stream.Quantization() ));
 
 		//Parse alignment
 		if( pchild != NULL)

@@ -37,8 +37,12 @@ NODELIST_BEGIN( _MetadataNodes)
 	NODELIST_ENTRY( "band", TE_BAND)
 	NODELIST_ENTRY( "system", TE_SYSTEM)
 	NODELIST_ENTRY( "stream", TE_STREAM)
+	NODELIST_ENTRY( "lump", TE_LUMP)
+	NODELIST_ENTRY( "chunk", TE_CHUNK)
+	NODELIST_ENTRY( "block", TE_BLOCK)
+	NODELIST_ENTRY( "lane", TE_LANE)
 	NODELIST_ENTRY( "session", TE_SESSION)
-	//TODO Add fileset,lane, block, chunk, lump 
+	//TODO Add FileSet
 NODELIST_END
 
 MetadataTranslator::MetadataTranslator() 
@@ -58,10 +62,14 @@ bool MetadataTranslator::OnRead( Context & ctxt, const XMLElement & elem, Access
 
 	bRetVal &= ReadList<AnyUri>(metadata.Includes(), "include", ctxt, elem);
 	bRetVal &= ReadList<File>(metadata.Files(), "file", ctxt, elem);
-    bRetVal &= ReadList<Session>(metadata.Sessions(), "session", ctxt, elem);
     bRetVal &= ReadList<Band>(metadata.Bands(), "band", ctxt, elem);
-    bRetVal &= ReadList<System>(metadata.Systems(), "system", ctxt, elem);
     bRetVal &= ReadList<Stream>(metadata.Streams(), "stream", ctxt, elem);
+    bRetVal &= ReadList<Lump>(metadata.Lumps(), "lump", ctxt, elem);
+    bRetVal &= ReadList<Chunk>(metadata.Chunks(), "chunk", ctxt, elem);
+    bRetVal &= ReadList<Block>(metadata.Blocks(), "block", ctxt, elem);
+    bRetVal &= ReadList<Lane>(metadata.Lanes(), "lane", ctxt, elem);
+	bRetVal &= ReadList<Session>(metadata.Sessions(), "session", ctxt, elem);
+    bRetVal &= ReadList<System>(metadata.Systems(), "system", ctxt, elem);
 
 	//Parse Artifacts and Comments.
 	bRetVal &= ReadAttributedObject( metadata, ctxt, elem, false);
@@ -81,15 +89,20 @@ void MetadataTranslator::OnWrite( const Object * pObject, pcstr pszName, Context
 	//Set the namespace for the Metadata.
 	pelemc->SetAttribute( "xmlns", METADATA_NAMESPACE);
 
-	WriteList<AnyUri>( pmetadata->Includes(), "include", ctxt, *pelemc);
-	WriteList<File>( pmetadata->Files(), "file", ctxt, *pelemc);
-	WriteList<Session>( pmetadata->Sessions(), "session", ctxt, *pelemc);
-	WriteList<Band>( pmetadata->Bands(), "channel", ctxt, *pelemc);
-	WriteList<System>( pmetadata->Systems(), "system", ctxt, *pelemc);
-	WriteList<Stream>( pmetadata->Streams(), "stream", ctxt, *pelemc);
-	
 	//Fill out id, artifacts, and comments last in accordance
 	//with schema.
 	WriteAttributedObject( *pmetadata, ctxt, *pelemc, false);
+
+	WriteList<AnyUri>( pmetadata->Includes(), "include", ctxt, *pelemc);
+	WriteList<Band>(   pmetadata->Bands(), "band", ctxt, *pelemc);
+	WriteList<Stream>( pmetadata->Streams(), "stream", ctxt, *pelemc);
+	WriteList<Lump>( pmetadata->Lumps(), "lump", ctxt, *pelemc);
+	WriteList<Chunk>( pmetadata->Chunks(), "chunks", ctxt, *pelemc);
+	WriteList<Block>( pmetadata->Blocks(), "blocks", ctxt, *pelemc);
+	WriteList<Lane>( pmetadata->Lanes(), "lane", ctxt, *pelemc);
+	WriteList<System>( pmetadata->Systems(), "system", ctxt, *pelemc);
+	WriteList<Session>( pmetadata->Sessions(), "session", ctxt, *pelemc);
+	WriteList<File>( pmetadata->Files(), "file", ctxt, *pelemc);
+	
 	elem.InsertEndChild( pelemc);
 }

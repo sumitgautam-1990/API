@@ -24,6 +24,10 @@
 #include "MetadataTranslator.h"
 #include "StreamTranslator.h"
 #include "BandTranslator.h"
+#include "LumpTranslator.h"
+#include "ChunkTranslator.h"
+#include "BlockTranslator.h"
+#include "LaneTranslator.h"
 #include "FrequencyTranslator.h"
 #include "FileTranslator.h"
 #include "DurationTranslator.h"
@@ -58,7 +62,12 @@ static struct TranslatorEntry
 	{TE_POSITION, *(new PositionTranslator())},
     {TE_STREAM, *(new StreamTranslator())},
     {TE_BAND, *(new BandTranslator())},
-    {TE_DATAFILE, *(new FileTranslator())},
+	{TE_LUMP, *(new LumpTranslator())},
+	{TE_LUMP, *(new LumpTranslator())},
+	{TE_CHUNK, *(new ChunkTranslator())},
+	{TE_BLOCK, *(new BlockTranslator())},
+	{TE_LANE, *(new LaneTranslator())},
+	{TE_DATAFILE, *(new FileTranslator())},
     {TE_SYSTEM, *(new SystemTranslator())},
     {TE_SESSION, *(new SessionTranslator())},
 //    {TE_RFCONFIG, *(new RfConfigTranslator())},

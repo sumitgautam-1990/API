@@ -26,40 +26,18 @@
 using namespace GnssMetadata;
 using namespace tinyxml2;
 
-//// Endian Values
-//static const char* _szEndian[] = {"Big","Little", "Undefined"};
-//Lump::WordEndian ToEndian( const char* pszFmt)
-//{
-//    for( unsigned int i = 0; i < sizeof( _szEndian); i++)
-//	{
-//		if( strcmp( _szEndian[i], pszFmt) == 0)
-//			return (Lump::WordEndian)i;
-//	}
-//	return (Lump::WordEndian)2;
-//}
-//
-//// Sample Format Values
-//static const char* _szWordAlignment[] = {"Left","Right","Unspecified"};
-//Lump::WordAlignment ToWordAlignment( const char* pszFmt)
-//{
-//    for( unsigned int i = 0; i < sizeof( _szWordAlignment); i++)
-//	{
-//		if( strcmp( _szWordAlignment[i], pszFmt) == 0)
-//			return (Lump::WordAlignment)i;
-//	}
-//	return (Lump::WordAlignment)2;
-//}
 
 NODELIST_BEGIN(_FileNodes)
+	NODELIST_ENTRY( "comment",		TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "artifact",		TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "url",			TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "timestamp",	TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "offset",		TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "owner",		TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "copyright",	TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "next",		TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "previous",	TE_SYSTEM)
-	NODELIST_ENTRY( "comment",	TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "artifact", TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "next",			TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "previous",		TE_SYSTEM)
+	NODELIST_ENTRY( "lane",			TE_LANE)
 NODELIST_END
 
 FileTranslator::FileTranslator() 
@@ -111,7 +89,10 @@ bool FileTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAd
 		//Parse previous [0..1]
 		file.Previous().Value( ReadFirstElement("previous", elem, false, ""));
 
-		//TODO Parse Lane [1]
+		//Parse Lane [1]
+		pchild = elem.FirstChildElement("lane");
+		AccessorAdaptor<File, Lane> adpt( &file, &File::Lane);
+		bRetVal = ReadElement( file, ctxt, *pchild, &adpt);
 	}
 
 	//Lastly set the datafile on the specified object.
@@ -124,44 +105,45 @@ bool FileTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAd
  */
 void FileTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem )
 {
-	const File* pdatafile = dynamic_cast< const File*>(pObject);
-	if( pdatafile == NULL) 
+	const File* pfile = dynamic_cast< const File*>(pObject);
+	if( pfile == NULL) 
 		throw TranslationException("FileTranslator cannot cast File object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
 
-	if( !pdatafile->IsReference())
+	if( !pfile->IsReference())
 	{
 		XMLElement* pelem;
 
 		//Write url [1]
-		WriteElement( "url", pdatafile->Url().Value().c_str(), pelemc, true);
+		WriteElement( "url", pfile->Url().Value().c_str(), pelemc, true);
 
 		//Write timestamp [1]
 		pelem = elem.GetDocument()->NewElement( "timestamp");
-		pelem->SetText( pdatafile->TimeStamp().toString().c_str());
+		pelem->SetText( pfile->TimeStamp().toString().c_str());
 		pelemc->InsertEndChild( pelem);
 
 		//Write offset [0..1]
-		WriteElement( "offset", pdatafile->Offset(), pelemc, false, 0);
+		WriteElement( "offset", pfile->Offset(), pelemc, false, 0);
 
 		//Write owner [0..1]
-		WriteElement("owner", pdatafile->Owner().c_str(), pelemc, false, "");
+		WriteElement("owner", pfile->Owner().c_str(), pelemc, false, "");
 
 		//Write copyright [0..1]
-		WriteElement("owner", pdatafile->Copyright().c_str(), pelemc, false, "");
+		WriteElement("owner", pfile->Copyright().c_str(), pelemc, false, "");
 
 		//Write next [0..1]
-		WriteElement("next", pdatafile->Next().Value().c_str(), pelemc, false, "");
+		WriteElement("next", pfile->Next().Value().c_str(), pelemc, false, "");
 
 		//Write previous [0..1]
-		WriteElement("previous", pdatafile->Previous().Value().c_str(), pelemc, false, "");
+		WriteElement("previous", pfile->Previous().Value().c_str(), pelemc, false, "");
 
-		//TODO Write Lane [1]
+		//Write Lane [1]
+		WriteElement( &pfile->Lane(), "lane", ctxt, *pelemc);
 	}
 	
 	//Fill out id, artifacts, and comments last in accordance
 	//with schema.
-	WriteAttributedObject( *pdatafile, ctxt, *pelemc, false);
+	WriteAttributedObject( *pfile, ctxt, *pelemc, false);
 	elem.InsertEndChild( pelemc);
 }

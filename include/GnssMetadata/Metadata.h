@@ -98,6 +98,42 @@ namespace GnssMetadata
 			return _streams;
 		}
 
+		const LumpList& Lumps( ) const
+		{
+			return _lumps;
+		}
+		LumpList& Lumps( )
+		{
+			return _lumps;
+		}
+
+		const ChunkList& Chunks( ) const
+		{
+			return _chunks;
+		}
+		ChunkList& Chunks( )
+		{
+			return _chunks;
+		}
+
+		const BlockList& Blocks( ) const
+		{
+			return _blocks;
+		}
+		BlockList& Blocks( )
+		{
+			return _blocks;
+		}
+
+		const LaneList& Lanes( ) const
+		{
+			return _lanes;
+		}
+		LaneList& Lanes( )
+		{
+			return _lanes;
+		}
+
 		const SessionList& Sessions( ) const
 		{
 			return _sessions;
@@ -130,6 +166,14 @@ namespace GnssMetadata
 		BandList  _bands;
 
 		StreamList _streams;
+
+		LumpList _lumps;
+
+		ChunkList _chunks;
+
+		BlockList _blocks;
+
+		LaneList _lanes;
 		
 		SessionList _sessions;
 
