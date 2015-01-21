@@ -21,7 +21,7 @@
 
 #include<list>
 
-#define METADATA_NAMESPACE "http://www.ion.org/XMLSchema/GnssMetadata.xsd"
+#define METADATA_NAMESPACE "http://www.ion.org/standards/sdrwg/schema/metadata.xsd"
 
 namespace GnssMetadata
 {
