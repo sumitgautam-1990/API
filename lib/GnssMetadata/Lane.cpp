@@ -1,5 +1,5 @@
 /**
- * File: DataFile.cpp
+ * File: Lane.cpp
  * Author: M.B. Mathews
  *  
  * Copyright(c) 2014 Institute of Navigation
@@ -18,14 +18,13 @@
 
 
 
-#include <GnssMetadata/DataFile.h>
+#include <GnssMetadata/Lane.h>
 using namespace GnssMetadata;
-
 
 /**
  * Returns a string representation of the object.
  */
-String DataFile::toString( const String & sFormat )
+String Lane::toString( const String & /*sFormat*/ )
 {
-	return AttributedObject::toString(sFormat);
+	return String("Lane toString not implmented yet.");
 }

@@ -146,6 +146,7 @@ namespace GnssMetadata
 		GnssMetadata::ChunkList _chunklist;
 	};
 	
+	typedef std::list<Block> BlockList;
 }
 
 

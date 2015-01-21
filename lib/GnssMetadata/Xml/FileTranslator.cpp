@@ -28,26 +28,26 @@ using namespace tinyxml2;
 
 // Endian Values
 static const char* _szEndian[] = {"Big","Little", "Undefined"};
-SubFrame::WordEndian ToEndian( const char* pszFmt)
+Lump::WordEndian ToEndian( const char* pszFmt)
 {
     for( unsigned int i = 0; i < sizeof( _szEndian); i++)
 	{
 		if( strcmp( _szEndian[i], pszFmt) == 0)
-			return (SubFrame::WordEndian)i;
+			return (Lump::WordEndian)i;
 	}
-	return (SubFrame::WordEndian)2;
+	return (Lump::WordEndian)2;
 }
 
 // Sample Format Values
 static const char* _szWordAlignment[] = {"Left","Right","Unspecified"};
-SubFrame::WordAlignment ToWordAlignment( const char* pszFmt)
+Lump::WordAlignment ToWordAlignment( const char* pszFmt)
 {
     for( unsigned int i = 0; i < sizeof( _szWordAlignment); i++)
 	{
 		if( strcmp( _szWordAlignment[i], pszFmt) == 0)
-			return (SubFrame::WordAlignment)i;
+			return (Lump::WordAlignment)i;
 	}
-	return (SubFrame::WordAlignment)2;
+	return (Lump::WordAlignment)2;
 }
 
 NODELIST_BEGIN(_DataFileNodes)
@@ -135,7 +135,7 @@ bool DatafileTranslator::OnRead( Context & ctxt, const XMLElement & elem, Access
 		pchild = elem.FirstChildElement("subframe");
 		if( pchild != NULL)
 		{
-			SubFrame sf;
+			Lump sf;
 			//words
 			pszval = pchild->Attribute("words");
 			sf.Words( (pszval != NULL) ? atoi( pszval) : 0);
@@ -146,7 +146,7 @@ bool DatafileTranslator::OnRead( Context & ctxt, const XMLElement & elem, Access
 			sf.Endian( ToEndian( pchild->Attribute("endian")));
 			//alignment
 			sf.Alignment( ToWordAlignment( pchild->Attribute("alignment")));
-			datafile.SubFrame( sf);
+			datafile.Lump( sf);
 		}
 
 		//Parse frame
@@ -248,9 +248,9 @@ void DatafileTranslator::OnWrite( const Object * pObject, pcstr pszName, Context
 		pelemc->InsertEndChild( pelem);
 
 		//Write subframe
-		if( pdatafile->SubFrame().IsDefined())
+		if( pdatafile->Lump().IsDefined())
 		{
-			const SubFrame& sf = pdatafile->SubFrame();
+			const Lump& sf = pdatafile->Lump();
 			pelem = elem.GetDocument()->NewElement( "subframe");
 			sprintf(buff, "%ld", sf.Words());
 			pelem->SetAttribute("words", buff);

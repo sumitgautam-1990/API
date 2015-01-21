@@ -1,5 +1,5 @@
 /**
- * File: Location.h
+ * File: Position.h
  * Author: M.B. Mathews
  * 
  * Copyright(c) 2014 Institute of Navigation
@@ -16,29 +16,29 @@
  * GNU General Public License for more details.
  */
 
-#ifndef LOCATION_H_H
-#define LOCATION_H_H
+#ifndef POSITION_H_H
+#define POSITION_H_H
 
 #include "BaseTypes.h"
 
 namespace GnssMetadata
 {
 	/**
-	 * Class represents the Latitude, Longitude, and height for a location.
+	 * Class represents the Latitude, Longitude, and height for a position.
 	 */
-	class Location: public Object
+	class Position: public Object
 	{
 		
 	public:
-		Location( double lat, double lon, double height) 
+		Position( double lat, double lon, double height) 
 			: _latitude(lat), _longitude(lon), _height( height)
 		{}
 	
-		Location() 
+		Position() 
 			: _latitude(0.0), _longitude(0.0), _height( 0.0)
 		{}
 
-		Location(const Location& rhs) 
+		Position(const Position& rhs) 
 			: _latitude(rhs._latitude), _longitude(rhs._longitude), _height( rhs._height)
 		{}
 

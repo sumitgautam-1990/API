@@ -20,9 +20,10 @@
 #define SYSTEM_H_H
 
 #include "AttributedObject.h"
-#include "RfConfiguration.h"
-#include "Oscillator.h"
 #include "BaseTypes.h"
+#include "Source.h"
+#include "Cluster.h"
+#include "Frequency.h"
 #include <list>
 
 namespace GnssMetadata
@@ -35,70 +36,60 @@ namespace GnssMetadata
 	public:
 		enum SystemType
 		{
+			Undefined=0,
 			Processor,
 			Receiver,
-			Simulator,
-			Undefined
+			Simulator
 		};
 	public:
 		System( const String& id = "", bool bIsReference = false, SystemType type=Undefined) 
 			: AttributedObject( id, bIsReference), _type( type) {}
 		System(const System& rhs) 
-			: AttributedObject( rhs), _type( rhs._type), _model( rhs._model),
-			_oscillator( rhs._oscillator), _rfconfig( rhs._rfconfig){}		
+			: AttributedObject( rhs), _freqBase( rhs._freqBase), 
+			_equipment( rhs._equipment), _type( rhs._type), 
+			_sourcelist(rhs._sourcelist),
+			_clusterlist(rhs._clusterlist)
+		{}
+
 		const System& operator=( const System& rhs)
 		{
 			if( &rhs == this)
 				return *this;
 			AttributedObject::operator =(rhs);
+			_freqBase = rhs._freqBase;
+			_equipment = rhs._equipment;
 			_type = rhs._type;
-			_model = rhs._model;
-			_oscillator = rhs._oscillator;
-			_rfconfig = rhs._rfconfig;
+			_sourcelist = rhs._sourcelist;
+			_clusterlist = rhs._clusterlist;
 			return *this;
 		}
 
+		const Frequency& BaseFrequency( ) const
+		{
+			return _freqBase;
+		}
+		Frequency& BaseFrequency( ) 
+		{
+			return _freqBase;
+		}
+		void BaseFrequency( const Frequency& centerFrequency )
+		{
+			_freqBase = centerFrequency;
+		}
+
 		/**
-		 * Gets the system model information.
+		 * Gets the system equipment information.
 		 */
-		String Model( ) const
+		String Equipment( ) const
 		{
-			return _model;
+			return _equipment;
 		}
 		/**
-		 * Sets the system model information.
+		 * Sets the system equipment information.
 		 */
-		void Model( const String model )
+		void Equipment( const String equipment )
 		{
-			_model = model;
-		}
-
-		const GnssMetadata::Oscillator& Oscillator( ) const
-		{
-			return _oscillator;
-		}
-
-		GnssMetadata::Oscillator& Oscillator( )
-		{
-			return _oscillator;
-		}
-		void Oscillator( const GnssMetadata::Oscillator& oscillator )
-		{
-			_oscillator = oscillator;
-		}
-
-		const RfConfiguration& Rfconfig( ) const
-		{
-			return _rfconfig;
-		}
-		RfConfiguration& Rfconfig( )
-		{
-			return _rfconfig;
-		}
-
-		void Rfconfig( const RfConfiguration& rfconfig )
-		{
-			_rfconfig = rfconfig;
+			_equipment = equipment;
 		}
 		/**
 		 * Sets the System type.
@@ -115,6 +106,27 @@ namespace GnssMetadata
 			return _type;
 		}
 
+		const GnssMetadata::SourceList& Sources( ) const
+		{
+			return _sourcelist;
+		}
+		GnssMetadata::SourceList& Sources( )
+		{
+			return _sourcelist;
+		}
+
+
+		const GnssMetadata::ClusterList& Clusters( ) const
+		{
+			return _clusterlist;
+		}
+		GnssMetadata::ClusterList& Clusters( )
+		{
+			return _clusterlist;
+		}
+
+
+
 		/**
 		 *  Returns a string representation of the object.
 		 *  
@@ -122,28 +134,21 @@ namespace GnssMetadata
 		virtual String toString( const String & sFormat = DefaultFormat );
 		
 	private:
+		GnssMetadata::Frequency _freqBase;
+
+
+		/**
+		 * Specifies the equipment information for the system.
+		 */
+		String _equipment;
+
 		/**
 		 * Specifies the general type of the system responsible for producing the data.
 		 */
 		SystemType _type;
 
-		/**
-		 * Specifies the model information for the system.
-		 */
-		String _model;
-		
-		/**
-		 * System oscillator information.
-		 */
-		GnssMetadata::Oscillator _oscillator;
-		
-		/**
-		 * Specifes multiple RF configurations
-		 */
-		GnssMetadata::RfConfiguration _rfconfig;
-		
-		
-		
+		GnssMetadata::SourceList _sourcelist;
+		GnssMetadata::ClusterList _clusterlist;
 	};
 
 	typedef std::list<System> SystemList;

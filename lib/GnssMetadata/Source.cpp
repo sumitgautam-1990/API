@@ -1,10 +1,10 @@
 /**
- * File: Location.cpp
+ * File: Source.cpp
  * Author: M.B. Mathews
- * 
+ *  
  * Copyright(c) 2014 Institute of Navigation
  * http://www.ion.org
- * 
+ *  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -17,33 +17,14 @@
  */
 
 
-#include <GnssMetadata/Location.h>
-#include <stdio.h>
-#include <math.h>
+
+#include <GnssMetadata/Source.h>
 using namespace GnssMetadata;
-
-#if defined (LINUX)
-    #define _snprintf snprintf
-#endif
-
-/**
- * Returns true if is defined, meaning non-zero value.
- */
-bool Location::IsDefined() const
-{
-    return fabs(_latitude) > 0.0 || fabs(_longitude) > 0.0 || fabs(_height) > 0.0;
-}
 
 /**
  * Returns a string representation of the object.
  */
-String Location::toString( const String& sFormat )
+String Source::toString( const String & /*sFormat*/ )
 {
-	char buff[256];
-	const String& sfmt = (sFormat == DefaultFormat) ? "%0.7lf deg., %0.7lf deg., %0.3lf m" : sFormat;
-	_snprintf( buff, sizeof(buff), sfmt.c_str(), _latitude, _longitude, _height);
-	return String(buff);	
+	return String("Source toString not implmented yet.");
 }
-
-
-

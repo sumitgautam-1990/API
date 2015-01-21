@@ -1,5 +1,5 @@
 /**
- * File: Lump.h
+ * File: Source.h
  * Author: M.B. Mathews
  *  
  * Copyright(c) 2014 Institute of Navigation
@@ -16,52 +16,71 @@
  * GNU General Public License for more details.
  */
 
-#ifndef LUMP_H_H
-#define LUMP_H_H
+#ifndef SOURCE_H_H
+#define SOURCE_H_H
 
 #include "BaseTypes.h"
-#include "Stream.h"
 #include "AttributedObject.h"
+#include "Position.h"
+
 
 namespace GnssMetadata
 {
 	/**
-	 * Class defines a collection of sample words organized into a contiguous block. This is known as a Lump in the 
-	 * currente draft specfication.
+	 * Class defines a source.
 	 */
-	class Lump: public AttributedObject
+	class Source: public AttributedObject
 	{
 	public:
+		enum SourcePolarization 
+		{
+			UndefinedPolarization,
+			RHCP,
+			Linear,
+			Horizontal,
+			Vertical
+		};
+
+		enum SourceType
+		{
+			UndefinedType,
+			Patch,
+			Dipole,
+			Helical,
+			Quadrifilar,
+			Simulator
+		};
+	public:
 		/**
-		 * Default constructor for the lump.
+		 * Default constructor.
 		 */
-		Lump( )
+		Source( )
 		{
 			
 		}
 
-		Lump( const Lump& rhs) : _streamlist(rhs._streamlist)
+		Source( const Source& rhs) : 
+			_type(rhs._type),
+			_polarization(rhs._polarization),
+			_origin( rhs._origin),
+			_idCluster( rhs._idCluster)
+
 		{
 			
 		}
 
-		const Lump& operator=( const Lump& rhs)
+		const Source& operator=( const Source& rhs)
 		{
 			if( &rhs == this)
 				return *this;
 			AttributedObject::operator =(rhs);
-			_streamlist = rhs._streamlist;
+			_type = rhs._type;
+			_polarization = rhs._polarization;
+			_origin = rhs._origin;
+			_idCluster = rhs._idCluster;
 			return *this;
 		}
 
-		const GnssMetadata::StreamList& Streams( ) const
-		{
-			return _streamlist;
-		}
-		GnssMetadata::StreamList& Streams( )
-		{
-			return _streamlist;
-		}
 
 		/**
 		 * Returns a string representation of the object.
@@ -69,10 +88,15 @@ namespace GnssMetadata
 		virtual String toString( const String & sFormat = DefaultFormat );
 
 	private:
-		GnssMetadata::StreamList _streamlist;		
+		SourceType _type;
+		SourcePolarization _polarization;
+		GnssMetadata::Position _origin;
+		// TODO Rotation _rotation;
+		String  _idCluster;
+
 	};
 
-	typedef std::list<Lump> LumpList;	
+	typedef std::list<Source> SourceList;	
 	
 }
 

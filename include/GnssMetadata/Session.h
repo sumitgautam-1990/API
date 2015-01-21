@@ -19,7 +19,9 @@
 #ifndef SESSION_H_H
 #define SESSION_H_H
 
-#include "Location.h"
+#include "Position.h"
+#include "Date.h"
+#include "System.h"
 #include "AttributedObject.h"
 #include "BaseTypes.h"
 #include <list>
@@ -33,20 +35,23 @@ namespace GnssMetadata
 		Session() {}
 		Session(const Session& rhs) 
 			: AttributedObject( rhs),
-			_campaign(rhs._campaign), _contact(rhs._contact),
-			_location(rhs._location), _poc(rhs._poc),
-			_scenario(rhs._scenario)
+			_toa( rhs._toa), _position(rhs._position), 
+			_poc(rhs._poc), _contact(rhs._contact),
+			_campaign(rhs._campaign), _scenario(rhs._scenario),
+			_systemlist( rhs._systemlist)
 		{}	
 		const Session& operator=( const Session& rhs)
 		{
 			if( &rhs == this)
 				return *this;
 			AttributedObject::operator =(rhs);
-			_campaign = rhs._campaign; 
-			_contact = rhs._contact;
-			_location = rhs._location; 
+			_toa  = rhs._toa;
+			_position = rhs._position; 
 			_poc = rhs._poc;
+			_contact = rhs._contact;
+			_campaign = rhs._campaign; 
 			_scenario = rhs._scenario;
+			_systemlist = rhs._systemlist;
 			return *this;
 		}
 
@@ -69,17 +74,17 @@ namespace GnssMetadata
 		}
 
 
-		const GnssMetadata::Location& Location( ) const
+		const GnssMetadata::Position& Position( ) const
 		{
-			return _location;
+			return _position;
 		}
-		GnssMetadata::Location& Location( ) 
+		GnssMetadata::Position& Position( ) 
 		{
-			return _location;
+			return _position;
 		}
-		void Location( const GnssMetadata::Location& location )
+		void Position( const GnssMetadata::Position& location )
 		{
-			_location = location;
+			_position = location;
 		}
 
 		String Poc( ) const
@@ -99,6 +104,15 @@ namespace GnssMetadata
 		{
 			return _scenario;
 		}
+
+		const GnssMetadata::SystemList& Systems( ) const
+		{
+			return _systemlist;
+		}
+		GnssMetadata::SystemList& Systems( )
+		{
+			return _systemlist;
+		}
 		
 		/**
 		 *  Returns a string representation of the object.
@@ -107,17 +121,15 @@ namespace GnssMetadata
 		virtual String toString( const String & sFormat = DefaultFormat );
 		
 	private:
-		String _campaign;
-		
-		String _contact;
-		
-		GnssMetadata::Location _location;
-		
+		GnssMetadata::Date _toa;
+
+		GnssMetadata::Position _position;
+		//TODO Add Attitude Information.
 		String _poc;
-		
+		String _contact;
+		String _campaign;
 		String _scenario;
-		
-		
+		GnssMetadata::SystemList _systemlist;
 	};
 
 	typedef std::list<Session> SessionList;

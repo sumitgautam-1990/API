@@ -1,5 +1,5 @@
 /**
- * File: Lump.cpp
+ * File: Cluster.cpp
  * Author: M.B. Mathews
  *  
  * Copyright(c) 2014 Institute of Navigation
@@ -18,13 +18,13 @@
 
 
 
-#include <GnssMetadata/Lump.h>
+#include <GnssMetadata/Cluster.h>
 using namespace GnssMetadata;
 
 /**
  * Returns a string representation of the object.
  */
-String Lump::toString( const String & /*sFormat*/ )
+String Cluster::toString( const String & /*sFormat*/ )
 {
-	return String("Lump toString not implmented yet.");
+	return String("Cluster toString not implmented yet.");
 }

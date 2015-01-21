@@ -1,5 +1,5 @@
 /**
- * File: Lump.cpp
+ * File: File.cpp
  * Author: M.B. Mathews
  *  
  * Copyright(c) 2014 Institute of Navigation
@@ -18,13 +18,14 @@
 
 
 
-#include <GnssMetadata/Lump.h>
+#include <GnssMetadata/File.h>
 using namespace GnssMetadata;
+
 
 /**
  * Returns a string representation of the object.
  */
-String Lump::toString( const String & /*sFormat*/ )
+String File::toString( const String & sFormat )
 {
-	return String("Lump toString not implmented yet.");
+	return AttributedObject::toString(sFormat);
 }

@@ -137,7 +137,7 @@ void WriteXmlFile(const char* pszFilename)
 	df.Session (sess);
 	df.Rate( Frequency( 4, Frequency::MHz));
 	df.Offset( offset);
-	df.SubFrame(SubFrame(32,SubFrame::Little, 1, SubFrame::Left));
+	df.Lump(Lump(32,Lump::Little, 1, Lump::Left));
 	df.Frame( Frame(4000, 96,0));
 	df.Streams().push_back( sm1);
 	df.Streams().push_back( sm2);

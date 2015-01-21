@@ -1,0 +1,146 @@
+/**
+ * File: Lane.h
+ * Author: M.B. Mathews
+ *  
+ * Copyright(c) 2014 Institute of Navigation
+ * http://www.ion.org
+ *  
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#ifndef LANE_H_H
+#define LANE_H_H
+
+#include "BaseTypes.h"
+#include "Session.h"
+#include "System.h"
+#include "Block.h"
+#include "AttributedObject.h"
+
+namespace GnssMetadata
+{
+	/**
+	 * Class defines a Lane configuration of file formant and equipment configuration.
+	 */
+	class Lane: public AttributedObject
+	{
+	public:
+		struct BandSource
+		{
+			BandSource( ){}
+			BandSource( String sidBand, String sidSource)
+				: idBand(sidBand), idSource(sidSource)
+			{
+			}
+			String idBand;
+			String idSource;
+		};
+		typedef std::list< BandSource> BandSourceList;
+
+	public:
+		/**
+		 * Default constructor for the lane.
+		 */
+		Lane( )
+		{
+			
+		}
+
+		Lane( const Lane& rhs) 
+			: _sessionlist(rhs._sessionlist),
+			  _systemlist(rhs._systemlist),
+			  _blocklist(rhs._blocklist),
+			  _bandsources(rhs._bandsources)
+		{
+			
+		}
+
+		const Lane& operator=( const Lane& rhs)
+		{
+			if( &rhs == this)
+				return *this;
+			AttributedObject::operator =(rhs);
+			_sessionlist = rhs._sessionlist;
+			_systemlist = rhs._systemlist;
+			_blocklist = rhs._blocklist;
+			_bandsources = rhs._bandsources;
+			return *this;
+		}
+
+		const GnssMetadata::SessionList& Sessions( ) const
+		{
+			return _sessionlist;
+		}
+		GnssMetadata::SessionList& Sessions( )
+		{
+			return _sessionlist;
+		}
+
+		const GnssMetadata::SystemList& Systems( ) const
+		{
+			return _systemlist;
+		}
+		GnssMetadata::SystemList& Systems( )
+		{
+			return _systemlist;
+		}
+
+		const GnssMetadata::BlockList& Blocks( ) const
+		{
+			return _blocklist;
+		}
+		GnssMetadata::BlockList& Blocks( )
+		{
+			return _blocklist;
+		}
+
+		const BandSourceList& BandSources( ) const
+		{
+			return _bandsources;
+		}
+		BandSourceList& BandSources( )
+		{
+			return _bandsources;
+		}
+
+		/**
+		 * Adds a band source definition to the lane.
+		 */
+		void AddBandSource( String sidBand, String sidSource, bool bValidate = false)
+		{
+			if( bValidate)
+			{
+				//TODO validate the existence of sidBand and sidSource objects
+				//within the lane definition. 
+			}
+
+			BandSource bsrc( sidBand, sidSource);
+			_bandsources.push_back( bsrc);
+		}
+
+		/**
+		 * Returns a string representation of the object.
+		 */
+		virtual String toString( const String & sFormat = DefaultFormat );
+
+	private:
+		GnssMetadata::SessionList _sessionlist;		
+		GnssMetadata::SystemList _systemlist;		
+		GnssMetadata::BlockList _blocklist;		
+		BandSourceList _bandsources;
+	};
+
+	typedef std::list<Lane> LaneList;	
+	
+}
+
+
+#endif
