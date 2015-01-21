@@ -29,9 +29,13 @@ using namespace GnssMetadata;
 using namespace tinyxml2;
 
 NODELIST_BEGIN(_SystemNodes)
-	NODELIST_ENTRY( "model",      TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "rfconfig",   TE_RFCONFIG)
-	NODELIST_ENTRY( "oscillator", TE_OSCILLATOR)
+	NODELIST_ENTRY( "freqbase",      TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "equipment",      TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "type",      TE_SIMPLE_TYPE)
+	//TODO Add source element
+	//TODO Add cluster element
+//	NODELIST_ENTRY( "rfconfig",   TE_RFCONFIG)
+//	NODELIST_ENTRY( "oscillator", TE_OSCILLATOR)
 	NODELIST_ENTRY( "comment",	  TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "artifact",	  TE_SIMPLE_TYPE)
 NODELIST_END
@@ -75,30 +79,20 @@ bool SystemTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accessor
 		system.IsReference(true);
 	else
 	{
-		//Parse Type Attribute.
-		System::SystemType stype = ToSystemType( elem.Attribute("type"));
+		//Parse freqbase [0..1]
+		pchild = elem.FirstChildElement("freqbase");
+		AccessorAdaptor<System, Frequency> adpt( &system, &System::BaseFrequency);
+		retval = ReadElement( system, ctxt, *pchild, &adpt);
+
+		//Parse Equipment [0..1]
+		system.Equipment(ReadFirstElement( "equipment", elem, false, ""));
+
+		//Parse Type Attribute. [0..1]
+		System::SystemType stype = ToSystemType( ReadFirstElement("type", elem, false, ""));
 		system.Type( stype);
 
-		//Parse Model
-		pchild = elem.FirstChildElement("model");
-		const char* pszValue = (pchild != NULL) ? pchild->GetText() : "";
-		system.Model( pszValue );
-
-		//Parse RfConfig
-		pchild = elem.FirstChildElement("rfconfig");
-		if( pchild != NULL)
-		{
-			AccessorAdaptor<System, RfConfiguration> adpt( &system, &System::Rfconfig);
-			retval = ReadElement( system, ctxt, *pchild, &adpt);
-		}
-
-		//Parse Oscillator
-		pchild = elem.FirstChildElement("oscillator");
-		if( pchild != NULL)
-		{
-			AccessorAdaptor<System, Oscillator> adpt1( &system, &System::Oscillator);
-			retval &= ReadElement( system, ctxt, *pchild, &adpt1);
-		}
+		//TODO Read source elements
+		//TODO Read cluster elements
 	}
 
 	//Lastly set the channel on the specified object.
@@ -118,23 +112,17 @@ void SystemTranslator::OnWrite( const Object * pObject, pcstr pszName, Context &
 
 	if( !psystem->IsReference())
 	{
-		XMLElement* pelem;
+		//Write Frequency Base.
+		WriteElement( &psystem->BaseFrequency(), "freqbase", ctxt, *pelemc);
+	
+		//Write Equipment [0..1]
+		WriteElement("equipment", psystem->Equipment().c_str(),  pelemc, false, "");
 
-		//Write Type Attribute
-		pelemc->SetAttribute("type", _szTypes[psystem->Type()]);
-		
-		//Write Model
-		pelem = elem.GetDocument()->NewElement( "model");
-		pelem->SetText( psystem->Model().c_str());
-		pelemc->InsertEndChild(pelem);
+		//Write Type Attribute [0..1]
+		WriteElement( "types", _szTypes[psystem->Type()], pelemc, false, "");
 
-		//Write RfConfig
-		if( psystem->Rfconfig().Id().length() > 0)
-			WriteElement( &psystem->Rfconfig(), "rfconfig", ctxt, *pelemc);
-
-		//Write Oscillator.
-		if( psystem->Oscillator().Id().length() > 0)
-			WriteElement( &psystem->Oscillator(), "oscillator", ctxt, *pelemc);
+		//TODO Write source elements
+		//TODO Write cluster elements
 	}
 	
 	//Fill out id, artifacts, and comments last in accordance

@@ -21,6 +21,7 @@
 
 #include "Context.h"
 #include <tinyxml2.h>
+#include <list>
 
 namespace GnssMetadata
 {
@@ -81,9 +82,50 @@ namespace GnssMetadata
 		 */
 		static void WriteAttributedObject(const AttributedObject& aobj, Context& ctxt, tinyxml2::XMLElement & elem, bool bIdAttributeRequired = true);
 
+		static bool ReadFirstElement( const char* pszelem, const tinyxml2::XMLElement& elem, bool bRequired, bool bDefault = false);
+		static const char* ReadFirstElement( const char* pszelem, const tinyxml2::XMLElement& elem, bool bRequired,  const char* pszDefault = "");
+		static size_t ReadFirstElement( const char* pszelem, const tinyxml2::XMLElement& elem, bool bRequired,  size_t iDefault = 0);
+		static double ReadFirstElement( const char* pszelem, const tinyxml2::XMLElement& elem, bool bRequired,  double dDefault = 0.0);
+		
+		static void WriteElement( const char* pszElemName, bool bvalue, tinyxml2::XMLElement* pcontainer, bool bRequired, const bool& bDefault = false);
+		static void WriteElement( const char* pszElemName, const char* pszValue, tinyxml2::XMLElement* pcontainer, bool bRequired, const char* pszDefault = "");
+		static void WriteElement( const char* pszElemName, size_t ivalue, tinyxml2::XMLElement* pcontainer, bool bRequired, const size_t& iDefault = 0);
+		static void WriteElement( const char* pszElemName, double dvalue, tinyxml2::XMLElement* pcontainer, bool bRequired,  const char* pszFormat="%0.15le", const double& dDefault = 0.0);
+
+		/**
+		 * Helper function reads a list of elements.
+		 */
+		template< typename A>
+		bool ReadList( std::list<A>& list, const char* pszName, Context& ctxt, const tinyxml2::XMLElement & elem)
+		{
+			bool bRetVal = true;
+			const tinyxml2::XMLElement* pelem = elem.FirstChildElement(pszName); 
+			for( ;pelem != NULL; pelem = pelem->NextSiblingElement(pszName)) 
+			{ 
+                ListAdaptor<A> adapt( list );
+				bRetVal &= ReadElement( *(ctxt.pContainer), ctxt, *pelem, &adapt); 
+			} 
+			return bRetVal;
+		}
+
+		/**
+		 * Helper function writes a list of attributed elements.
+		 */
+		template< typename A>
+        void WriteList( const std::list<A>& list, const char* pszName, 
+			Context& ctxt, tinyxml2::XMLElement & elem)
+		{
+            typename  std::list<A> ::const_iterator iter = list.begin();
+
+            for(; iter != list.end(); iter++)
+			{
+				WriteElement( &(*iter), pszName, ctxt, elem);
+			}
+		}
+
+
 	private:
 		NodeEntry* _nodesAllowed;
 	};
-
 }
 #endif

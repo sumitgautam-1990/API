@@ -23,14 +23,15 @@
 #include "AnyUriTranslator.h"
 #include "MetadataTranslator.h"
 #include "StreamTranslator.h"
-#include "ChannelTranslator.h"
+#include "BandTranslator.h"
 #include "FrequencyTranslator.h"
-#include "DatafileTranslator.h"
+#include "FileTranslator.h"
 #include "DurationTranslator.h"
+#include "PositionTranslator.h"
 #include "SystemTranslator.h"
 #include "SessionTranslator.h"
-#include "RfConfigTranslator.h"
-#include "OscillatorTranslator.h"
+//#include "RfConfigTranslator.h"
+//#include "OscillatorTranslator.h"
 using namespace GnssMetadata;
 using namespace tinyxml2;
 
@@ -54,13 +55,14 @@ static struct TranslatorEntry
     {TE_ANYURI, *(new AnyUriTranslator())},
     {TE_FREQUENCY, *(new FrequencyTranslator())},
     {TE_DURATION, *(new DurationTranslator())},
+	{TE_POSITION, *(new PositionTranslator())},
     {TE_STREAM, *(new StreamTranslator())},
-    {TE_CHANNEL, *(new ChannelTranslator())},
-    {TE_DATAFILE, *(new DatafileTranslator())},
+    {TE_BAND, *(new BandTranslator())},
+    {TE_DATAFILE, *(new FileTranslator())},
     {TE_SYSTEM, *(new SystemTranslator())},
     {TE_SESSION, *(new SessionTranslator())},
-    {TE_RFCONFIG, *(new RfConfigTranslator())},
-    {TE_OSCILLATOR, *(new OscillatorTranslator())},
+//    {TE_RFCONFIG, *(new RfConfigTranslator())},
+//    {TE_OSCILLATOR, *(new OscillatorTranslator())},
     {TE_METADATA, *(new MetadataTranslator())}
 };
 #define COUNT_TRANSLATORS (sizeof(_Translators)/sizeof(TranslatorEntry))

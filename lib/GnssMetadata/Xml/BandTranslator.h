@@ -1,5 +1,5 @@
 /**
- * File: FileTranslator.h
+ * File: BandTranslator.h
  * Author: M.B. Mathews
  *  
  * Copyright(c) 2014 Institute of Navigation
@@ -16,8 +16,8 @@
  * GNU General Public License for more details.
  */
 
-#ifndef FILETRANSLATOR_H_H
-#define FILETRANSLATOR_H_H
+#ifndef BANDTRANSLATOR_H_H
+#define BANDTRANSLATOR_H_H
 
 #include <GnssMetadata/BaseTypes.h>
 #include <GnssMetadata/Xml/Translator.h>
@@ -25,13 +25,13 @@
 namespace GnssMetadata
 {
 	/**
-	* Class implements xml translation for Datafile Type.
+	* Class implements xml translation for Band Type.
 	*/
-	class FileTranslator : public Translator
+	class BandTranslator : public Translator
 	{
 		
 	public:
-		FileTranslator();
+		BandTranslator();
 
 	protected:
 		/**

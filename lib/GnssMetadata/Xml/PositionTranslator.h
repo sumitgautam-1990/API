@@ -1,5 +1,5 @@
 /**
- * File: ChannelTranslator.h
+ * File: PositionTranslator.h
  * Author: M.B. Mathews
  *  
  * Copyright(c) 2014 Institute of Navigation
@@ -16,8 +16,8 @@
  * GNU General Public License for more details.
  */
 
-#ifndef CHANNELTRANSLATOR_H_H
-#define CHANNELTRANSLATOR_H_H
+#ifndef POSITIONTRANSLATOR_H_H
+#define POSITIONTRANSLATOR_H_H
 
 #include <GnssMetadata/BaseTypes.h>
 #include <GnssMetadata/Xml/Translator.h>
@@ -25,13 +25,13 @@
 namespace GnssMetadata
 {
 	/**
-	* Class implements xml translation for Channel Type.
+	* Class implements xml translation for Position Types.
 	*/
-	class ChannelTranslator : public Translator
+	class PositionTranslator : public Translator
 	{
 		
 	public:
-		ChannelTranslator();
+		PositionTranslator();
 
 	protected:
 		/**

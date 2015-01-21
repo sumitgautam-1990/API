@@ -46,35 +46,7 @@ namespace GnssMetadata
 
 	private:
 
-		/**
-		 * Helper function reads a list of elements.
-		 */
-		template< typename A>
-		bool ReadList( std::list<A>& list, const char* pszName, Context& ctxt, const tinyxml2::XMLElement & elem)
-		{
-			bool bRetVal = true;
-			const tinyxml2::XMLElement* pelem = elem.FirstChildElement(pszName); 
-			for( ;pelem != NULL; pelem = pelem->NextSiblingElement(pszName)) 
-			{ 
-                ListAdaptor<A> adapt( list );
-				bRetVal &= ReadElement( *(ctxt.pContainer), ctxt, *pelem, &adapt); 
-			} 
-			return bRetVal;
-		}
 
-		/**
-		 * Helper function writes a list of attributed elements.
-		 */
-		template< typename A>
-        void WriteList( const std::list<A>& list, const char* pszName, Context& ctxt, tinyxml2::XMLElement & elem)
-		{
-            typename  std::list<A> ::const_iterator iter = list.begin();
-
-            for(; iter != list.end(); iter++)
-			{
-				WriteElement( &(*iter), pszName, ctxt, elem);
-			}
-		}
 		
 	};
 }

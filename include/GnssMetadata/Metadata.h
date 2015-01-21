@@ -20,8 +20,8 @@
 #define METADATA_H_H
 
 #include "AttributedObject.h"
-#include "Channel.h"
-#include "DataFile.h"
+#include "Band.h"
+#include "File.h"
 #include "AnyUri.h"
 #include "Stream.h"
 #include "Session.h"
@@ -40,8 +40,8 @@ namespace GnssMetadata
 		Metadata( const String& id) : AttributedObject( id){}
 		Metadata() {}
 		Metadata(const Metadata& rhs) 
-			: AttributedObject( rhs), _includes(rhs._includes), _datafiles( rhs._datafiles),
-			_channels(rhs._channels), _streams(rhs._streams), _sessions( rhs._sessions),
+			: AttributedObject( rhs), _includes(rhs._includes), _files( rhs._files),
+			_bands(rhs._bands), _streams(rhs._streams), _sessions( rhs._sessions),
 			_systems(rhs._systems)
 		{}	
 
@@ -53,8 +53,8 @@ namespace GnssMetadata
 			AttributedObject::operator =(rhs);
 
 			_includes = rhs._includes;
-			_datafiles = rhs._datafiles;
-			_channels = rhs._channels; 
+			_files = rhs._files;
+			_bands = rhs._bands; 
 			_streams = rhs._streams; 
 			_sessions = rhs._sessions;
 			_systems = rhs._systems;
@@ -71,22 +71,22 @@ namespace GnssMetadata
 			return _includes;
 		}
 
-		const DataFileList& DataFiles( ) const
+		const FileList& Files( ) const
 		{
-			return _datafiles;
+			return _files;
 		}
-		DataFileList& DataFiles( )
+		FileList& Files( )
 		{
-			return _datafiles;
+			return _files;
 		}
 
-		const ChannelList& Channels( ) const
+		const BandList& Bands( ) const
 		{
-			return _channels;
+			return _bands;
 		}
-		ChannelList& Channels( ) 
+		BandList& Bands( ) 
 		{
-			return _channels;
+			return _bands;
 		}
 
 		const StreamList& Streams( ) const
@@ -125,9 +125,9 @@ namespace GnssMetadata
 	private:
 		AnyUriList  _includes;
 
-		DataFileList _datafiles;
+		FileList _files;
 
-		ChannelList  _channels;
+		BandList  _bands;
 
 		StreamList _streams;
 		

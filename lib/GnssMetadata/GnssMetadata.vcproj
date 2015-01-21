@@ -299,11 +299,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Block.cpp"
+				RelativePath=".\Xml\BandTranslator.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Xml\ChannelTranslator.cpp"
+				RelativePath=".\Block.cpp"
 				>
 			</File>
 			<File
@@ -371,6 +371,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\PositionTranslator.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Xml\RfConfigTranslator.cpp"
 				>
 			</File>
@@ -433,15 +437,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\BandTranslator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\GnssMetadata\BaseTypes.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\include\GnssMetadata\Block.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Xml\ChannelTranslator.h"
 				>
 			</File>
 			<File
@@ -514,6 +518,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\GnssMetadata\Position.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\PositionTranslator.h"
 				>
 			</File>
 			<File

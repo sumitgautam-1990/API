@@ -84,7 +84,7 @@ namespace GnssMetadata
 		{
 			return _timestamp;
 		}
-		void TimeStamp( const Date timestamp )
+		void TimeStamp( const Date& timestamp )
 		{
 			_timestamp = timestamp;
 		}

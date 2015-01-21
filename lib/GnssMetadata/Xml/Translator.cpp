@@ -26,6 +26,8 @@ using namespace tinyxml2;
 /******************************************************************************
 * Translator Implementation
 ******************************************************************************/
+namespace GnssMetadata
+{
 
 /**
  * Processes the current element within the context of the attributed object, delegates
@@ -124,3 +126,142 @@ void Translator::WriteAttributedObject(const AttributedObject& aobj, Context& /*
 		elem.InsertEndChild(pec);
 	}
 }
+
+
+bool Translator::ReadFirstElement( const char* pszelem, 
+	const tinyxml2::XMLElement& container,  
+	bool bRequired, bool bDefault)
+{
+	const XMLElement* pchild = container.FirstChildElement(pszelem);
+	if( pchild == NULL)
+	{
+		if( !bRequired)
+			return bDefault;
+		else
+		{
+			char buff[256];
+			sprintf( "Cannot find required boolean element %s in container %s", pszelem, container.Name());
+			throw TranslationException(buff);
+		}
+	}
+	else
+	{
+		return (strcmp( pchild->GetText(),"false")==0);
+	}
+}
+const char* Translator::ReadFirstElement( const char* pszelem,
+	const tinyxml2::XMLElement& container,
+	 bool bRequired,  const char* pszDefault )
+{
+	const XMLElement* pchild = container.FirstChildElement(pszelem);
+	if( pchild == NULL)
+	{
+		if( !bRequired)
+			return pszDefault;
+		else
+		{
+			char buff[256];
+			sprintf( "Cannot find required string element %s in container %s", pszelem, container.Name());
+			throw TranslationException(buff);
+		}
+	}
+	else
+	{
+		return pchild->GetText();
+	}
+
+}
+size_t Translator::ReadFirstElement( const char* pszelem, 
+		const tinyxml2::XMLElement& container, 
+		bool bRequired,  size_t iDefault)
+{
+	const XMLElement* pchild = container.FirstChildElement(pszelem);
+	if( pchild == NULL)
+	{
+		if( !bRequired)
+			return iDefault;
+		else
+		{
+			char buff[256];
+			sprintf( "Cannot find required unsigned integer element %s in container %s", pszelem, container.Name());
+			throw TranslationException(buff);
+		}
+	}
+	else
+	{
+		return atol( pchild->GetText());
+	}
+}
+
+double Translator::ReadFirstElement( const char* pszelem, 
+	const tinyxml2::XMLElement& container,
+	 bool bRequired, double dDefault)
+{
+	const XMLElement* pchild = container.FirstChildElement(pszelem);
+	if( pchild == NULL)
+	{
+		if( !bRequired)
+			return dDefault;
+		else
+		{
+			char buff[256];
+			sprintf( "Cannot find required double element %s in container %s", pszelem, container.Name());
+			throw TranslationException(buff);
+		}
+	}
+	else
+	{
+		return atof( pchild->GetText());
+	}
+
+}
+
+void Translator::WriteElement( const char* pszElemName, bool bvalue, XMLElement* pcontainer, bool bRequired, const bool& bDefault )
+{
+	if( bRequired || bvalue != bDefault)
+	{
+		XMLElement* pelem = pcontainer->GetDocument()->NewElement( pszElemName);
+		pelem->SetText( bvalue? "true":"false");
+		pcontainer->InsertEndChild( pelem);
+	}
+}
+void Translator::WriteElement( const char* pszElemName, const char* pszValue, 
+	XMLElement* pcontainer, bool bRequired, const char* pszDefault )
+{
+	if( bRequired || strcmp(pszValue, pszDefault) != 0)
+	{
+		XMLElement* pelem = pcontainer->GetDocument()->NewElement( pszElemName);
+		pelem->SetText( pszValue );
+		pcontainer->InsertEndChild( pelem);
+	}
+
+}
+void Translator::WriteElement( const char* pszElemName, size_t ivalue, XMLElement* pcontainer, 
+	bool bRequired, const size_t& iDefault)
+{
+	if( bRequired || ivalue != iDefault)
+	{
+		char buff[64];
+		XMLElement* pelem = pcontainer->GetDocument()->NewElement( pszElemName);
+		sprintf( buff, "%ld", ivalue );
+		pelem->SetText( buff);
+		pcontainer->InsertEndChild( pelem);
+	}
+}
+
+void Translator::WriteElement( const char* pszElemName, double dvalue, 
+	XMLElement* pcontainer, bool bRequired, 
+	const char* pszFormat, const double& dDefault)
+{
+	if( bRequired || dvalue != dDefault)
+	{
+		char buff[64];
+		XMLElement* pelem = pcontainer->GetDocument()->NewElement( pszElemName);
+		sprintf( buff, pszFormat, dvalue );
+		pelem->SetText( buff);
+		pcontainer->InsertEndChild( pelem);
+	}
+}
+
+
+};

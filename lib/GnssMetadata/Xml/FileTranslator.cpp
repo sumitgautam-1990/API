@@ -1,5 +1,5 @@
 /**
- * File: DatafileTranslator.cpp
+ * File: FileTranslator.cpp
  * Author: M.B. Mathews
  *  
  * Copyright(c) 2014 Institute of Navigation
@@ -17,8 +17,8 @@
  */
 
 
-#include "DatafileTranslator.h"
-#include <GnssMetadata/DataFile.h>
+#include "FileTranslator.h"
+#include <GnssMetadata/File.h>
 #include "XmlDefs.h"
 #include <string.h>
 #include <stdlib.h>
@@ -26,277 +26,138 @@
 using namespace GnssMetadata;
 using namespace tinyxml2;
 
-// Endian Values
-static const char* _szEndian[] = {"Big","Little", "Undefined"};
-Lump::WordEndian ToEndian( const char* pszFmt)
-{
-    for( unsigned int i = 0; i < sizeof( _szEndian); i++)
-	{
-		if( strcmp( _szEndian[i], pszFmt) == 0)
-			return (Lump::WordEndian)i;
-	}
-	return (Lump::WordEndian)2;
-}
+//// Endian Values
+//static const char* _szEndian[] = {"Big","Little", "Undefined"};
+//Lump::WordEndian ToEndian( const char* pszFmt)
+//{
+//    for( unsigned int i = 0; i < sizeof( _szEndian); i++)
+//	{
+//		if( strcmp( _szEndian[i], pszFmt) == 0)
+//			return (Lump::WordEndian)i;
+//	}
+//	return (Lump::WordEndian)2;
+//}
+//
+//// Sample Format Values
+//static const char* _szWordAlignment[] = {"Left","Right","Unspecified"};
+//Lump::WordAlignment ToWordAlignment( const char* pszFmt)
+//{
+//    for( unsigned int i = 0; i < sizeof( _szWordAlignment); i++)
+//	{
+//		if( strcmp( _szWordAlignment[i], pszFmt) == 0)
+//			return (Lump::WordAlignment)i;
+//	}
+//	return (Lump::WordAlignment)2;
+//}
 
-// Sample Format Values
-static const char* _szWordAlignment[] = {"Left","Right","Unspecified"};
-Lump::WordAlignment ToWordAlignment( const char* pszFmt)
-{
-    for( unsigned int i = 0; i < sizeof( _szWordAlignment); i++)
-	{
-		if( strcmp( _szWordAlignment[i], pszFmt) == 0)
-			return (Lump::WordAlignment)i;
-	}
-	return (Lump::WordAlignment)2;
-}
-
-NODELIST_BEGIN(_DataFileNodes)
+NODELIST_BEGIN(_FileNodes)
 	NODELIST_ENTRY( "url",			TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "timestamp",	TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "offset",		TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "owner",		TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "copyright",	TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "createDate",	TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "modDate",	TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "session",	TE_SESSION)
-	NODELIST_ENTRY( "rate",		TE_FREQUENCY)
-	NODELIST_ENTRY( "offset",	TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "subframe", TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "frame",	TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "next",		TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "previous",	TE_SYSTEM)
-	NODELIST_ENTRY( "stream",	TE_STREAM)
 	NODELIST_ENTRY( "comment",	TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "artifact", TE_SIMPLE_TYPE)
 NODELIST_END
 
-DatafileTranslator::DatafileTranslator() 
-: Translator( (NodeEntry*) _DataFileNodes)
+FileTranslator::FileTranslator() 
+: Translator( (NodeEntry*) _FileNodes)
 {
 }
 
 /**
  * Reads a node from the document and parses into metadata.
  */
-bool DatafileTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor )
+bool FileTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor )
 {
 	const XMLElement* pchild;
 	if( pAdaptor == NULL)
 		return false;
-	DataFile datafile;
+	File file;
 
 	bool bRetVal = true;
 
 	//Parse the AttributedObject Elements.
-	if( !ReadAttributedObject( datafile, ctxt, elem, false))
+	if( !ReadAttributedObject( file, ctxt, elem, false))
 		return false;
 
-	//Done processing element, if no children, meaning this is 
+	//Done processing element, if	 children, meaning this is 
 	//an element referencing another element.
 	if( elem.NoChildren())
-		datafile.IsReference(true);
+		file.IsReference(true);
 	else
 	{
-		const char* pszval;
+		//Parse url [1]
+		file.Url().Value( ReadFirstElement("url", elem, true, ""));
 
-		//Parse url
-		pchild = elem.FirstChildElement("url");
-		datafile.Url().Value(pchild->GetText());
+		//Parse timestamp [1]
+		pchild = elem.FirstChildElement("timestamp");
+		file.TimeStamp( Date(pchild->GetText()));
 
-		//Parse owner
-		pchild = elem.FirstChildElement("owner");
-		datafile.Owner( (pchild != NULL) ? pchild->GetText():"");
+		//Parse offset [0..1]
+		file.Offset( ReadFirstElement("offset", elem, false, (size_t)0));
 
-        //Parse copyright
-		pchild = elem.FirstChildElement("copyright");
-		datafile.Copyright((pchild != NULL) ? pchild->GetText():"");
+		//Parse owner [0..1]
+		file.Owner( ReadFirstElement( "owner", elem, false, ""));
 
-		//Parse createDate
-		pchild = elem.FirstChildElement("createDate");
-		datafile.CreateDate( Date(pchild->GetText()));
+        //Parse copyright [0..1]
+		file.Copyright( ReadFirstElement( "copyright", elem, false, ""));
 
-        //Parse modDate
-		pchild = elem.FirstChildElement("modDate");
-		if( pchild != NULL)	datafile.ModDate( Date(pchild->GetText()));
-
-		//Parse session
-		pchild = elem.FirstChildElement("session");
-		AccessorAdaptor<DataFile, Session> adpt( &datafile, &DataFile::Session);
-        bRetVal &= ReadElement( datafile, ctxt, *pchild, &adpt);
-
-		//Parse rate
-		pchild = elem.FirstChildElement("rate");
-		AccessorAdaptor<DataFile, Frequency> adpt1( &datafile, &DataFile::Rate);
-		bRetVal &= ReadElement( datafile, ctxt, *pchild, &adpt1);
-
-		//Parse offset
-		pchild = elem.FirstChildElement("offset");
-		datafile.Offset( (pchild != NULL) ? atol( pchild->GetText()) : 0);
-
-		//Parse subframe
-		pchild = elem.FirstChildElement("subframe");
-		if( pchild != NULL)
-		{
-			Lump sf;
-			//words
-			pszval = pchild->Attribute("words");
-			sf.Words( (pszval != NULL) ? atoi( pszval) : 0);
-			//size
-			pszval = pchild->Attribute("size");
-			sf.Size(  (pszval != NULL) ? atoi( pszval) : 0);
-			//endian
-			sf.Endian( ToEndian( pchild->Attribute("endian")));
-			//alignment
-			sf.Alignment( ToWordAlignment( pchild->Attribute("alignment")));
-			datafile.Lump( sf);
-		}
-
-		//Parse frame
-		pchild = elem.FirstChildElement("frame");
-		if( pchild != NULL)
-		{
-			Frame frm;
-			//sizeHeader
-			pszval = pchild->Attribute("sizeHeader");
-			frm.SizeHeader( (pszval != NULL) ? atol( pszval) : 0);
-			//sizeFooter
-			pszval = pchild->Attribute("sizeFooter");
-			frm.SizeFooter( (pszval != NULL) ? atol( pszval) : 0);
-			//count
-			pszval = pchild->Attribute("count");
-			frm.SizeHeader( (pszval != NULL) ? atol( pszval) : 0);
-			datafile.Frame(frm);
-		}
-
-		//Parse next
-		pchild = elem.FirstChildElement("next");
-		datafile.Next().Value( (pchild != NULL) ? pchild->GetText() : "");
+		//Parse next [0..1]
+		file.Next().Value( ReadFirstElement("next", elem, false, ""));
 		
-		//Parse previous
-		pchild = elem.FirstChildElement("previous");
-		datafile.Previous().Value((pchild != NULL) ? pchild->GetText() : "");
+		//Parse previous [0..1]
+		file.Previous().Value( ReadFirstElement("previous", elem, false, ""));
 
-		//Parse Streams
-		pchild = elem.FirstChildElement("stream");
-		for( ;pchild != NULL; pchild = pchild->NextSiblingElement("stream")) 
-		{ 
-			ListAdaptor<Stream> adapt( datafile.Streams() ); 
-			bRetVal &= ReadElement( datafile, ctxt, *pchild, &adapt); 
-		} 
+		//TODO Parse Lane [1]
 	}
 
 	//Lastly set the datafile on the specified object.
 	if( bRetVal)
-		pAdaptor->set( &datafile);
+		pAdaptor->set( &file);
 	return bRetVal;
 }
 /**
  * Write the current object 
  */
-void DatafileTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem )
+void FileTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & ctxt, tinyxml2::XMLNode & elem )
 {
-	const DataFile* pdatafile = dynamic_cast< const DataFile*>(pObject);
+	const File* pdatafile = dynamic_cast< const File*>(pObject);
 	if( pdatafile == NULL) 
-		throw TranslationException("DatafileTranslator cannot cast DataFile object");
+		throw TranslationException("FileTranslator cannot cast File object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
 
 	if( !pdatafile->IsReference())
 	{
 		XMLElement* pelem;
-		char buff[64];
 
-		//Write url
-		pelem = elem.GetDocument()->NewElement( "url");
-		pelem->SetText( pdatafile->Url().Value().c_str());
+		//Write url [1]
+		WriteElement( "url", pdatafile->Url().Value().c_str(), pelemc, true);
+
+		//Write timestamp [1]
+		pelem = elem.GetDocument()->NewElement( "timestamp");
+		pelem->SetText( pdatafile->TimeStamp().toString().c_str());
 		pelemc->InsertEndChild( pelem);
 
-		//Write owner
-		if( pdatafile->Owner().length() > 0)
-		{
-			pelem = elem.GetDocument()->NewElement( "owner");
-			pelem->SetText( pdatafile->Owner().c_str());
-			pelemc->InsertEndChild( pelem);
-		}
+		//Write offset [0..1]
+		WriteElement( "offset", pdatafile->Offset(), pelemc, false, 0);
 
-		//Write copyright
-		if( pdatafile->Copyright().length() > 0)
-		{
-			pelem = elem.GetDocument()->NewElement( "copyright");
-			pelem->SetText( pdatafile->Copyright().c_str());
-			pelemc->InsertEndChild( pelem);
-		}
+		//Write owner [0..1]
+		WriteElement("owner", pdatafile->Owner().c_str(), pelemc, false, "");
 
-		//Write createDate
-		pelem = elem.GetDocument()->NewElement( "createDate");
-		pelem->SetText( pdatafile->CreateDate().toString().c_str());
-		pelemc->InsertEndChild( pelem);
+		//Write copyright [0..1]
+		WriteElement("owner", pdatafile->Copyright().c_str(), pelemc, false, "");
 
-		//Write modDate
-		pelem = elem.GetDocument()->NewElement( "modDate");
-		pelem->SetText( pdatafile->CreateDate().toString().c_str());
-		pelemc->InsertEndChild( pelem);
+		//Write next [0..1]
+		WriteElement("next", pdatafile->Next().Value().c_str(), pelemc, false, "");
 
-		//Write session
-		WriteElement( &pdatafile->Session(), "session", ctxt, *pelemc);
+		//Write previous [0..1]
+		WriteElement("previous", pdatafile->Previous().Value().c_str(), pelemc, false, "");
 
-		//Write rate
-		WriteElement( &pdatafile->Rate(), "rate", ctxt, *pelemc);
-
-		//Write offset
-		pelem = elem.GetDocument()->NewElement( "offset");
-		sprintf( buff, "%ld", pdatafile->Offset() );
-		pelem->SetText( buff );
-		pelemc->InsertEndChild( pelem);
-
-		//Write subframe
-		if( pdatafile->Lump().IsDefined())
-		{
-			const Lump& sf = pdatafile->Lump();
-			pelem = elem.GetDocument()->NewElement( "subframe");
-			sprintf(buff, "%ld", sf.Words());
-			pelem->SetAttribute("words", buff);
-			sprintf(buff, "%ld", sf.Size());
-			pelem->SetAttribute("size",  buff);
-			pelem->SetAttribute("endian", _szEndian[ sf.Endian()]);
-			pelem->SetAttribute("alignment", _szWordAlignment[ sf.Alignment()] );
-			pelemc->InsertEndChild( pelem);
-		}
-
-		//Write frame
-		if( pdatafile->Frame().IsDefined())
-		{
-			const Frame& frm = pdatafile->Frame();
-			pelem = elem.GetDocument()->NewElement( "frame");
-			sprintf(buff, "%ld", frm.SizeHeader());
-			pelem->SetAttribute("sizeHeader", buff);
-			sprintf(buff, "%ld", frm.SizeFooter());
-			pelem->SetAttribute("sizeFooter", buff);
-			sprintf(buff, "%ld", frm.Count());
-			pelem->SetAttribute("count", buff);			
-			pelemc->InsertEndChild( pelem);
-		}
-
-		//Write next
-		if( pdatafile->Next().Value().length() > 0)
-		{
-			pelem = elem.GetDocument()->NewElement( "next");
-			pelem->SetText(pdatafile->Next().Value().c_str());
-			pelemc->InsertEndChild( pelem);
-		}
-
-		//Write previous
-		if( pdatafile->Previous().Value().length() > 0)
-		{
-			pelem = elem.GetDocument()->NewElement( "previous");
-			pelem->SetText(pdatafile->Previous().Value().c_str());
-			pelemc->InsertEndChild( pelem);
-		}
-
-		//Write streams
-		StreamList::const_iterator iter = pdatafile->Streams().begin();
-		for(; iter != pdatafile->Streams().end(); iter++)
-		{
-			WriteElement( &(*iter), "stream", ctxt, *pelemc);
-		}
+		//TODO Write Lane [1]
 	}
 	
 	//Fill out id, artifacts, and comments last in accordance

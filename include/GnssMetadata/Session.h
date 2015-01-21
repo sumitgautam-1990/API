@@ -55,6 +55,14 @@ namespace GnssMetadata
 			return *this;
 		}
 
+		Date Toa( ) const
+		{
+			return _toa;
+		}
+		void Toa( const Date& toa)
+		{
+			_toa = toa;
+		}
 
 		String Campaign( ) const
 		{

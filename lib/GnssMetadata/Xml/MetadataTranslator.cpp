@@ -33,11 +33,12 @@ using namespace tinyxml2;
 ******************************************************************************/
 NODELIST_BEGIN( _MetadataNodes)
 	NODELIST_ENTRY( "include", TE_ANYURI)
-	NODELIST_ENTRY( "datafile", TE_DATAFILE)
-	NODELIST_ENTRY( "channel", TE_CHANNEL)
+	NODELIST_ENTRY( "file", TE_DATAFILE)
+	NODELIST_ENTRY( "band", TE_BAND)
 	NODELIST_ENTRY( "system", TE_SYSTEM)
 	NODELIST_ENTRY( "stream", TE_STREAM)
 	NODELIST_ENTRY( "session", TE_SESSION)
+	//TODO Add fileset,lane, block, chunk, lump 
 NODELIST_END
 
 MetadataTranslator::MetadataTranslator() 
@@ -56,9 +57,9 @@ bool MetadataTranslator::OnRead( Context & ctxt, const XMLElement & elem, Access
 	Metadata& metadata = dynamic_cast<Metadata&>( *ctxt.pContainer);
 
 	bRetVal &= ReadList<AnyUri>(metadata.Includes(), "include", ctxt, elem);
-	bRetVal &= ReadList<DataFile>(metadata.DataFiles(), "datafile", ctxt, elem);
+	bRetVal &= ReadList<File>(metadata.Files(), "file", ctxt, elem);
     bRetVal &= ReadList<Session>(metadata.Sessions(), "session", ctxt, elem);
-    bRetVal &= ReadList<Channel>(metadata.Channels(), "channel", ctxt, elem);
+    bRetVal &= ReadList<Band>(metadata.Bands(), "band", ctxt, elem);
     bRetVal &= ReadList<System>(metadata.Systems(), "system", ctxt, elem);
     bRetVal &= ReadList<Stream>(metadata.Streams(), "stream", ctxt, elem);
 
@@ -81,9 +82,9 @@ void MetadataTranslator::OnWrite( const Object * pObject, pcstr pszName, Context
 	pelemc->SetAttribute( "xmlns", METADATA_NAMESPACE);
 
 	WriteList<AnyUri>( pmetadata->Includes(), "include", ctxt, *pelemc);
-	WriteList<DataFile>( pmetadata->DataFiles(), "datafile", ctxt, *pelemc);
+	WriteList<File>( pmetadata->Files(), "file", ctxt, *pelemc);
 	WriteList<Session>( pmetadata->Sessions(), "session", ctxt, *pelemc);
-	WriteList<Channel>( pmetadata->Channels(), "channel", ctxt, *pelemc);
+	WriteList<Band>( pmetadata->Bands(), "channel", ctxt, *pelemc);
 	WriteList<System>( pmetadata->Systems(), "system", ctxt, *pelemc);
 	WriteList<Stream>( pmetadata->Streams(), "stream", ctxt, *pelemc);
 	

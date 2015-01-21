@@ -29,11 +29,14 @@ using namespace GnssMetadata;
 using namespace tinyxml2;
 
 NODELIST_BEGIN(_SessionNodes)
-	NODELIST_ENTRY( "scenario",      TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "campaign",		 TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "location",		 TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "contact",		 TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "toa",      TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "position",		 TE_POSITION)
+	//TODO Attitude
 	NODELIST_ENTRY( "poc",			 TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "contact",		 TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "campaign",		 TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "scenario",      TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "system",		 TE_SYSTEM)
 	NODELIST_ENTRY( "comment",		 TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "artifact",		 TE_SIMPLE_TYPE)
 NODELIST_END
@@ -49,13 +52,12 @@ SessionTranslator::SessionTranslator()
 bool SessionTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor )
 {
 	const XMLElement* pchild;
-	const char* pszValue;
+	bool bRetVal = true;
+	Session session;
 
 	if( pAdaptor == NULL)
 		return false;
-	Session session;
 
-    //bool retval = false;
 
 	//Parse the AttributedObject Elements.
 	if( !ReadAttributedObject( session, ctxt, elem))
@@ -67,48 +69,42 @@ bool SessionTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accesso
 		session.IsReference(true);
 	else
 	{
-		//Parse scenario
-		pchild = elem.FirstChildElement("scenario");
-        pszValue = (pchild != NULL && pchild->GetText() != NULL) ? pchild->GetText() : "";
-		session.Scenario(pszValue );
-
-		//Parse campaign
-		pchild = elem.FirstChildElement("campaign");
-        pszValue = (pchild != NULL && pchild->GetText() != NULL) ? pchild->GetText() : "";
-		session.Campaign(pszValue );
-
-		//Parse location
-		pchild = elem.FirstChildElement("location");
-		try
+		//Parse TOA	[0..1]
+		pchild = elem.FirstChildElement("toa");
+		if( pchild != NULL)
 		{
-            if( pchild != NULL)
-            {
-                double lat = atof( pchild->Attribute("lat"));
-                double lon = atof( pchild->Attribute("lon"));
-                double height= atof( pchild->Attribute("height"));
-                Location loc(lat, lon, height);
-                session.Location( loc);
-            }
-		}
-		catch(...)
-		{
-			throw TranslationException("Couldn't parse Location element");
+			session.Toa(Date(pchild->GetText()));
 		}
 
-        //Parse contact
-		pchild = elem.FirstChildElement("contact");
-        pszValue = (pchild != NULL && pchild->GetText() != NULL) ? pchild->GetText() : "";
-		session.Contact(pszValue );
+		//Parse Position [0..1]
+		pchild = elem.FirstChildElement("position");
+		if( pchild != NULL)
+		{
+			AccessorAdaptor<Session, Position> adapt(&session, &Session::Position);
+			bRetVal &= ReadElement( session, ctxt, *pchild, &adapt);
+		}
 
-		//Parse poc
-		pchild = elem.FirstChildElement("poc");
-        pszValue = (pchild != NULL && pchild->GetText() != NULL) ? pchild->GetText() : "";
-        session.Poc( pszValue );
+		//TODO Parse attitude [0..1]
+
+		//Parse poc [0..1]
+		session.Poc( ReadFirstElement("poc", elem, false, ""));
+
+		//Parse contact [0..1]
+		session.Contact( ReadFirstElement("contact", elem, false, ""));
+
+		//Parse campaign [0..1]
+		session.Campaign( ReadFirstElement("campaign", elem, false, ""));
+
+		//Parse scenario [0..1]
+		session.Scenario( ReadFirstElement("scenario", elem, false, ""));
+
+		//Parse Systems [0..1]
+		bRetVal &= ReadList<System>(session.Systems(), "system", ctxt, elem);
     }
 
 	//Lastly set the session on the specified object.
 	pAdaptor->set( &session);
-	return true;
+	return bRetVal;
 }
 /**
  * Write the current object 
@@ -125,54 +121,32 @@ void SessionTranslator::OnWrite( const Object * pObject, pcstr pszName, Context 
 	if( !psession->IsReference())
 	{
 		XMLElement* pelem;
+		
+		//Write toa
+		pelem = elem.GetDocument()->NewElement( "toa");
+		pelem->SetText( psession->Toa().toString().c_str());
+		pelemc->InsertEndChild( pelem);
 
-		//Write scenario
-        if( psession->Scenario().length() > 0)
-        {
-            pelem = elem.GetDocument()->NewElement( "scenario");
-            pelem->SetText( psession->Scenario().c_str());
-            pelemc->InsertEndChild(pelem);
-        }
+		//Write Position
+		WriteElement( &psession->Position(), "position", ctxt, *pelemc);
+
+		//TODO Write Attitude 
+
+		//Write poc
+		WriteElement("poc",psession->Poc().c_str(), pelemc, false, "");
+
+		//Write conact
+		WriteElement("contact",psession->Contact().c_str(), pelemc, false, "");
 
 		//Write campaign
-        if( psession->Campaign().length() > 0)
-        {
-            pelem = elem.GetDocument()->NewElement( "campaign");
-            pelem->SetText( psession->Campaign().c_str());
-            pelemc->InsertEndChild(pelem);
-        }
+		WriteElement("campaign",psession->Campaign().c_str(), pelemc, false, "");
 
-        //Write location
-        if( psession->Location().IsDefined())
-        {
-            pelem = elem.GetDocument()->NewElement( "location");
-            char buff[128];
-            const Location& llh = psession->Location();
-            sprintf(buff,"%0.8lf", llh.Latitude());
-            pelem->SetAttribute("lat", buff);
-            sprintf(buff,"%0.8lf", llh.Longitude());
-            pelem->SetAttribute("lon", buff);
-            sprintf(buff,"%0.3lf", llh.Height());
-            pelem->SetAttribute("height", buff);
-            pelemc->InsertEndChild(pelem);
-        }
+		//Write scenario
+		WriteElement("scenario",psession->Scenario().c_str(), pelemc, false, "");
 
-        //Write conact
-        if( psession->Contact().length() > 0)
-        {
-            pelem = elem.GetDocument()->NewElement( "contact");
-            pelem->SetText( psession->Contact().c_str());
-            pelemc->InsertEndChild(pelem);
-        }
-
-        //Write poc
-        if( psession->Poc().length() > 0)
-        {
-            pelem = elem.GetDocument()->NewElement( "poc");
-            pelem->SetText( psession->Poc().c_str());
-            pelemc->InsertEndChild(pelem);
-        }
-    }
+		//Write system
+		WriteList<System>( psession->Systems(), "system", ctxt,*pelemc);		//Write location
+	}
 	
 	//Fill out id, artifacts, and comments last in accordance
 	//with schema.
