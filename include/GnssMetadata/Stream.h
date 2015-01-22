@@ -97,7 +97,7 @@ namespace GnssMetadata
 		{
 			return _encoding;
 		}
-		void Encoding( const String encoding )
+		void Encoding( const String& encoding )
 		{
 			_encoding = encoding;
 		}
@@ -110,6 +110,7 @@ namespace GnssMetadata
 		{
 			_format = format;
 		}
+
 		void Packedbits( const size_t packedbits )
 		{
 			_packedbits = packedbits;

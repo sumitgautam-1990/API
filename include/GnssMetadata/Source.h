@@ -81,6 +81,45 @@ namespace GnssMetadata
 			return *this;
 		}
 
+		SourceType Type( ) const
+		{
+			return _type;
+		}
+		void Type( const SourceType type )
+		{
+			_type = type;
+		}
+
+		SourcePolarization Polarization( ) const
+		{
+			return _polarization;
+		}
+		void Polarization( const SourcePolarization polarization)
+		{
+			_polarization = polarization;
+		}
+
+		const GnssMetadata::Position& Origin( ) const
+		{
+			return _origin;
+		}
+		GnssMetadata::Position& Origin( ) 
+		{
+			return _origin;
+		}
+		void Origin( const GnssMetadata::Position& origin )
+		{
+			_origin = origin;
+		}
+
+		String IdCluster( ) const
+		{
+			return _idCluster;
+		}
+		void IdCluster( const String& id)
+		{
+			_idCluster = id;
+		}
 
 		/**
 		 * Returns a string representation of the object.

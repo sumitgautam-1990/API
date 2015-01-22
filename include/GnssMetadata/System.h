@@ -87,7 +87,7 @@ namespace GnssMetadata
 		/**
 		 * Sets the system equipment information.
 		 */
-		void Equipment( const String equipment )
+		void Equipment( const String& equipment )
 		{
 			_equipment = equipment;
 		}

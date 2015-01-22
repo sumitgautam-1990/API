@@ -30,9 +30,12 @@
 #include "LaneTranslator.h"
 #include "FrequencyTranslator.h"
 #include "FileTranslator.h"
+#include "FileSetTranslator.h"
 #include "DurationTranslator.h"
 #include "PositionTranslator.h"
 #include "SystemTranslator.h"
+#include "ClusterTranslator.h"
+#include "SourceTranslator.h"
 #include "SessionTranslator.h"
 //#include "RfConfigTranslator.h"
 //#include "OscillatorTranslator.h"
@@ -63,12 +66,14 @@ static struct TranslatorEntry
     {TE_STREAM, *(new StreamTranslator())},
     {TE_BAND, *(new BandTranslator())},
 	{TE_LUMP, *(new LumpTranslator())},
-	{TE_LUMP, *(new LumpTranslator())},
 	{TE_CHUNK, *(new ChunkTranslator())},
 	{TE_BLOCK, *(new BlockTranslator())},
 	{TE_LANE, *(new LaneTranslator())},
 	{TE_DATAFILE, *(new FileTranslator())},
+	{TE_FILESET, *(new FileSetTranslator())},
     {TE_SYSTEM, *(new SystemTranslator())},
+	{TE_CLUSTER,*(new ClusterTranslator())},
+	{TE_SOURCE,*(new SourceTranslator())},
     {TE_SESSION, *(new SessionTranslator())},
 //    {TE_RFCONFIG, *(new RfConfigTranslator())},
 //    {TE_OSCILLATOR, *(new OscillatorTranslator())},

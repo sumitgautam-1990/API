@@ -34,6 +34,7 @@ using namespace tinyxml2;
 NODELIST_BEGIN( _MetadataNodes)
 	NODELIST_ENTRY( "include", TE_ANYURI)
 	NODELIST_ENTRY( "file", TE_DATAFILE)
+	NODELIST_ENTRY( "fileset", TE_FILESET)
 	NODELIST_ENTRY( "band", TE_BAND)
 	NODELIST_ENTRY( "system", TE_SYSTEM)
 	NODELIST_ENTRY( "stream", TE_STREAM)
@@ -62,6 +63,7 @@ bool MetadataTranslator::OnRead( Context & ctxt, const XMLElement & elem, Access
 
 	bRetVal &= ReadList<AnyUri>(metadata.Includes(), "include", ctxt, elem);
 	bRetVal &= ReadList<File>(metadata.Files(), "file", ctxt, elem);
+	bRetVal &= ReadList<FileSet>(metadata.FileSets(), "fileset", ctxt, elem);
     bRetVal &= ReadList<Band>(metadata.Bands(), "band", ctxt, elem);
     bRetVal &= ReadList<Stream>(metadata.Streams(), "stream", ctxt, elem);
     bRetVal &= ReadList<Lump>(metadata.Lumps(), "lump", ctxt, elem);
@@ -103,6 +105,7 @@ void MetadataTranslator::OnWrite( const Object * pObject, pcstr pszName, Context
 	WriteList<System>( pmetadata->Systems(), "system", ctxt, *pelemc);
 	WriteList<Session>( pmetadata->Sessions(), "session", ctxt, *pelemc);
 	WriteList<File>( pmetadata->Files(), "file", ctxt, *pelemc);
+	WriteList<FileSet>( pmetadata->FileSets(), "fileset", ctxt, *pelemc);
 	
 	elem.InsertEndChild( pelemc);
 }

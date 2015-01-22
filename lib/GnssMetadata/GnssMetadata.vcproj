@@ -323,6 +323,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\ClusterTranslator.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Comment.cpp"
 				>
 			</File>
@@ -340,6 +344,10 @@
 			</File>
 			<File
 				RelativePath=".\File.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\FileSetTranslator.cpp"
 				>
 			</File>
 			<File
@@ -404,6 +412,10 @@
 			</File>
 			<File
 				RelativePath=".\Source.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\SourceTranslator.cpp"
 				>
 			</File>
 			<File
@@ -481,6 +493,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Xml\ClusterTranslator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\GnssMetadata\Comment.h"
 				>
 			</File>
@@ -502,6 +518,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\GnssMetadata\File.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\FileSetTranslator.h"
 				>
 			</File>
 			<File
@@ -574,6 +594,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\GnssMetadata\Source.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Xml\SourceTranslator.h"
 				>
 			</File>
 			<File

@@ -68,7 +68,7 @@ namespace GnssMetadata
 		{
 			return _campaign;
 		}
-		void Campaign( const String campaign )
+		void Campaign( const String& campaign )
 		{
 			_campaign = campaign;
 		}
@@ -76,7 +76,7 @@ namespace GnssMetadata
 		{
 			return _contact;
 		}
-		void Contact( const String contact )
+		void Contact( const String& contact )
 		{
 			_contact = contact;
 		}
@@ -99,12 +99,12 @@ namespace GnssMetadata
 		{
 			return _poc;
 		}
-		void Poc( const String poc )
+		void Poc( const String& poc )
 		{
 			_poc = poc;
 		}
 		
-		void Scenario( const String scenario )
+		void Scenario( const String& scenario )
 		{
 			_scenario = scenario;
 		}

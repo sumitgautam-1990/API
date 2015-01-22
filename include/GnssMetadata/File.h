@@ -102,7 +102,7 @@ namespace GnssMetadata
 		{
 			return _owner;
 		}
-		void Owner( const String owner )
+		void Owner( const String& owner )
 		{
 			_owner = owner;
 		}
@@ -111,7 +111,7 @@ namespace GnssMetadata
 		{
 			return _copyright;
 		}
-		void Copyright( const String copyright )
+		void Copyright( const String& copyright )
 		{
 			_copyright = copyright;
 		}
@@ -195,6 +195,55 @@ namespace GnssMetadata
 	};
 
 	typedef std::list<File> FileList;
+
+
+	/**
+	 * Class defines metadata for a specific a file set. 
+	 */
+	class FileSet  : public AttributedObject
+	{
+		
+	public:
+		FileSet( const String& id) : AttributedObject( id){}
+		FileSet() {}
+		FileSet(const FileSet& rhs) 
+			: AttributedObject( rhs), _files(rhs._files)
+		{}	
+	
+		const FileSet& operator=( const FileSet& rhs)
+		{
+			if( &rhs == this)
+				return *this;
+			AttributedObject::operator =(rhs);
+	
+			_files = rhs._files;
+			return *this;
+		}
+
+		const AnyUriList& FileUrls( ) const
+		{
+			return _files;
+		}
+		AnyUriList& FileUrls( )
+		{
+			return _files;
+		}
+
+
+		/**
+		 *  Returns a string representation of the object.
+		 *  
+		 */
+		virtual String toString( const String & sFormat = DefaultFormat );
+		
+	private:
+		AnyUriList _files;
+
+	};
+
+	typedef std::list<FileSet> FileSetList;
+
+
 }
 
 

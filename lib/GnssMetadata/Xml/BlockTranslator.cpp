@@ -46,7 +46,6 @@ BlockTranslator::BlockTranslator()
  */
 bool BlockTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAdaptorBase* pAdaptor )
 {
-	const XMLElement* pchild;
 	if( pAdaptor == NULL)
 		return false;
 	Block block;

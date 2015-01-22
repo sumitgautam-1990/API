@@ -65,7 +65,7 @@ namespace GnssMetadata
 		{
 			return _model;
 		}
-		void Model( const String model )
+		void Model( const String& model )
 		{
 			_model = model;
 		}
@@ -73,7 +73,7 @@ namespace GnssMetadata
 		{
 			return _vendor;
 		}
-		void Vendor( const String vendor )
+		void Vendor( const String& vendor )
 		{
 			_vendor = vendor;
 		}
@@ -81,7 +81,7 @@ namespace GnssMetadata
 		{
 			return _serial;
 		}
-		void Serial( const String serial)
+		void Serial( const String& serial)
 		{
 			_serial = serial;
 		}

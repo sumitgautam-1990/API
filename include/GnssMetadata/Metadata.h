@@ -80,6 +80,16 @@ namespace GnssMetadata
 			return _files;
 		}
 
+		const FileSetList& FileSets( ) const
+		{
+			return _filesets;
+		}
+		FileSetList& FileSets( )
+		{
+			return _filesets;
+		}
+
+
 		const BandList& Bands( ) const
 		{
 			return _bands;
@@ -162,6 +172,8 @@ namespace GnssMetadata
 		AnyUriList  _includes;
 
 		FileList _files;
+
+		FileSetList  _filesets;
 
 		BandList  _bands;
 
