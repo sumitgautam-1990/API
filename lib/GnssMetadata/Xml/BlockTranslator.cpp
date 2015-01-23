@@ -53,7 +53,7 @@ bool BlockTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorA
 	bool bRetVal = true;
 
 	//Parse the AttributedObject Elements.
-	if( !ReadAttributedObject( block, ctxt, elem))
+	if( !ReadAttributedObject( block, ctxt, elem, false))
 		return false;
 
 	//Done processing element, if no children, meaning this is 
@@ -91,6 +91,11 @@ void BlockTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & 
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
 
+	//Fill out id, artifacts, and comments last in accordance
+	//with schema.
+	WriteAttributedObject( *pblock, ctxt, *pelemc, pblock->IsReference());
+
+
 	if( !pblock->IsReference())
 	{
 		//Write cycles [1]
@@ -106,8 +111,6 @@ void BlockTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & 
 		WriteList<Chunk>( pblock->Chunks(), "chunk", ctxt,*pelemc);
 	}
 	
-	//Fill out id, artifacts, and comments last in accordance
-	//with schema.
-	WriteAttributedObject( *pblock, ctxt, *pelemc);
+
 	elem.InsertEndChild( pelemc);
 }

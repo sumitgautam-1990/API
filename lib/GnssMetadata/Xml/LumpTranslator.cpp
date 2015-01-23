@@ -48,7 +48,7 @@ bool LumpTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAd
 	bool bRetVal = true;
 
 	//Parse the AttributedObject Elements.
-	if( !ReadAttributedObject( lump, ctxt, elem))
+	if( !ReadAttributedObject( lump, ctxt, elem, false))
 		return false;
 
 	//Done processing element, if no children, meaning this is 
@@ -77,14 +77,16 @@ void LumpTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & c
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
 
+	//Fill out id, artifacts, and comments last in accordance
+	//with schema.
+	WriteAttributedObject( *plump, ctxt, *pelemc, plump->IsReference());
+
 	if( !plump->IsReference())
 	{
 		//Write band
 		WriteList<Stream>( plump->Streams(), "stream", ctxt,*pelemc);
 	}
 	
-	//Fill out id, artifacts, and comments last in accordance
-	//with schema.
-	WriteAttributedObject( *plump, ctxt, *pelemc);
+
 	elem.InsertEndChild( pelemc);
 }

@@ -29,3 +29,12 @@ String File::toString( const String & sFormat )
 {
 	return AttributedObject::toString(sFormat);
 }
+
+
+/**
+ * Returns a string representation of the object.
+ */
+String FileSet::toString( const String & sFormat )
+{
+	return AttributedObject::toString(sFormat);
+}

@@ -33,8 +33,10 @@ namespace GnssMetadata
 	{
 		
 	public:
-		File( const String& id) : AttributedObject( id){}
-		File() {}
+		File( const String& id = "", bool bIsReference = false)
+			: AttributedObject( id, bIsReference), _offset(0)
+		{}
+
 		File(const File& rhs) 
 			: AttributedObject( rhs), 
 			_url(rhs._url), 
@@ -150,9 +152,19 @@ namespace GnssMetadata
 		{
 			return _lane;
 		}
-		void Lane( const GnssMetadata::Lane& session )
+		void Lane( const GnssMetadata::Lane& lane)
 		{
-			_lane = session;
+			_lane = lane;
+		}
+		void Lane( const GnssMetadata::Lane& lane, bool bReferenceOnly)
+		{
+			if( bReferenceOnly)
+			{
+				GnssMetadata::Lane rln( lane.Id(), true);
+				_lane = rln;
+			}
+			else
+				_lane = lane;
 		}
 
 		/**

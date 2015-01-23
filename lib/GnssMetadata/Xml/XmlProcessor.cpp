@@ -59,6 +59,8 @@ static struct TranslatorEntry
 	Translator& translator;
 } _Translators[] =  
 {
+	//NOTE these are in the same order as the 
+	//TranslatorId enum.
     {TE_ANYURI, *(new AnyUriTranslator())},
     {TE_FREQUENCY, *(new FrequencyTranslator())},
     {TE_DURATION, *(new DurationTranslator())},

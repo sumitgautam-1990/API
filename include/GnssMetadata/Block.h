@@ -36,19 +36,20 @@ namespace GnssMetadata
 		/**
 		 * Default constructor.
 		 */
-		Block( ) : _cycles( 0), _sizeHeader(0), 
+		Block( const String& id = "", bool bIsReference = false)
+			: AttributedObject( id, bIsReference), _cycles( 0), _sizeHeader(0), 
 			_sizeFooter(0)
 		{
 			
 		}
 
-		Block( size_t cycles, size_t sizeHeader=0, size_t sizeFooter = 0)
-			: _cycles( cycles), _sizeHeader(sizeHeader), _sizeFooter( sizeFooter)
+		Block( size_t cycles, size_t sizeHeader=0, size_t sizeFooter = 0, const String& id="")
+			: AttributedObject(id, false), _cycles( cycles), _sizeHeader(sizeHeader), _sizeFooter( sizeFooter)
 		{
 		}
 
 		Block( const Block& rhs) 
-		: _cycles( rhs._cycles), _sizeHeader( rhs._sizeHeader), _sizeFooter( rhs._sizeFooter),
+		: AttributedObject(rhs), _cycles( rhs._cycles), _sizeHeader( rhs._sizeHeader), _sizeFooter( rhs._sizeFooter),
 		  _chunklist(rhs._chunklist)
 		{
 			

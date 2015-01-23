@@ -60,6 +60,7 @@ namespace GnssMetadata
 		}
 
 		Source( const Source& rhs) : 
+			AttributedObject(rhs),
 			_type(rhs._type),
 			_polarization(rhs._polarization),
 			_origin( rhs._origin),

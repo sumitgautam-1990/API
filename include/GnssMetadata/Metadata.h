@@ -22,11 +22,16 @@
 #include "AttributedObject.h"
 #include "Band.h"
 #include "File.h"
+#include "Lane.h"
+#include "Block.h"
+#include "Chunk.h"
+#include "Lump.h"
 #include "AnyUri.h"
 #include "Stream.h"
 #include "Session.h"
 #include "System.h"
 #include "BaseTypes.h"
+
 namespace GnssMetadata
 {
 	/**
@@ -41,7 +46,9 @@ namespace GnssMetadata
 		Metadata() {}
 		Metadata(const Metadata& rhs) 
 			: AttributedObject( rhs), _includes(rhs._includes), _files( rhs._files),
-			_bands(rhs._bands), _streams(rhs._streams), _sessions( rhs._sessions),
+			_filesets( rhs._filesets), _bands(rhs._bands), _streams(rhs._streams), 
+			_lumps( rhs._lumps), _chunks(rhs._chunks), _blocks(rhs._blocks),
+			_lanes(rhs._lanes), _sessions( rhs._sessions),
 			_systems(rhs._systems)
 		{}	
 
@@ -54,8 +61,13 @@ namespace GnssMetadata
 
 			_includes = rhs._includes;
 			_files = rhs._files;
+			_filesets = rhs._filesets;
 			_bands = rhs._bands; 
 			_streams = rhs._streams; 
+			_lumps = rhs._lumps;
+			_chunks = rhs._chunks;
+			_blocks = rhs._blocks;
+			_lanes = rhs._lanes;
 			_sessions = rhs._sessions;
 			_systems = rhs._systems;
 			return *this;

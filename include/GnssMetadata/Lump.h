@@ -35,12 +35,14 @@ namespace GnssMetadata
 		/**
 		 * Default constructor for the lump.
 		 */
-		Lump( )
+		Lump(  const String& id = "", bool bIsReference = false)
+			: AttributedObject( id, bIsReference)
 		{
 			
 		}
 
-		Lump( const Lump& rhs) : _streamlist(rhs._streamlist)
+		Lump( const Lump& rhs) : AttributedObject(rhs), 
+			_streamlist(rhs._streamlist)
 		{
 			
 		}

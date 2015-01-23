@@ -42,7 +42,7 @@ NODELIST_END
 static const char* _szEndian[] = {"Big","Little", "Undefined"};
 Chunk::WordEndian ToEndian( const char* pszFmt)
 {
-    for( unsigned int i = 0; i < sizeof( _szEndian); i++)
+    for( unsigned int i = 0; i < 3; i++)
 	{
 		if( strcmp( _szEndian[i], pszFmt) == 0)
 			return (Chunk::WordEndian)i;
@@ -54,7 +54,7 @@ Chunk::WordEndian ToEndian( const char* pszFmt)
 static const char* _szWordPadding[] = {"None","Head","Tail"};
 Chunk::WordPadding ToWordPadding( const char* pszFmt)
 {
-    for( unsigned int i = 0; i < sizeof( _szWordPadding); i++)
+    for( unsigned int i = 0; i < 3; i++)
 	{
 		if( strcmp( _szWordPadding[i], pszFmt) == 0)
 			return (Chunk::WordPadding)i;
@@ -66,7 +66,7 @@ Chunk::WordPadding ToWordPadding( const char* pszFmt)
 static const char* _szWordShift[] = {"Left","Right"};
 Chunk::WordShift ToWordShift( const char* pszFmt)
 {
-    for( unsigned int i = 0; i < sizeof( _szWordShift); i++)
+    for( unsigned int i = 0; i < 2; i++)
 	{
 		if( strcmp( _szWordShift[i], pszFmt) == 0)
 			return (Chunk::WordShift)i;
@@ -94,7 +94,7 @@ bool ChunkTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorA
 	bool bRetVal = true;
 
 	//Parse the AttributedObject Elements.
-	if( !ReadAttributedObject( chunk, ctxt, elem))
+	if( !ReadAttributedObject( chunk, ctxt, elem, false))
 		return false;
 
 	//Done processing element, if no children, meaning this is 
@@ -150,6 +150,10 @@ void ChunkTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & 
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
 
+	//Fill out id, artifacts, and comments last in accordance
+	//with schema.
+	WriteAttributedObject( *pchunk, ctxt, *pelemc, pchunk->IsReference());
+
 	if( !pchunk->IsReference())
 	{
 		XMLElement* pelem;
@@ -180,8 +184,5 @@ void ChunkTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & 
 
 	}
 	
-	//Fill out id, artifacts, and comments last in accordance
-	//with schema.
-	WriteAttributedObject( *pchunk, ctxt, *pelemc);
 	elem.InsertEndChild( pelemc);
 }

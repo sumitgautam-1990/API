@@ -30,7 +30,7 @@ using namespace tinyxml2;
 static const char* _szfmts[] = {"sec","msec", "usec", "nsec", "psec"};
 static Duration::DurationFormat ToFormat( const char* pszFmt)
 {
-    for( unsigned int i = 0; i < sizeof( _szfmts); i++)
+    for( unsigned int i = 0; i < 5; i++)
 	{
 		if( strcmp( _szfmts[i], pszFmt) == 0)
 			return (Duration::DurationFormat)i;

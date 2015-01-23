@@ -30,7 +30,7 @@ using namespace tinyxml2;
 static const char* _szAlignFmts[] = {"Left","Right", "Undefined"};
 static Stream::StreamAlignment ToAlignmentFormat( const char* pszFmt)
 {
-    for( unsigned  int i = 0; i < sizeof( _szAlignFmts); i++)
+    for( unsigned  int i = 0; i < 3; i++)
 	{
 		if( strcmp( _szAlignFmts[i], pszFmt) == 0)
 			return (Stream::StreamAlignment)i;
@@ -43,7 +43,7 @@ static const char* _szSampleFmts[] = {"IF","IFn","IQ",
 	"IQn","InQ","InQn","QI","QIn","QnI","QnIn"};
 static Stream::SampleFormat ToSampleFormat( const char* pszFmt)
 {
-    for( unsigned int i = 0; i < sizeof( _szSampleFmts); i++)
+    for( unsigned int i = 0; i < 10; i++)
 	{
 		if( strcmp( _szSampleFmts[i], pszFmt) == 0)
 			return (Stream::SampleFormat)i;
@@ -101,9 +101,9 @@ bool StreamTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accessor
 		stream.Packedbits(ReadFirstElement("packedbits", elem, true, stream.Quantization() ));
 
 		//Parse alignment
+		pchild = elem.FirstChildElement("alignment");
 		if( pchild != NULL)
 		{
-			pchild = elem.FirstChildElement("alignment");
 			stream.Alignment( ToAlignmentFormat(pchild->GetText()));
 		}
 
@@ -134,6 +134,10 @@ void StreamTranslator::OnWrite( const Object * pObject, pcstr pszName, Context &
 		throw TranslationException("StreamTranslator cannot cast Stream object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
+
+	//Fill out id, artifacts, and comments last in accordance
+	//with schema.
+	WriteAttributedObject( *pstream, ctxt, *pelemc);
 
 	if( !pstream->IsReference())
 	{
@@ -178,8 +182,5 @@ void StreamTranslator::OnWrite( const Object * pObject, pcstr pszName, Context &
 
 	}
 	
-	//Fill out id, artifacts, and comments last in accordance
-	//with schema.
-	WriteAttributedObject( *pstream, ctxt, *pelemc);
 	elem.InsertEndChild( pelemc);
 }

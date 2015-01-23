@@ -40,6 +40,7 @@ namespace GnssMetadata
 		}
 
 		Cluster( const Cluster& rhs) :
+			AttributedObject(rhs),
 			_position(rhs._position),
 			_vendor(rhs._vendor),
 			_model(rhs._model),

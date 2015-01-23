@@ -49,13 +49,15 @@ namespace GnssMetadata
 		/**
 		 * Default constructor for the lane.
 		 */
-		Lane( )
+		Lane( const String& id = "", bool bIsReference = false)
+			: AttributedObject( id, bIsReference)
 		{
 			
 		}
 
 		Lane( const Lane& rhs) 
-			: _sessionlist(rhs._sessionlist),
+			: AttributedObject(rhs),
+			  _sessionlist(rhs._sessionlist),
 			  _systemlist(rhs._systemlist),
 			  _blocklist(rhs._blocklist),
 			  _bandsources(rhs._bandsources)

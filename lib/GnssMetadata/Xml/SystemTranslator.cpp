@@ -29,8 +29,8 @@ using namespace GnssMetadata;
 using namespace tinyxml2;
 
 NODELIST_BEGIN(_SystemNodes)
-	NODELIST_ENTRY( "freqbase",      TE_SIMPLE_TYPE)
-	NODELIST_ENTRY( "equipment",      TE_SIMPLE_TYPE)
+	NODELIST_ENTRY( "freqbase",  TE_FREQUENCY)
+	NODELIST_ENTRY( "equipment", TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "type",      TE_SIMPLE_TYPE)
 	//TODO Add source element
 	//TODO Add cluster element
@@ -43,7 +43,7 @@ NODELIST_END
 static const char* _szTypes[] = {"Processor","Receiver", "Simulator", "Undefined"};
 System::SystemType ToSystemType( const char* pszFmt)
 {
-    for( unsigned int i = 0; i < sizeof( _szTypes); i++)
+    for( unsigned int i = 0; i < 4; i++)
 	{
 		if( strcmp( _szTypes[i], pszFmt) == 0)
 			return (System::SystemType)i;
@@ -110,6 +110,10 @@ void SystemTranslator::OnWrite( const Object * pObject, pcstr pszName, Context &
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
 
+	//Fill out id, artifacts, and comments last in accordance
+	//with schema.
+	WriteAttributedObject( *psystem, ctxt, *pelemc);
+
 	if( !psystem->IsReference())
 	{
 		//Write Frequency Base.
@@ -125,8 +129,5 @@ void SystemTranslator::OnWrite( const Object * pObject, pcstr pszName, Context &
 		//TODO Write cluster elements
 	}
 	
-	//Fill out id, artifacts, and comments last in accordance
-	//with schema.
-	WriteAttributedObject( *psystem, ctxt, *pelemc);
 	elem.InsertEndChild( pelemc);
 }

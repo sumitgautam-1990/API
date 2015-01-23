@@ -53,7 +53,7 @@ bool LaneTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAd
 	bool bRetVal = true;
 
 	//Parse the AttributedObject Elements.
-	if( !ReadAttributedObject( lane, ctxt, elem))
+	if( !ReadAttributedObject( lane, ctxt, elem, false))
 		return false;
 
 	//Done processing element, if no children, meaning this is 
@@ -97,6 +97,10 @@ void LaneTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & c
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
 
+	//Fill out id, artifacts, and comments last in accordance
+	//with schema.
+	WriteAttributedObject( *plane, ctxt, *pelemc, plane->IsReference());
+
 	if( !plane->IsReference())
 	{
 		//Write bandsrc [1..*]
@@ -119,8 +123,5 @@ void LaneTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & c
 		WriteList<Block>( plane->Blocks(), "block", ctxt,*pelemc);
 	}
 	
-	//Fill out id, artifacts, and comments last in accordance
-	//with schema.
-	WriteAttributedObject( *plane, ctxt, *pelemc);
 	elem.InsertEndChild( pelemc);
 }

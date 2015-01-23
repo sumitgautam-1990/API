@@ -41,7 +41,7 @@ NODELIST_END
 static const char* _szSourceType[] = {"UndefinedType","Patch", "Dipole", "Helical", "Quadrilfilar", "Simulator"};
 Source::SourceType ToSourceType( const char* psz)
 {
-    for( unsigned int i = 0; i < sizeof( _szSourceType); i++)
+    for( unsigned int i = 0; i < 6; i++)
 	{
 		if( strcmp( _szSourceType[i], psz) == 0)
 			return (Source::SourceType)i;
@@ -53,7 +53,7 @@ Source::SourceType ToSourceType( const char* psz)
 static const char* _szSourcePolarization[] = {"UndefinedPolarization", "RHCP", "Linear", "Horizontal", "Vertical"};
 Source::SourcePolarization ToSourcePolarization( const char* psz)
 {
-    for( unsigned int i = 0; i < sizeof( _szSourcePolarization); i++)
+    for( unsigned int i = 0; i < 5; i++)
 	{
 		if( strcmp( _szSourcePolarization[i], psz) == 0)
 			return (Source::SourcePolarization)i;
@@ -134,6 +134,10 @@ void SourceTranslator::OnWrite( const Object * pObject, pcstr pszName, Context &
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
 
+	//Fill out id, artifacts, and comments last in accordance
+	//with schema.
+	WriteAttributedObject( *psource, ctxt, *pelemc);
+
 	if( !psource->IsReference())
 	{
 		XMLElement* pelem;
@@ -157,8 +161,5 @@ void SourceTranslator::OnWrite( const Object * pObject, pcstr pszName, Context &
 		WriteElement("idcluster",psource->IdCluster().c_str(), pelemc, false, "");
 	}
 	
-	//Fill out id, artifacts, and comments last in accordance
-	//with schema.
-	WriteAttributedObject( *psource, ctxt, *pelemc);
 	elem.InsertEndChild( pelemc);
 }

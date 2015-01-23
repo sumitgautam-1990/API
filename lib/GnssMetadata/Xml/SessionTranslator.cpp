@@ -118,6 +118,10 @@ void SessionTranslator::OnWrite( const Object * pObject, pcstr pszName, Context 
 		return;
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
 
+	//Fill out id, artifacts, and comments last in accordance
+	//with schema.
+	WriteAttributedObject( *psession, ctxt, *pelemc);
+
 	if( !psession->IsReference())
 	{
 		XMLElement* pelem;
@@ -148,8 +152,6 @@ void SessionTranslator::OnWrite( const Object * pObject, pcstr pszName, Context 
 		WriteList<System>( psession->Systems(), "system", ctxt,*pelemc);		//Write location
 	}
 	
-	//Fill out id, artifacts, and comments last in accordance
-	//with schema.
-	WriteAttributedObject( *psession, ctxt, *pelemc);
+
 	elem.InsertEndChild( pelemc);
 }

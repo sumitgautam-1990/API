@@ -52,12 +52,13 @@ namespace GnssMetadata
 		};
 
 	public:
-		Chunk() 
-		: _countWords(0), _sizeWord(0), _endian(Undefined), _padding(None), _shift(Left)
+		Chunk( const String& id = "", bool bIsReference = false)
+			: AttributedObject( id, bIsReference),
+			_countWords(0), _sizeWord(0), _endian(Undefined), _padding(None), _shift(Left)
 		{
 		}
 
-		Chunk(const Chunk& rhs): _countWords(rhs._countWords), 
+		Chunk(const Chunk& rhs): AttributedObject(rhs), _countWords(rhs._countWords), 
 			_sizeWord(rhs._sizeWord), _endian(rhs._endian),
 			_padding( rhs._padding), _shift( rhs._shift),
 			_lumplist( rhs._lumplist)
