@@ -66,8 +66,8 @@ bool LaneTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAd
 		const tinyxml2::XMLElement* pelem = elem.FirstChildElement("bandsrc"); 
 		for( ;pelem != NULL; pelem = pelem->NextSiblingElement("bandsrc")) 
 		{ 
-			const char* pszidband = pelem->Attribute("idband", "");
-			const char* pszidsrc = pelem->Attribute("idsrc", "");
+			const char* pszidband = pelem->Attribute("idband");
+			const char* pszidsrc = pelem->Attribute("idsrc");
 			lane.AddBandSource(pszidband, pszidsrc);
 		} 
 

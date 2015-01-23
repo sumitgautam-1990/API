@@ -54,7 +54,10 @@ namespace GnssMetadata
 		/**
 		 * Default constructor.
 		 */
-		Source( )
+		Source( SourceType type = UndefinedType, 
+			SourcePolarization polarization = UndefinedPolarization,
+			const String& id = "", bool bIsReference = false)
+			: AttributedObject( id, bIsReference), _type( type), _polarization(polarization)
 		{
 			
 		}

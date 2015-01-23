@@ -89,7 +89,7 @@ void WriteXmlFile(const char* pszFilename)
     String sfilemd = pszFilename;
 
 	////////////////////////////////
-	//Define the Session and System.
+	//Define the Session.
 	Session sess("0");
 	sess.Scenario("Example 2");
 	sess.Campaign("GNSS Metadata API Testing");
@@ -97,20 +97,35 @@ void WriteXmlFile(const char* pszFilename)
 	sess.Position( Position(47.76471300, -122.15612900, 25.610));
 	sess.AddComment("This is an example metadata specification with two interleaved streams.");
 
+	////////////////////////////////
+	//Define the System, Sources, and cluster.
 	System sys("A2300-1");
 	sys.BaseFrequency( Frequency( 4, Frequency::MHz));
 	sys.Equipment("ASR-2300");
 	sys.AddComment( "ASR-2300 configured with standard firmware and FPGA id=1, version=1.18.");
 
+	Cluster clstr("Antenna");
+
+	Source src1( Source::Patch, Source::RHCP, "L1 C/A");
+	src1.IdCluster("Antenna");
+
+	Source src2( Source::Patch, Source::RHCP, "L2 C");
+	src2.IdCluster("Antenna");
+
+	sys.AddSource( src1);
+	sys.AddSource( src2);
+	sys.AddCluster(clstr);
+
 	////////////////////////////////
 	//Define Band 1 and L1 C/A Stream.
 	Band ch1("L1External");
-	ch1.CenterFrequency(Frequency( 1575.42, Frequency::GHz));
+	ch1.CenterFrequency(Frequency( 1575.42, Frequency::MHz));
 	ch1.TranslatedFrequency(Frequency( 38400, Frequency::Hz));
 
 	Stream sm1("L1ca");
 	sm1.RateFactor(1);
 	sm1.Quantization(8);
+	sm1.Packedbits(16);
 	sm1.Encoding("INT8");
 	sm1.Format(Stream::IQ);
 	sm1.Bands().push_back( ch1);
@@ -118,7 +133,7 @@ void WriteXmlFile(const char* pszFilename)
 	////////////////////////////////
 	//Define Band 2 and L2 C Stream.
 	Band ch2("L2cExternal");
-	ch2.CenterFrequency(Frequency( 1227.6, Frequency::GHz));
+	ch2.CenterFrequency(Frequency( 1227.6, Frequency::MHz));
 	ch2.TranslatedFrequency(Frequency( 38400, Frequency::Hz));
 
 	//Stream sm2 will be added to the global metadata
@@ -126,6 +141,7 @@ void WriteXmlFile(const char* pszFilename)
 	Stream sm2("L2C");
 	sm2.RateFactor(1);
 	sm2.Quantization(8);
+	sm2.Packedbits(16);
 	sm2.Encoding("INT8");
 	sm2.Format(Stream::IQ);
 	sm2.Bands().push_back(ch2);
@@ -135,16 +151,22 @@ void WriteXmlFile(const char* pszFilename)
 	Lump lump;
 	lump.Streams().push_back( sm1);
 	lump.Streams().push_back( Stream( sm2.Id(), true));	
-	
+
+
 	Chunk chunk;
+	chunk.SizeWord(4);
+	chunk.CountWords(1);
 	chunk.Lumps().push_back(lump);
 
-	Block blk(1);
+	Block blk(256);
 	blk.Chunks().push_back(chunk);
 	
 	Lane lane("GPS SPS Data");
 	lane.Sessions().push_back( sess);
 	lane.Blocks().push_back(blk);
+	lane.AddBandSource(ch1, src1);
+	lane.AddBandSource(ch2, src2);
+	lane.Systems().push_back( System(sys.Id(), true));
 
 	////////////////////////////////
 	//Define the file

@@ -32,8 +32,8 @@ NODELIST_BEGIN(_SystemNodes)
 	NODELIST_ENTRY( "freqbase",  TE_FREQUENCY)
 	NODELIST_ENTRY( "equipment", TE_SIMPLE_TYPE)
 	NODELIST_ENTRY( "type",      TE_SIMPLE_TYPE)
-	//TODO Add source element
-	//TODO Add cluster element
+	NODELIST_ENTRY( "source",    TE_SOURCE)
+	NODELIST_ENTRY( "cluster",   TE_CLUSTER)
 //	NODELIST_ENTRY( "rfconfig",   TE_RFCONFIG)
 //	NODELIST_ENTRY( "oscillator", TE_OSCILLATOR)
 	NODELIST_ENTRY( "comment",	  TE_SIMPLE_TYPE)
@@ -67,7 +67,7 @@ bool SystemTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accessor
 		return false;
 	System system;
 
-	bool retval = false;
+	bool bRetVal = true;
 
 	//Parse the AttributedObject Elements.
 	if( !ReadAttributedObject( system, ctxt, elem))
@@ -82,7 +82,7 @@ bool SystemTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accessor
 		//Parse freqbase [0..1]
 		pchild = elem.FirstChildElement("freqbase");
 		AccessorAdaptor<System, Frequency> adpt( &system, &System::BaseFrequency);
-		retval = ReadElement( system, ctxt, *pchild, &adpt);
+		bRetVal = ReadElement( system, ctxt, *pchild, &adpt);
 
 		//Parse Equipment [0..1]
 		system.Equipment(ReadFirstElement( "equipment", elem, false, ""));
@@ -91,13 +91,16 @@ bool SystemTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accessor
 		System::SystemType stype = ToSystemType( ReadFirstElement("type", elem, false, ""));
 		system.Type( stype);
 
-		//TODO Read source elements
-		//TODO Read cluster elements
+		//Read source elements [1..*]
+		bRetVal &= ReadList<Source>(system.Sources(), "source", ctxt, elem);
+
+		//Read cluster elements [0..*]
+		bRetVal &= ReadList<Cluster>(system.Clusters(), "cluster", ctxt, elem);
 	}
 
 	//Lastly set the channel on the specified object.
 	pAdaptor->set( &system);
-	return true;
+	return bRetVal;
 }
 /**
  * Write the current object 
@@ -125,8 +128,11 @@ void SystemTranslator::OnWrite( const Object * pObject, pcstr pszName, Context &
 		//Write Type Attribute [0..1]
 		WriteElement( "types", _szTypes[psystem->Type()], pelemc, false, "");
 
-		//TODO Write source elements
-		//TODO Write cluster elements
+		//Write source elements [1..*]
+		WriteList<Source>( psystem->Sources(), "source", ctxt,*pelemc);
+
+		//Write cluster elements [0..*]
+		WriteList<Cluster>( psystem->Clusters(), "cluster", ctxt,*pelemc);
 	}
 	
 	elem.InsertEndChild( pelemc);

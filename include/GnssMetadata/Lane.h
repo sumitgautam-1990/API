@@ -116,6 +116,15 @@ namespace GnssMetadata
 		/**
 		 * Adds a band source definition to the lane.
 		 */
+		void AddBandSource( const Band& band, const Source& source, bool bValidate = false)
+		{
+			AddBandSource( band.Id(), source.Id(), bValidate);
+		}
+
+
+		/**
+		 * Adds a band source definition to the lane.
+		 */
 		void AddBandSource( String sidBand, String sidSource, bool bValidate = false)
 		{
 			if( bValidate)

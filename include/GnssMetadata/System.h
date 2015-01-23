@@ -114,7 +114,10 @@ namespace GnssMetadata
 		{
 			return _sourcelist;
 		}
-
+		void AddSource( const GnssMetadata::Source& source)
+		{
+			_sourcelist.push_back( source);
+		}
 
 		const GnssMetadata::ClusterList& Clusters( ) const
 		{
@@ -123,6 +126,10 @@ namespace GnssMetadata
 		GnssMetadata::ClusterList& Clusters( )
 		{
 			return _clusterlist;
+		}
+		void AddCluster( const GnssMetadata::Cluster& cluster)
+		{
+			_clusterlist.push_back( cluster);
 		}
 
 

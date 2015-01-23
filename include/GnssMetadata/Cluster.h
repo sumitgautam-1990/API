@@ -34,7 +34,8 @@ namespace GnssMetadata
 		/**
 		 * Default constructor.
 		 */
-		Cluster( )
+		Cluster( const String& id = "", bool bIsReference = false)
+			: AttributedObject( id, bIsReference)
 		{
 			
 		}
