@@ -19,10 +19,18 @@
  * GNU General Public License for more details.
  */
 
+// standard C++ include files
+#include <math.h>
+#include <string>
+#include <vector>
+using namespace std;
+
 // include files for ION GNSS metadata standard
 #include<GnssMetadata/Metadata.h>
 #include<GnssMetadata/Xml/XmlProcessor.h>
 using namespace GnssMetadata;
+
+
 
 // some IFEN specific typedefs
 typedef int nsr_int32;
@@ -50,16 +58,16 @@ class DSamplePacketInfo
 		enum SampleInputSource
 		{
 			File,	// read data from a file, whose configuration is stored previously as an XML format. Now a ClassicDataFile format is used.
-			NavPortUSB,	// NavPort frontend conntected via USB
-			NavPort2USB,// NavPort2 frontend conntected via USB
-			NavPort4USB,// NavPort4 frontend conntected via USB
-			NavPort5USB,// NavPort5 frontend conntected via USB
+			NavPortUSB,	// NavPort frontend conntected via USB 2.0
+			NavPort2USB,// NavPort2 frontend conntected via USB 2.0
+			NavPort4USB,// NavPort4 frontend conntected via USB 2.0
+			NavPort5USB,// SX3 conntected via USB 3.0
 			FausstUSB,  // FAUSST frontend conntected via USB
 			NI,			// NI card
 			Audio,		// Uses sound card input
 			NI2,		// Dual NI
 			SourceUnknown		// No real source, used for initialization or test purposes
-		};
+		} nSource;
 		//! Number of streams.
 		nsr_int32	nStreams;	
 		//! Time of first sample of stream (GPS time scale).
@@ -72,10 +80,6 @@ class DSamplePacketInfo
 		nsr_int32	vnRfBandNo[nMaxSimultaneousStreams];
 		//! Virtual Band (Channel) Number per Frontend, see vector vnRfBandNo for RF band number for virtual stream 
 		nsr_int32	vnBandNo[nMaxSimultaneousStreams];
-		//! Number of bits per IF sample.
-		nsr_int32	vnNoBits[nMaxSimultaneousStreams];
-		//! Sample rate = fz/fn
-		double vdSampleRate[nMaxSimultaneousStreams];
 		//! fz, numerator to calculate the sample rate.
 		nsr_int32 vnSampleRateZ[nMaxSimultaneousStreams];
 		//! fn, denominator to calculate the sample rate.
@@ -84,11 +88,10 @@ class DSamplePacketInfo
 		double vdIntermediateFrequency[nMaxSimultaneousStreams];
 		//! Carrier frequency for each virtual stream.
 		double vdCarrierFrequency[nMaxSimultaneousStreams];
-		//! Size of a packet. 
-		nsr_int32 vnPacketSize[nMaxSimultaneousStreams];
-		//! if true, then vpnSamples contains compressed samples (e.g. in 2-bit, 4-bit or 8-bit format). No of bits is given by DSamplePacketInfo::vnNoBits
-		bool vbCompressed[nMaxSimultaneousStreams];
+		//! 0 = 2-bit samples, 1 = 4-bit samples, 2 = 8-bit samples, to be continued
+		int vnFileFormat[nMaxSimultaneousStreams];
 };
+
 
 
 /**
@@ -148,9 +151,65 @@ void WriteXmlFile( const Metadata md, const char* pszFilename)
 /**
  * Converts metadata from IFEN structure to ION data structure
  */
-Metadata convertFromIfen( const DSamplePacketInfo mySampInfo )
+Metadata convertFromIfen( const DSamplePacketInfo si )
 {
 	Metadata md;
+	string equip;
+	const char* fe_type[] = { "file", "", "", "NavPort-4", "SX3", "", "" };
+	int i;
+
+	Date dt0( fmod(si.ptCoarseStartTime.nTime+si.ptCoarseStartTime.dTime, 86400.*7 ), int( ( si.ptCoarseStartTime.nTime + si.ptCoarseStartTime.dTime)/(86400*7) ) );
+	size_t offset = 0;
+
+	// Define the Session.
+	Session sess("0");
+	sess.Scenario("IFEN - ION GNSS metadata converter");
+	sess.Campaign("");
+	sess.Contact("");
+	sess.AddComment("Two spatially spitted files (multi-file recording)");
+
+	//Define the System, Sources, and cluster.
+	System sys("");
+	sys.BaseFrequency( Frequency( 40e6, Frequency::Hz));
+	sys.Equipment( string( "IFEN frontend type: " ) + string( fe_type[si.nSource] ) );
+
+	// loop over all IFEN streams
+	vector<Band> pch(si.nStreams);
+	vector<Stream> psm(si.nStreams);
+	Lump lump;
+	for( i = 0; i < si.nStreams; i++ )
+	{
+		pch[i].CenterFrequency(Frequency( si.vdCarrierFrequency[i], Frequency::Hz));
+		pch[i].TranslatedFrequency(Frequency( si.vdIntermediateFrequency[i], Frequency::Hz));
+		Stream sm("");
+		psm[i].RateFactor(1);
+		psm[i].Quantization(2);
+		psm[i].Packedbits(8);
+		psm[i].Encoding("INT8");
+		psm[i].Format(Stream::IF);
+		psm[i].Bands().push_back( pch[i]);
+
+		lump.Streams().push_back( psm[i] );
+	}
+
+	Chunk chunk;
+	chunk.SizeWord(1);
+	chunk.CountWords(1);
+	chunk.Lumps().push_back(lump);
+
+	Block blk(1);
+	blk.Chunks().push_back(chunk);
+	
+	Lane lane("");
+	lane.Sessions().push_back( sess);
+	lane.Blocks().push_back(blk);
+	lane.Systems().push_back( System(sys.Id(), true));
+
+	////////////////////////////////
+	//Define the file
+	File df;
+	df.TimeStamp( dt0);
+	df.Lane( lane, true);
 
 	return md;
 }
@@ -169,7 +228,6 @@ DSamplePacketInfo convertToIfen( const Metadata md )
 
 
 
-
 /**
  * main routine (see beginning of file for description)
  */
@@ -184,13 +242,42 @@ int main(int argc, char** argv)
 	printf("Test successful, if output file 'iter1.datx' matches 'iter2.datx'\n" );
     printf("\n");
 
+	// setup IFEN internal struct
+	mySamples1.nStreams = 2;
+	mySamples1.nSource = DSamplePacketInfo::NavPort5USB;
+	mySamples1.ptCoarseStartTime.nTime =1915*86400*7; // GPS week 1915, DOW: 3, TOD: 8:00:00
+	mySamples1.ptCoarseStartTime.dTime =86400*3+8*3600;
+	// stream 1
+	mySamples1.vdCarrierFrequency[0] = 1.57542e9;
+	mySamples1.vdIntermediateFrequency[0] = 19.942e6;
+	mySamples1.vnSampleRateN[0] = 1;
+	mySamples1.vnSampleRateZ[0] = 40000000;
+	mySamples1.vnAntennaId[0] = 0;
+	mySamples1.vnBandNo[0] = 0;
+	mySamples1.vnRfBandNo[0] = 0;
+	mySamples1.vnFrontendNo[0] = 0;
+	mySamples1.vnFileFormat[0] = 0;
+	// stream 2
+	mySamples1.vdCarrierFrequency[1] = 1.602e9;
+	mySamples1.vdIntermediateFrequency[1] = 19.912e6;
+	mySamples1.vnSampleRateN[1] = 1;
+	mySamples1.vnSampleRateZ[1] = 40000000;
+	mySamples1.vnAntennaId[1] = 0;
+	mySamples1.vnBandNo[1] = 1;
+	mySamples1.vnRfBandNo[1] = 0;
+	mySamples1.vnFrontendNo[1] = 0;
+	mySamples1.vnFileFormat[1] = 0;
+
+
+
+
 	md1 = convertFromIfen( mySamples1 );
 
     WriteXmlFile( md1, file1 );
-    md2 = ReadXmlFile( file1 );
-	mySamples2 = convertToIfen( md2 );
-	md3 = convertFromIfen( mySamples2 );
-    WriteXmlFile( md3, file2 );
+    //md2 = ReadXmlFile( file1 );
+	//mySamples2 = convertToIfen( md2 );
+	//md3 = convertFromIfen( mySamples2 );
+    //WriteXmlFile( md3, file2 );
 
 	return 0;
 }

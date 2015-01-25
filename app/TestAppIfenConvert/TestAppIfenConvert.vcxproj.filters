@@ -24,9 +24,6 @@
     <Filter Include="tinyxml2">
       <UniqueIdentifier>{7151c21f-09d5-4c19-b26c-239b2bd72705}</UniqueIdentifier>
     </Filter>
-    <Filter Include="IFEN">
-      <UniqueIdentifier>{fd8a17e8-f338-4de6-b976-b72b23b7f014}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestAppIfenConvert.cpp">
