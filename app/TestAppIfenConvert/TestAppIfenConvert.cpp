@@ -4,6 +4,9 @@
  *  
  * Copyright(c) 2014 Institute of Navigation
  * http://www.ion.org
+ *
+ * The program demonstrates the converion of IFEN internal meta data 
+ * structures to/from the ION standard.
  *  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
