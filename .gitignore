@@ -31,3 +31,16 @@
 *.idb
 app/TestApp/obj/
 *.mdr
+*.tlog
+*.manifest
+*.ilk
+*.lastbuildstate
+*.log
+*.cache
+*.rc
+*.ipch
+*.opensdf
+*.sdf
+*.suo
+*.user
+app/TestAppIfenConvert/Debug/TestAppIfenConvert.exe.embed.manifest.res
