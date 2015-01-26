@@ -45,3 +45,5 @@ app/TestApp/obj/
 *.user
 app/TestAppIfenConvert/Debug/TestAppIfenConvert.exe.embed.manifest.res
 app/TestAppIfenConvert/iter1.datx
+app/TestAppIfenConvert/fe0_band0.streamx
+app/TestAppIfenConvert/fe0_band1.streamx
