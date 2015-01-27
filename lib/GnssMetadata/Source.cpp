@@ -31,3 +31,4 @@ String Source::toString( const String & /*sFormat*/ )
 {
 	return String("Source toString not implmented yet.");
 }
+

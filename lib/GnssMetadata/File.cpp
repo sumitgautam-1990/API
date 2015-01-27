@@ -33,7 +33,21 @@ String File::toString( const String & sFormat )
 	return AttributedObject::toString(sFormat);
 }
 
+/**
+ * Virtual function traverses collections of attributed objects looking for object with the
+ * specified id.  Returns the count of objects found.
+ */
+size_t File::FindObject( 
+	SearchItem::List& listResults, const String& sid, 
+	const AttributedObject& rparent, bool bExcludeReference, int nDepth ) const
+{
+	//Check this object first.
+	size_t count = AttributedObject::FindObject( listResults,
+		sid, rparent, bExcludeReference, nDepth);
 
+	count += _lane.FindObject( listResults, sid, rparent, bExcludeReference, nDepth-1);
+	return count;
+}
 /**
  * Returns a string representation of the object.
  */
@@ -41,3 +55,4 @@ String FileSet::toString( const String & sFormat )
 {
 	return AttributedObject::toString(sFormat);
 }
+

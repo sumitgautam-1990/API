@@ -31,3 +31,19 @@ String Block::toString( const String & /*sFormat*/ )
 {
 	return String("Block toString not implmented yet.");
 }
+
+/**
+ * Virtual function traverses collections of attributed objects looking for object with the
+ * specified id.  Returns the count of objects found.
+ */
+size_t Block::FindObject( 
+	SearchItem::List& listResults, const String& sid, 
+	const AttributedObject& rparent, bool bExcludeReference, int nDepth ) const
+{
+	//Check this object first.
+	size_t count = AttributedObject::FindObject( listResults,
+		sid, rparent, bExcludeReference, nDepth);
+
+	count += SearchList<Chunk>( listResults, _chunklist, sid,rparent, bExcludeReference, nDepth);
+	return count;
+}

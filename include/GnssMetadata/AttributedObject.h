@@ -33,7 +33,17 @@ namespace GnssMetadata
 	 */
 	class AttributedObject: public Object
 	{
-		
+	public:
+		/** 
+		 * Class provides results for searching for attributed objects.
+		 */
+		struct SearchItem
+		{
+			typedef std::list<SearchItem> List;
+			const AttributedObject* pParent;
+			const AttributedObject* pObject;
+		};
+
 	public:
 		AttributedObject( const String& id, bool bIsReference = false) 
 			: _id( id), _bIsReference( bIsReference)
@@ -114,17 +124,53 @@ namespace GnssMetadata
 		 *  Returns a string representation of the object.
 		 */
 		virtual String toString( const String & sFormat = DefaultFormat );
-		
+
+		/**
+		 * Virtual function traverses collections of attributed objects looking for object with the
+		 * specified id.  Returns the count of objects found.
+		 */
+		virtual size_t FindObject( SearchItem::List& listResults, 
+			const String& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
+
+	protected:
+		/**
+		 *Helper function searches a std list with specified search parameters.
+		 */
+		 template<typename Type> 
+		 static size_t SearchList( AttributedObject::SearchItem::List& listResults, 
+			 const std::list<typename Type>&, const String& sid, const AttributedObject& rparent, bool bExcludeReference, int nDepth );
+
+
 	private:
 		String		_id;
 		bool		_bIsReference;
 		CommentList _comments;
 		AnyUriList  _artifacts;
-		
-		
-		
-		
 	};
+
+
+
+
+	/**
+	 *Helper function searches a std list with specified search parameters.
+	 */
+	 template<typename Type> 
+	 static size_t AttributedObject::SearchList( AttributedObject::SearchItem::List& listResults, 
+		 const std::list<typename Type>& listsrc, const String& sid, const AttributedObject& rparent, bool bExcludeReference, int nDepth )
+	 {
+		 //Don't search on zero depth.
+		 if( nDepth == 0) return 0;
+		
+		 size_t count =0;
+		 std::list<Type>::const_iterator iter = listsrc.begin();
+		 for( ; iter != listsrc.end(); iter++)
+		 {
+			 //Search object for matching ID.
+			 count += (*iter).FindObject( listResults, sid, rparent, bExcludeReference, nDepth);
+		 }
+		 return count;
+	 }
+
 	
 }
 
