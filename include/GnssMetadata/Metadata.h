@@ -73,6 +73,13 @@ namespace GnssMetadata
 			return *this;
 		}
 
+		/**
+		 * Method combines one metadata object with another. It does not 
+		 * override local id.  Only collections are combined.
+		 */
+		void  Splice( Metadata& rhs);
+
+
 
 		const AnyUriList& Includes() const 
 		{

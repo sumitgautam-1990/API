@@ -28,3 +28,28 @@ String Metadata::toString( const String & /*sFormat*/ )
 {
 	return "Metadata Object";
 }
+
+
+/**
+ * Method combines one metadata object with another. It does not 
+ * override local id.  Only collections are combined.
+ */
+void  Metadata::Splice( Metadata& rhs)
+{
+	//Splice baseclass collections.
+	Comments().splice( Comments().end(), rhs.Comments());
+	Artifacts().splice( Artifacts().end(), rhs.Artifacts());
+
+	//splice all the collections.
+	_includes.splice( _includes.end(), rhs._includes);
+	_files.splice(_files.end(), rhs._files);
+	_filesets.splice(_filesets.end(), rhs._filesets);
+	_bands.splice(_bands.end(), rhs._bands);
+	_streams.splice(_streams.end(), rhs._streams);
+	_lumps.splice(_lumps.end(), rhs._lumps);
+	_chunks.splice(_chunks.end(), rhs._chunks);
+	_blocks.splice(_blocks.end(), rhs._blocks);
+	_lanes.splice(_lanes.end(), rhs._lanes);
+	_sessions.splice( _sessions.end(), rhs._sessions);
+	_systems.splice(_systems.end(), rhs._systems);
+}

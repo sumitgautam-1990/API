@@ -134,25 +134,51 @@ bool XmlProcessor::Load( const char* szFilename, const bool bProcessIncludes, Me
 {
 	tinyxml2::XMLDocument doc;
 
+	//TODO Figure out how to support non file URLS (e.g. hyperlinks).
+
+	//Parse file with Tiny XML processor.
     XMLError err = doc.LoadFile( szFilename);
 	if( err != XML_SUCCESS)
-        throw TranslationException( "Tiny XML Parsing Error", err);
+	{
+		char buff[512];
+		_snprintf( buff, 512, "XML parsing error in file, %s", szFilename);
+		throw TranslationException(buff, err);
+	}
 
     //Find the metadata element. There should be only one per file.
 	const XMLElement* pmetadata = doc.FirstChildElement( "metadata");
 	if( pmetadata == NULL)
-		throw TranslationException("Metadata element not found in file");
+	{
+		char buff[512];
+		_snprintf( buff, 512, "Metadata element not found in file, %s", szFilename);
+		throw TranslationException(buff);
+	}
 
+	//Transloate the XML data using the standard metadata translator.
 	Context ctxt( *this, NULL, &metadata);
 	Translator& trans = TranslatorFromId( TE_METADATA);
-
-	//Note the metadata translator does not create 
-	//a new metadata object.
-
     bool bRetVal = trans.OnRead( ctxt, *pmetadata, NULL);
+	
+	//If successful and caller requests processing of include
+	//elements.  Process them recursively as well.
 	if( bRetVal && bProcessIncludes)
 	{
-		//Todo, process includes.
+		Metadata mdchild;
+		AnyUriList::const_iterator iter = metadata.Includes().begin();
+	    for(; iter != metadata.Includes().end() && bRetVal; iter++ )
+		{
+			bRetVal = Load( iter->Value().c_str(), bProcessIncludes, mdchild);
+
+			//If successful, combine metadata with parent.
+			if( bRetVal) metadata.Splice( mdchild);
+		}
+
+		//If we were successful processing includes, remove includes, since 
+		//the data is now contained within the metadata object.
+		if( bRetVal)
+		{
+			mdchild.Includes().clear();
+		}
 	}
 
 	return bRetVal;
