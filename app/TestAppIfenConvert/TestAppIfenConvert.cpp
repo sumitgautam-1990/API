@@ -154,9 +154,9 @@ void WriteXmlFile( const Metadata md, const char* pszFilename)
 /**
  * Converts metadata from IFEN structure to ION data structure
  */
-vector<Metadata> convertFromIfen( const DSamplePacketInfo si )
+Metadata convertFromIfen( const DSamplePacketInfo si )
 {
-	vector<Metadata> md;
+	Metadata md;
 	string equip;
 	const char* fe_type[] = { "file", "", "", "NavPort-4", "SX3", "", "" };
 	int i;
@@ -188,12 +188,7 @@ vector<Metadata> convertFromIfen( const DSamplePacketInfo si )
 
 	// first prepare file set
 	fileset = FileSet( "MyFileSet" );
-	for( i = 0; i < si.nStreams; i++ )
-	{
-		fileset.FileUrls( ).push_back( si.vstrFileNames[i] );
-	}
 
-	md.resize( si.nStreams );
 	for( i = 0; i < si.nStreams; i++ )
 	{
 		std::ostringstream out;
@@ -201,7 +196,7 @@ vector<Metadata> convertFromIfen( const DSamplePacketInfo si )
 		band=Band( out.str( ) );
 		band.CenterFrequency(Frequency( si.vdCarrierFrequency[i]/1e6, Frequency::MHz));
 		band.TranslatedFrequency(Frequency( si.vdIntermediateFrequency[i]/1e6, Frequency::MHz));
-
+		
 		stream=Stream("MyStream");
 		stream.RateFactor(1);
 		stream.Quantization(2);
@@ -228,16 +223,19 @@ vector<Metadata> convertFromIfen( const DSamplePacketInfo si )
 		lane.Blocks().push_back( block );
 
 
-		file=File("");
+		file=File(si.vstrFileNames[i] );
 		file.Url( si.vstrFileNames[i] );
 		file.TimeStamp( dt0 );
 		file.Lane( lane, true );
 
+		fileset.FileUrls( ).push_back( file.toString( ) );
 
-		md[i].Lanes( ).push_back( lane );
-		md[i].Files( ).push_back( file );
-		md[i].AddComment( "IFEN GNSS metadata converter test" );
+		md.Lanes( ).push_back( lane );
+		md.Files( ).push_back( file );
 	}
+
+	md.FileSets( ).push_back( fileset );
+	md.AddComment( "IFEN GNSS metadata converter test" );
 
 	return md;
 }
@@ -262,11 +260,11 @@ DSamplePacketInfo convertToIfen( const Metadata md )
 int main(int argc, char** argv)
 {
 	DSamplePacketInfo mySamples1, mySamples2; // IFEN struct
-	vector<Metadata> md1, md2, md3;
+	Metadata md1, md2, md3;
 	int i;
 
 	printf("GNSS Metadata XML <-> IFEN conversion test\n");
-	printf("Test successful, if output file '[...]x' matches '[...]_2x'\n" );
+	printf("Test successful, if output file 'fe0.setx' matches 'fe0_1.setx" );
     printf("\n");
 
 	// setup IFEN internal struct
@@ -302,11 +300,9 @@ int main(int argc, char** argv)
 
 	md1 = convertFromIfen( mySamples1 );
 
-	for( i = 0; i < mySamples1.nStreams; i++ )
-	{
-		WriteXmlFile( md1[i], ( mySamples1.vstrFileNames[i]+"x").c_str( ) );
-	}
-    //md2 = ReadXmlFile( file1 );
+	WriteXmlFile( md1, "fe0.setx" );
+    md2 = ReadXmlFile( "fe0.setx" );
+	WriteXmlFile( md2, "fe0_1.setx" );
 	//mySamples2 = convertToIfen( md2 );
 	//md3 = convertFromIfen( mySamples2 );
     //WriteXmlFile( md3, file2 );

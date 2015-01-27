@@ -27,7 +27,7 @@ using namespace GnssMetadata;
 using namespace tinyxml2;
 
 NODELIST_BEGIN(_FileSetNodes)
-	NODELIST_ENTRY( "stream", TE_STREAM)
+	NODELIST_ENTRY( "file", TE_ANYURI)
 NODELIST_END
 
 

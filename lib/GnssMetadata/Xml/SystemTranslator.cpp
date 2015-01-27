@@ -88,7 +88,7 @@ bool SystemTranslator::OnRead( Context & ctxt, const XMLElement & elem, Accessor
 		system.Equipment(ReadFirstElement( "equipment", elem, false, ""));
 
 		//Parse Type Attribute. [0..1]
-		System::SystemType stype = ToSystemType( ReadFirstElement("type", elem, false, ""));
+		System::SystemType stype = ToSystemType( ReadFirstElement("types", elem, false, ""));
 		system.Type( stype);
 
 		//Read source elements [1..*]
