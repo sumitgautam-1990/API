@@ -56,3 +56,31 @@ void  Metadata::Splice( Metadata& rhs)
 	_sessions.splice( _sessions.end(), rhs._sessions);
 	_systems.splice(_systems.end(), rhs._systems);
 }
+
+/**
+ * Virtual function traverses collections of attributed objects looking for object with the
+ * specified id.  Returns the count of objects found.
+ */
+size_t Metadata::FindObject( 
+	SearchItem::List& listResults, const String& sid, 
+	const AttributedObject& rparent, bool bExcludeReference, int nDepth ) const
+{
+	//Check this object first.
+	size_t count = AttributedObject::FindObject( listResults,
+		sid, rparent, bExcludeReference, nDepth);
+
+	//Now check all collections:
+	nDepth--;
+	count += SearchList<File>( listResults, _files, sid, rparent, bExcludeReference, nDepth);
+	count += SearchList<FileSet>( listResults, _filesets, sid, rparent, bExcludeReference, nDepth);
+	count += SearchList<Band>( listResults, _bands, sid, rparent, bExcludeReference, nDepth);
+	count += SearchList<Stream>( listResults, _streams, sid, rparent, bExcludeReference, nDepth);
+	count += SearchList<Lump>( listResults, _lumps, sid, rparent, bExcludeReference, nDepth);
+	count += SearchList<Chunk>( listResults, _chunks, sid, rparent, bExcludeReference, nDepth);
+	count += SearchList<Block>( listResults, _blocks, sid, rparent, bExcludeReference, nDepth);
+	count += SearchList<Lane>( listResults, _lanes, sid, rparent, bExcludeReference, nDepth);
+	count += SearchList<Session>( listResults, _sessions, sid, rparent, bExcludeReference, nDepth);
+	count += SearchList<System>( listResults, _systems, sid, rparent, bExcludeReference, nDepth);
+
+	return count;
+}

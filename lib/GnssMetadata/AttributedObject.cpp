@@ -37,3 +37,26 @@ String AttributedObject::toString( const String & /*sFormat*/  )
 {
 	return _id;
 }
+
+
+/**
+ * Virtual function implemented by derived classes traverses collections of attributed objects looking for object with the
+ * specified id. Returns the count of objects found.
+ */
+size_t AttributedObject::FindObject( 
+	SearchItem::List& listResults, const String& sid, 
+	const AttributedObject& rparent, bool bExcludeReference, int nDepth )const
+{
+	size_t count = 0;
+
+	//If it matches the ID an type of object specfied, add to list.
+	if( this->_id == sid && !(bExcludeReference && _bIsReference))
+	{
+		AttributedObject::SearchItem si;
+		si.pParent = &rparent;
+		si.pObject = this;
+		listResults.push_back( si);
+		count++;
+	}
+	return count;
+}

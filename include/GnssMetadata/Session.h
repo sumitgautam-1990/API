@@ -131,6 +131,13 @@ namespace GnssMetadata
 		 */
 		virtual String toString( const String & sFormat = DefaultFormat );
 		
+		/**
+		 * Virtual function traverses collections of attributed objects looking for object with the
+		 * specified id.  Returns the count of objects found.
+		 */
+		virtual size_t FindObject( SearchItem::List& listResults, 
+			const String& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
+
 	private:
 		GnssMetadata::Date _toa;
 
