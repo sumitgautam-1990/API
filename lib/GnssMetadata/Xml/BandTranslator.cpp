@@ -72,7 +72,7 @@ bool BandTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAd
 		AccessorAdaptor<Band, Frequency> adpt( &band, &Band::CenterFrequency);
 		bRetVal = ReadElement( band, ctxt, *pchild, &adpt);
 
-		//Parse Parse Translated Frequency
+		//Parse Translated Frequency
 		pchild = elem.FirstChildElement("translatedfreq");
 		AccessorAdaptor<Band, Frequency> adpt1( &band, &Band::TranslatedFrequency);
 		bRetVal &= ReadElement( band, ctxt, *pchild, &adpt1);
@@ -84,15 +84,15 @@ bool BandTranslator::OnRead( Context & ctxt, const XMLElement & elem, AccessorAd
 		pchild = elem.FirstChildElement("delaybias");
 		if( pchild != NULL)
 		{
-			AccessorAdaptor<Band, Duration> adpt2( &band, &Band::DelayBias);
-			bRetVal &= ReadElement( band, ctxt, *pchild, &adpt2);
+			AccessorAdaptor<Band, Duration> adpt( &band, &Band::DelayBias);
+			bRetVal &= ReadElement( band, ctxt, *pchild, &adpt);
 		}
 
-		//Parse CenterFrequency
+		//Parse bandwidth
 		pchild = elem.FirstChildElement("bandwidth");
 		if( pchild != NULL)
 		{
-			AccessorAdaptor<Band, Frequency> adpt( &band, &Band::CenterFrequency);
+			AccessorAdaptor<Band, Frequency> adpt( &band, &Band::Bandwidth);
 			bRetVal = ReadElement( band, ctxt, *pchild, &adpt);
 		}
 	}
