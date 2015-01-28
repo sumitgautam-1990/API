@@ -102,7 +102,7 @@ void LaneTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & c
 
 	//Fill out id, artifacts, and comments last in accordance
 	//with schema.
-	WriteAttributedObject( *plane, ctxt, *pelemc, plane->IsReference());
+	WriteAttributedObject( *plane, ctxt, *pelemc);
 
 	if( !plane->IsReference())
 	{

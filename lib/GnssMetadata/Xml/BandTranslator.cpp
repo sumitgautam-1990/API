@@ -113,6 +113,11 @@ void BandTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & c
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
 
+	//Fill out id, artifacts, and comments last in accordance
+	//with schema.
+	//Band must define id so it can be referenced in bandsrc.
+	WriteAttributedObject( *pband, ctxt, *pelemc, true);
+
 	if( !pband->IsReference())
 	{
 		//Write CenterFrequency
@@ -131,8 +136,6 @@ void BandTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & c
 		WriteElement( &pband->Bandwidth(), "bandwidth", ctxt, *pelemc);
 	}
 	
-	//Fill out id, artifacts, and comments last in accordance
-	//with schema.
-	WriteAttributedObject( *pband, ctxt, *pelemc);
+
 	elem.InsertEndChild( pelemc);
 }

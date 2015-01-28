@@ -80,14 +80,15 @@ void FileSetTranslator::OnWrite( const Object * pObject, pcstr pszName, Context 
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
 
+	//Fill out id, artifacts, and comments last in accordance
+	//with schema.
+	WriteAttributedObject( *pfileset, ctxt, *pelemc);
+
 	if( !pfileset->IsReference())
 	{
 		//Write band
 		WriteList<AnyUri>( pfileset->FileUrls(), "file", ctxt,*pelemc);
 	}
 	
-	//Fill out id, artifacts, and comments last in accordance
-	//with schema.
-	WriteAttributedObject( *pfileset, ctxt, *pelemc);
 	elem.InsertEndChild( pelemc);
 }

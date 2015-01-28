@@ -65,9 +65,9 @@ void OscillatorTranslator::OnWrite( const Object * pObject, pcstr pszName, Conte
 		throw TranslationException("OscillatorTranslator cannot cast to Oscillator object");
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
-
 	//Fill out id, artifacts, and comments last in accordance
 	//with schema.
 	WriteAttributedObject( *posc, ctxt, *pelemc);
+
 	elem.InsertEndChild( pelemc);
 }

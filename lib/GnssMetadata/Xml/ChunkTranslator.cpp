@@ -155,7 +155,7 @@ void ChunkTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & 
 
 	//Fill out id, artifacts, and comments last in accordance
 	//with schema.
-	WriteAttributedObject( *pchunk, ctxt, *pelemc, pchunk->IsReference());
+	WriteAttributedObject( *pchunk, ctxt, *pelemc);
 
 	if( !pchunk->IsReference())
 	{

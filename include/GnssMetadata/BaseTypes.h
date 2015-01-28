@@ -64,7 +64,7 @@ namespace GnssMetadata
 			NotImplemented
 		};
 	public:
-		ApiException( const char *const& _What, ErrorType errType = Unspecified )
+		ApiException( const String& _What, ErrorType errType = Unspecified )
 			: std::runtime_error( _What), _error(errType)
 		{
 		}
@@ -84,7 +84,7 @@ namespace GnssMetadata
 	class ArgumentException : public ApiException
 	{
 	public:
-		ArgumentException( const char *const& _What = "Argument Error",
+		ArgumentException( const String& _What = "Argument Error",
 			ErrorType errType = ArgumentError)
 			: ApiException( _What, errType)
 		{
@@ -97,7 +97,7 @@ namespace GnssMetadata
 	class OutOfRangeException : public ArgumentException
 	{
 	public:
-		OutOfRangeException( const char *const& _What = "Argument out of range")
+		OutOfRangeException( const String& _What = "Argument out of range")
 			: ArgumentException( _What, OutOfRange)
 		{
 		}
@@ -110,7 +110,7 @@ namespace GnssMetadata
 	class TranslationException : public ApiException
 	{
 	public:
-		TranslationException( const char *const& _What = "Translation Error", int  iderror = 0)
+		TranslationException( const String& _What = "Translation Error", int  iderror = 0)
 			: ApiException( _What, TranslationError), XmlError( iderror)
 		{
 		
@@ -124,7 +124,7 @@ namespace GnssMetadata
 	class NotImplementedException : public ApiException
 	{
 	public:
-		NotImplementedException( const char *const& _What = "Not Implemented")
+		NotImplementedException( const String& _What = "Not Implemented")
 			: ApiException( _What, NotImplemented)
 		{
 		}

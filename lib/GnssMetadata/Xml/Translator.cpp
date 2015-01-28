@@ -102,10 +102,15 @@ void Translator::WriteAttributedObject(const AttributedObject& aobj, Context& /*
 {
 	//Write the ID.
 	if( aobj.Id().length() > 0 )
+	{
 		elem.SetAttribute( "id", aobj.Id().c_str());
-	else if( bIdAttributeRequired )
-		throw GnssMetadata::TranslationException( "Required id attribute not defined.");
-
+	}
+	else if( bIdAttributeRequired || aobj.IsReference())
+	{
+		//Else if caller requires the id attribute or object is a reference, throw an 
+		//exception.
+		throw GnssMetadata::TranslationException( aobj.Id() + ": required id attribute not defined.");
+	}
 
 
 	//Write the comments.

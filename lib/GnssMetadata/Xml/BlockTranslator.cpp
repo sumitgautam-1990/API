@@ -96,8 +96,7 @@ void BlockTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & 
 
 	//Fill out id, artifacts, and comments last in accordance
 	//with schema.
-	WriteAttributedObject( *pblock, ctxt, *pelemc, pblock->IsReference());
-
+	WriteAttributedObject( *pblock, ctxt, *pelemc);
 
 	if( !pblock->IsReference())
 	{

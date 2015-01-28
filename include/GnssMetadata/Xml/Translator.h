@@ -81,9 +81,10 @@ namespace GnssMetadata
 		static bool ReadAttributedObject( AttributedObject& aobj, Context& ctxt, const tinyxml2::XMLElement & elem, bool bIdAttributeRequired = true);
 		
 		/**
-		 * Writes the attributed object id, comments, and artifacts.
+		 * Writes the attributed object id, comments, and artifacts. By default the id attribute is not required as long as the
+		 * object is not a reference.
 		 */
-		static void WriteAttributedObject(const AttributedObject& aobj, Context& ctxt, tinyxml2::XMLElement & elem, bool bIdAttributeRequired = true);
+		static void WriteAttributedObject(const AttributedObject& aobj, Context& ctxt, tinyxml2::XMLElement & elem, bool bIdAttributeRequired = false);
 
 		static bool ReadFirstElement( const char* pszelem, const tinyxml2::XMLElement& elem, bool bRequired, bool bDefault = false);
 		static const char* ReadFirstElement( const char* pszelem, const tinyxml2::XMLElement& elem, bool bRequired,  const char* pszDefault = "");

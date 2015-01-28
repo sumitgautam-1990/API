@@ -82,7 +82,7 @@ void LumpTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & c
 
 	//Fill out id, artifacts, and comments last in accordance
 	//with schema.
-	WriteAttributedObject( *plump, ctxt, *pelemc, plump->IsReference());
+	WriteAttributedObject( *plump, ctxt, *pelemc);
 
 	if( !plump->IsReference())
 	{

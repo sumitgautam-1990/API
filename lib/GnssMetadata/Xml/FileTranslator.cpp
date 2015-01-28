@@ -114,6 +114,10 @@ void FileTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & c
 
 	XMLElement* pelemc = elem.GetDocument()->NewElement( pszName);
 
+	//Fill out id, artifacts, and comments last in accordance
+	//with schema.
+	WriteAttributedObject( *pfile, ctxt, *pelemc);
+
 	if( !pfile->IsReference())
 	{
 		XMLElement* pelem;
@@ -145,8 +149,5 @@ void FileTranslator::OnWrite( const Object * pObject, pcstr pszName, Context & c
 		WriteElement( &pfile->Lane(), "lane", ctxt, *pelemc);
 	}
 	
-	//Fill out id, artifacts, and comments last in accordance
-	//with schema.
-	WriteAttributedObject( *pfile, ctxt, *pelemc, false);
 	elem.InsertEndChild( pelemc);
 }

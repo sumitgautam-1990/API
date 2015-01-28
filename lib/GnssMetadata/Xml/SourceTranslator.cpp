@@ -139,7 +139,9 @@ void SourceTranslator::OnWrite( const Object * pObject, pcstr pszName, Context &
 
 	//Fill out id, artifacts, and comments last in accordance
 	//with schema.
-	WriteAttributedObject( *psource, ctxt, *pelemc);
+	//Source object must have ID defined in order to support association
+	//with bandsrc.
+	WriteAttributedObject( *psource, ctxt, *pelemc, true);
 
 	if( !psource->IsReference())
 	{

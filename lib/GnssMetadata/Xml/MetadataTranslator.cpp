@@ -96,7 +96,7 @@ void MetadataTranslator::OnWrite( const Object * pObject, pcstr pszName, Context
 
 	//Fill out id, artifacts, and comments last in accordance
 	//with schema.
-	WriteAttributedObject( *pmetadata, ctxt, *pelemc, false);
+	WriteAttributedObject( *pmetadata, ctxt, *pelemc);
 
 	WriteList<AnyUri>( pmetadata->Includes(), "include", ctxt, *pelemc);
 	WriteList<Band>(   pmetadata->Bands(), "band", ctxt, *pelemc);
