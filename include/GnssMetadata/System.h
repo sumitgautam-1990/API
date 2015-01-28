@@ -45,7 +45,9 @@ namespace GnssMetadata
 			Simulator
 		};
 	public:
-		System( const String& id = "", bool bIsReference = false, SystemType type=Undefined) 
+		System( const String& id = "", bool bIsReference = false) 
+			: AttributedObject( id, bIsReference), _type( Undefined) {}
+		System( SystemType type, const String& id = "", bool bIsReference = false ) 
 			: AttributedObject( id, bIsReference), _type( type) {}
 		System(const System& rhs) 
 			: AttributedObject( rhs), _freqBase( rhs._freqBase), 

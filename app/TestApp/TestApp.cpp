@@ -153,7 +153,7 @@ void WriteXmlFile(const char* pszFilename)
 	//Define the lane
 	Lump lump;
 	lump.Streams().push_back( sm1);
-	lump.Streams().push_back( Stream( sm2.Id(), true));	
+	lump.Streams().push_back( sm2.ToReference<Stream>());	
 
 
 	Chunk chunk;
@@ -169,7 +169,7 @@ void WriteXmlFile(const char* pszFilename)
 	lane.Blocks().push_back(blk);
 	lane.AddBandSource(ch1, src1);
 	lane.AddBandSource(ch2, src2);
-	lane.Systems().push_back( System(sys.Id(), true));
+	lane.Systems().push_back( sys.ToReference<System>());
 
 	////////////////////////////////
 	//Define the file

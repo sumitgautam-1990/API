@@ -45,6 +45,11 @@ namespace GnssMetadata
 		};
 
 	public:
+		/**
+		 * Standard reference constructor.  Should be implemented by all
+		 * derived objects as is. This is reuqired to make ToReference function 
+		 * work right.
+		 */
 		AttributedObject( const String& id, bool bIsReference = false) 
 			: _id( id), _bIsReference( bIsReference)
 		{}
@@ -81,6 +86,19 @@ namespace GnssMetadata
 		void IsReference( bool bValue)
 		{
 			_bIsReference = bValue;
+		}
+
+		/** 
+		 * Constructs a reference object of the current instance.  If already, a reference,
+		 * just returns the object.  Note this function only works where the standard reference
+		 * constructor is defined.
+		 */
+		template<typename Type>
+		Type ToReference() const 
+		{ 
+			return ( _bIsReference)
+				? *dynamic_cast< const Type*>(this)
+				: Type( this->Id(), true);
 		}
 
 		const CommentList& Comments( ) const
@@ -147,6 +165,9 @@ namespace GnssMetadata
 		CommentList _comments;
 		AnyUriList  _artifacts;
 	};
+
+
+	
 
 
 
