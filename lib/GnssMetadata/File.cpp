@@ -39,13 +39,13 @@ String File::toString( const String & sFormat )
  */
 size_t File::FindObject( 
 	SearchItem::List& listResults, const String& sid, 
-	const AttributedObject& rparent, bool bExcludeReference, int nDepth ) const
+	const AttributedObject* pparent, bool bExcludeReference, int nDepth ) const
 {
 	//Check this object first.
 	size_t count = AttributedObject::FindObject( listResults,
-		sid, rparent, bExcludeReference, nDepth);
+		sid, pparent, bExcludeReference, nDepth);
 
-	count += _lane.FindObject( listResults, sid, rparent, bExcludeReference, nDepth-1);
+	count += _lane.FindObject( listResults, sid, pparent, bExcludeReference, nDepth-1);
 	return count;
 }
 /**

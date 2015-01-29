@@ -63,24 +63,25 @@ void  Metadata::Splice( Metadata& rhs)
  */
 size_t Metadata::FindObject( 
 	SearchItem::List& listResults, const String& sid, 
-	const AttributedObject& rparent, bool bExcludeReference, int nDepth ) const
+	const AttributedObject* pparent, bool bExcludeReference, int nDepth ) const
 {
 	//Check this object first.
 	size_t count = AttributedObject::FindObject( listResults,
-		sid, rparent, bExcludeReference, nDepth);
+		sid, pparent, bExcludeReference, nDepth);
+
+	pparent = this;
 
 	//Now check all collections:
-	nDepth--;
-	count += SearchList<File>( listResults, _files, sid, rparent, bExcludeReference, nDepth);
-	count += SearchList<FileSet>( listResults, _filesets, sid, rparent, bExcludeReference, nDepth);
-	count += SearchList<Band>( listResults, _bands, sid, rparent, bExcludeReference, nDepth);
-	count += SearchList<Stream>( listResults, _streams, sid, rparent, bExcludeReference, nDepth);
-	count += SearchList<Lump>( listResults, _lumps, sid, rparent, bExcludeReference, nDepth);
-	count += SearchList<Chunk>( listResults, _chunks, sid, rparent, bExcludeReference, nDepth);
-	count += SearchList<Block>( listResults, _blocks, sid, rparent, bExcludeReference, nDepth);
-	count += SearchList<Lane>( listResults, _lanes, sid, rparent, bExcludeReference, nDepth);
-	count += SearchList<Session>( listResults, _sessions, sid, rparent, bExcludeReference, nDepth);
-	count += SearchList<System>( listResults, _systems, sid, rparent, bExcludeReference, nDepth);
+	count += SearchList<File>( listResults, _files, sid, pparent, bExcludeReference, nDepth);
+	count += SearchList<FileSet>( listResults, _filesets, sid, pparent, bExcludeReference, nDepth);
+	count += SearchList<Band>( listResults, _bands, sid, pparent, bExcludeReference, nDepth);
+	count += SearchList<Stream>( listResults, _streams, sid, pparent, bExcludeReference, nDepth);
+	count += SearchList<Lump>( listResults, _lumps, sid, pparent, bExcludeReference, nDepth);
+	count += SearchList<Chunk>( listResults, _chunks, sid, pparent, bExcludeReference, nDepth);
+	count += SearchList<Block>( listResults, _blocks, sid, pparent, bExcludeReference, nDepth);
+	count += SearchList<Lane>( listResults, _lanes, sid, pparent, bExcludeReference, nDepth);
+	count += SearchList<Session>( listResults, _sessions, sid, pparent, bExcludeReference, nDepth);
+	count += SearchList<System>( listResults, _systems, sid, pparent, bExcludeReference, nDepth);
 
 	return count;
 }

@@ -146,7 +146,7 @@ namespace GnssMetadata
 		 * specified id.  Returns the count of objects found.
 		 */
 		virtual size_t FindObject( SearchItem::List& listResults, 
-			const String& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
+			const String& sid, const AttributedObject* pparent, bool bExcludeReference=true, int nDepth =-1) const;
 
 		
 	private:

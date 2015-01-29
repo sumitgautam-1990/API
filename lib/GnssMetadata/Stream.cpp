@@ -37,12 +37,12 @@ String Stream::toString( const String & sFormat )
  */
 size_t Stream::FindObject( 
 	SearchItem::List& listResults, const String& sid, 
-	const AttributedObject& rparent, bool bExcludeReference, int nDepth ) const
+	const AttributedObject* pparent, bool bExcludeReference, int nDepth ) const
 {
 	//Check this object first.
 	size_t count = AttributedObject::FindObject( listResults,
-		sid, rparent, bExcludeReference, nDepth);
+		sid, pparent, bExcludeReference, nDepth);
 
-	count += SearchList<Band>( listResults, _bandlist, sid,rparent, bExcludeReference, nDepth);
+	count += SearchList<Band>( listResults, _bandlist, sid, this, bExcludeReference, nDepth);
 	return count;
 }

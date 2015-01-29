@@ -28,22 +28,23 @@
 
 namespace GnssMetadata
 {
+	class AttributedObject;
+
+	/** 
+	 * Class provides results for searching for attributed objects.
+	 */
+	struct SearchItem
+	{
+		typedef std::list<SearchItem> List;
+		const AttributedObject* pParent;
+		const AttributedObject* pObject;
+	};
+
 	/**
 	 * An attributed object can have comments and artifact URLs associated with it.
 	 */
 	class AttributedObject: public Object
 	{
-	public:
-		/** 
-		 * Class provides results for searching for attributed objects.
-		 */
-		struct SearchItem
-		{
-			typedef std::list<SearchItem> List;
-			const AttributedObject* pParent;
-			const AttributedObject* pObject;
-		};
-
 	public:
 		/**
 		 * Standard reference constructor.  Should be implemented by all
@@ -148,15 +149,15 @@ namespace GnssMetadata
 		 * specified id.  Returns the count of objects found.
 		 */
 		virtual size_t FindObject( SearchItem::List& listResults, 
-			const String& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
+			const String& sid, const AttributedObject* pparent = NULL, bool bExcludeReference=true, int nDepth =-1) const;
 
 	protected:
 		/**
 		 *Helper function searches a std list with specified search parameters.
 		 */
 		 template<typename Type> 
-		 static size_t SearchList( AttributedObject::SearchItem::List& listResults, 
-			 const std::list<typename Type>&, const String& sid, const AttributedObject& rparent, bool bExcludeReference, int nDepth );
+		 static size_t SearchList( SearchItem::List& listResults, 
+			 const std::list<typename Type>&, const String& sid, const AttributedObject* pparent, bool bExcludeReference, int nDepth );
 
 
 	private:
@@ -166,28 +167,24 @@ namespace GnssMetadata
 		AnyUriList  _artifacts;
 	};
 
-
-	
-
-
-
-
 	/**
 	 *Helper function searches a std list with specified search parameters.
 	 */
 	 template<typename Type> 
-	 static size_t AttributedObject::SearchList( AttributedObject::SearchItem::List& listResults, 
-		 const std::list<typename Type>& listsrc, const String& sid, const AttributedObject& rparent, bool bExcludeReference, int nDepth )
+	 static size_t AttributedObject::SearchList( SearchItem::List& listResults, 
+		 const std::list<typename Type>& listsrc, const String& sid, const AttributedObject* pparent, bool bExcludeReference, int nDepth )
 	 {
 		 //Don't search on zero depth.
 		 if( nDepth == 0) return 0;
-		
+
+		 nDepth--;
+			
 		 size_t count =0;
 		 std::list<Type>::const_iterator iter = listsrc.begin();
 		 for( ; iter != listsrc.end(); iter++)
 		 {
 			 //Search object for matching ID.
-			 count += (*iter).FindObject( listResults, sid, rparent, bExcludeReference, nDepth);
+			 count += (*iter).FindObject( listResults, sid, pparent, bExcludeReference, nDepth);
 		 }
 		 return count;
 	 }

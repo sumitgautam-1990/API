@@ -62,7 +62,23 @@ int main(int argc, char** argv)
         {
             printf("Xml Processed successfully.\n");
 
+			//Find all instances of the system
+			//This demonstrates the search functions.
+			const System& sys = md.Systems().front();
+			SearchItem::List lr;
+			md.FindObject( lr, sys.Id(), NULL, false, 5);
 
+			printf( "Found %d instances of System at\n", (int) lr.size());
+			SearchItem::List::const_iterator iter = lr.begin();
+			for(; iter != lr.end(); iter++)
+			{
+				String sidParent = iter->pParent->Id();
+				if(sidParent.length() > 0)  sidParent = "[unnamed]";
+				if( iter->pObject->IsReference())
+					printf( " %s/%s(reference)\n", sidParent.c_str(),  iter->pObject->Id().c_str());
+				else
+					printf( " %s/%s\n", sidParent.c_str(),  iter->pObject->Id().c_str());
+			}
         }
     }
     catch( ApiException& e)

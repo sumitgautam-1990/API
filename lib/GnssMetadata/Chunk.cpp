@@ -36,12 +36,12 @@ String Chunk::toString( const String & /*sFormat*/ )
  */
 size_t Chunk::FindObject( 
 	SearchItem::List& listResults, const String& sid, 
-	const AttributedObject& rparent, bool bExcludeReference, int nDepth ) const
+	const AttributedObject* pparent, bool bExcludeReference, int nDepth ) const
 {
 	//Check this object first.
 	size_t count = AttributedObject::FindObject( listResults,
-		sid, rparent, bExcludeReference, nDepth);
+		sid, pparent, bExcludeReference, nDepth);
 
-	count += SearchList<Lump>( listResults, _lumplist, sid,rparent, bExcludeReference, nDepth);
+	count += SearchList<Lump>( listResults, _lumplist, sid, this, bExcludeReference, nDepth);
 	return count;
 }

@@ -45,15 +45,15 @@ String AttributedObject::toString( const String & /*sFormat*/  )
  */
 size_t AttributedObject::FindObject( 
 	SearchItem::List& listResults, const String& sid, 
-	const AttributedObject& rparent, bool bExcludeReference, int nDepth )const
+	const AttributedObject* pparent, bool bExcludeReference, int nDepth )const
 {
 	size_t count = 0;
 
 	//If it matches the ID an type of object specfied, add to list.
 	if( this->_id == sid && !(bExcludeReference && _bIsReference))
 	{
-		AttributedObject::SearchItem si;
-		si.pParent = &rparent;
+		SearchItem si;
+		si.pParent = pparent;
 		si.pObject = this;
 		listResults.push_back( si);
 		count++;

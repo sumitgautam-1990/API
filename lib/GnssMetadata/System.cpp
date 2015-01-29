@@ -36,12 +36,12 @@ String System::toString( const String & sFormat )
  */
 size_t System::FindObject( 
 	SearchItem::List& listResults, const String& sid, 
-	const AttributedObject& rparent, bool bExcludeReference, int nDepth ) const
+	const AttributedObject* pparent, bool bExcludeReference, int nDepth ) const
 {
 	//Check this object first.
 	size_t count = AttributedObject::FindObject( listResults,
-		sid, rparent, bExcludeReference, nDepth);
+		sid, pparent, bExcludeReference, nDepth);
 
-	count += SearchList<Cluster>( listResults, _clusterlist, sid,rparent, bExcludeReference, nDepth);
+	count += SearchList<Cluster>( listResults, _clusterlist, sid, this, bExcludeReference, nDepth);
 	return count;
 }

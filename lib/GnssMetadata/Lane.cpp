@@ -38,14 +38,14 @@ String Lane::toString( const String & /*sFormat*/ )
  */
 size_t Lane::FindObject( 
 	SearchItem::List& listResults, const String& sid, 
-	const AttributedObject& rparent, bool bExcludeReference, int nDepth ) const
+	const AttributedObject* pparent, bool bExcludeReference, int nDepth ) const
 {
 	//Check this object first.
 	size_t count = AttributedObject::FindObject( listResults,
-		sid, rparent, bExcludeReference, nDepth);
+		sid, pparent, bExcludeReference, nDepth);
 
-	count += SearchList<Session>( listResults, _sessionlist, sid,rparent, bExcludeReference, nDepth);
-	count += SearchList<System>( listResults, _systemlist, sid,rparent, bExcludeReference, nDepth);
-	count += SearchList<Block>( listResults, _blocklist, sid,rparent, bExcludeReference, nDepth);
+	count += SearchList<Session>( listResults, _sessionlist, sid, this, bExcludeReference, nDepth);
+	count += SearchList<System>( listResults, _systemlist, sid, this, bExcludeReference, nDepth);
+	count += SearchList<Block>( listResults, _blocklist, sid, this, bExcludeReference, nDepth);
 	return count;
 }
