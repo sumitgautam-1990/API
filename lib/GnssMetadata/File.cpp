@@ -45,7 +45,7 @@ size_t File::FindObject(
 	size_t count = AttributedObject::FindObject( listResults,
 		sid, pparent, bExcludeReference, nDepth);
 
-	count += _lane.FindObject( listResults, sid, pparent, bExcludeReference, nDepth-1);
+	count += _lane.FindObject( listResults, sid, this, bExcludeReference, nDepth-1);
 	return count;
 }
 /**
