@@ -20,9 +20,10 @@
  */
 
 
+#include "XmlDefs.h"
 #include "ChunkTranslator.h"
 #include <GnssMetadata/Chunk.h>
-#include "XmlDefs.h"
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -74,7 +75,7 @@ Chunk::WordShift ToWordShift( const char* pszFmt)
 		if( strcmp( _szWordShift[i], pszFmt) == 0)
 			return (Chunk::WordShift)i;
 	}
-	return (Chunk::WordShift)2;
+    return (Chunk::WordShift)1;
 }
 
 

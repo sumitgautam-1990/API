@@ -20,6 +20,8 @@
  */
 
 
+#include "XmlDefs.h"
+
 #include "AnyUriTranslator.h"
 #include <GnssMetadata/AnyUri.h>
 
@@ -28,8 +30,6 @@
 
 using namespace GnssMetadata;
 using namespace tinyxml2;
-
-#include "XmlDefs.h"
 
 
 AnyUriTranslator::AnyUriTranslator() 

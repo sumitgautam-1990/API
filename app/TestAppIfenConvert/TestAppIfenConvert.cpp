@@ -170,8 +170,8 @@ Metadata convertFromIfen( const DSamplePacketInfo si )
 	FileSet fileset;
 
 	// extract TOA
-	Date dt0( fmod(si.ptCoarseStartTime.nTime+si.ptCoarseStartTime.dTime, 86400.*7 ), int( ( si.ptCoarseStartTime.nTime + si.ptCoarseStartTime.dTime)/(86400*7) ) );
-	size_t offset = 0;
+    Date dt0( fmod((double)si.ptCoarseStartTime.nTime+si.ptCoarseStartTime.dTime, 86400.*7 ), int( ( (double)si.ptCoarseStartTime.nTime + si.ptCoarseStartTime.dTime)/(86400*7) ) );
+    //size_t offset = 0;
 
 	// Define the Session.
 	Session sess("");
@@ -212,7 +212,7 @@ Metadata convertFromIfen( const DSamplePacketInfo si )
 		chunk.SizeWord(1);
 		chunk.CountWords(1);
 		chunk.Lumps().push_back( lump );
-		chunk.Endian( Chunk::WordEndian::Big );
+        chunk.Endian( Chunk::Big );
 
 		block=Block("");
 		block.Chunks().push_back( chunk );
@@ -245,7 +245,7 @@ Metadata convertFromIfen( const DSamplePacketInfo si )
 /**
  * Converts metadat from ION data structure to IFEN structure
  */
-DSamplePacketInfo convertToIfen( const Metadata md )
+DSamplePacketInfo convertToIfen( const Metadata /*md*/ )
 {
 	DSamplePacketInfo mySampInfo;
 
@@ -257,11 +257,11 @@ DSamplePacketInfo convertToIfen( const Metadata md )
 /**
  * main routine (see beginning of file for description)
  */
-int main(int argc, char** argv)
+int main(int /*argc*/, char** /*argv*/)
 {
 	DSamplePacketInfo mySamples1, mySamples2; // IFEN struct
-	Metadata md1, md2, md3;
-	int i;
+    Metadata md1, md2; //, md3;
+    //int i;
 
 	printf("GNSS Metadata XML <-> IFEN conversion test\n");
 	printf("Test successful, if output file 'fe0.setx' matches 'fe0_1.setx" );

@@ -19,7 +19,7 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <GnssMetadata/Xml/Translator.h>
+#include "Translator.h"
 #include <GnssMetadata/Xml/XmlProcessor.h>
 #include <tinyxml2.h>
 using namespace GnssMetadata;
@@ -136,7 +136,7 @@ void Translator::WriteAttributedObject(const AttributedObject& aobj, Context& /*
 }
 
 
-bool Translator::ReadFirstElement( const char* pszelem, 
+bool Translator::ReadFirstElement( const char* pszelem,
 	const tinyxml2::XMLElement& container,  
 	bool bRequired, bool bDefault)
 {
@@ -148,7 +148,7 @@ bool Translator::ReadFirstElement( const char* pszelem,
 		else
 		{
 			char buff[256];
-			sprintf( "Cannot find required boolean element %s in container %s", pszelem, container.Name());
+            sprintf( buff, "Cannot find required boolean element %s in container %s", pszelem, container.Name());
 			throw TranslationException(buff);
 		}
 	}
@@ -169,7 +169,7 @@ const char* Translator::ReadFirstElement( const char* pszelem,
 		else
 		{
 			char buff[256];
-			sprintf( "Cannot find required string element %s in container %s", pszelem, container.Name());
+            sprintf( buff, "Cannot find required string element %s in container %s", pszelem, container.Name());
 			throw TranslationException(buff);
 		}
 	}
@@ -191,7 +191,7 @@ size_t Translator::ReadFirstElement( const char* pszelem,
 		else
 		{
 			char buff[256];
-			sprintf( "Cannot find required unsigned integer element %s in container %s", pszelem, container.Name());
+            sprintf( buff, "Cannot find required unsigned integer element %s in container %s", pszelem, container.Name());
 			throw TranslationException(buff);
 		}
 	}
@@ -213,7 +213,7 @@ double Translator::ReadFirstElement( const char* pszelem,
 		else
 		{
 			char buff[256];
-			sprintf( "Cannot find required double element %s in container %s", pszelem, container.Name());
+            sprintf( buff, "Cannot find required double element %s in container %s", pszelem, container.Name());
 			throw TranslationException(buff);
 		}
 	}

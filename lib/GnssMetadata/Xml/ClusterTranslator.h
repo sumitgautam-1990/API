@@ -23,7 +23,7 @@
 #define CLUSTERTRANSLATOR_H_H
 
 #include <GnssMetadata/BaseTypes.h>
-#include <GnssMetadata/Xml/Translator.h>
+#include "Translator.h"
 
 namespace GnssMetadata
 {

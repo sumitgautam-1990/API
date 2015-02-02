@@ -20,7 +20,6 @@
 
 UHD_INSTALL(FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Context.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/Translator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/XmlProcessor.h
     
     DESTINATION ${INCLUDE_DIR}/GnssMetadata/Xml

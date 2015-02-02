@@ -45,6 +45,9 @@
 using namespace GnssMetadata;
 using namespace tinyxml2;
 
+#if defined(WINDOWS) || defined(WIN32)
+#define snprintf _snprintf
+#endif
 
 
 /******************************************************************************
@@ -144,7 +147,7 @@ bool XmlProcessor::Load( const char* szFilename, const bool bProcessIncludes, Me
 	if( err != XML_SUCCESS)
 	{
 		char buff[512];
-		_snprintf( buff, 512, "XML parsing error in file, %s", szFilename);
+        snprintf( buff, 512, "XML parsing error in file, %s", szFilename);
 		throw TranslationException(buff, err);
 	}
 
@@ -153,7 +156,7 @@ bool XmlProcessor::Load( const char* szFilename, const bool bProcessIncludes, Me
 	if( pmetadata == NULL)
 	{
 		char buff[512];
-		_snprintf( buff, 512, "Metadata element not found in file, %s", szFilename);
+        snprintf( buff, 512, "Metadata element not found in file, %s", szFilename);
 		throw TranslationException(buff);
 	}
 

@@ -33,29 +33,41 @@ IF(ENABLE_METADATA_API)
     SET(METADATA_API_sources
         ${CMAKE_CURRENT_SOURCE_DIR}/AnyUri.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/AttributedObject.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Band.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/BaseTypes.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Channel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Block.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Chunk.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Cluster.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Comment.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/DataFile.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Date.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Duration.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Frame.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/File.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Frequency.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Location.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Lane.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Lump.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Metadata.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Position.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Session.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Source.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Stream.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/SubFrame.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/System.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Xml/AnyUriTranslator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Xml/ChannelTranslator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Xml/DatafileTranslator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Xml/BandTranslator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Xml/BlockTranslator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Xml/ChunkTranslator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Xml/ClusterTranslator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Xml/DurationTranslator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Xml/FileSetTranslator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Xml/FileTranslator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Xml/FrequencyTranslator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Xml/LaneTranslator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Xml/LumpTranslator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Xml/MetadataTranslator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Xml/OscillatorTranslator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Xml/PositionTranslator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Xml/RfConfigTranslator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Xml/SessionTranslator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Xml/SourceTranslator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Xml/StreamTranslator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Xml/SystemTranslator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Xml/Translator.cpp

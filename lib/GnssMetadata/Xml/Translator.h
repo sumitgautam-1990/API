@@ -22,9 +22,10 @@
 #ifndef TRANSLATOR_H_H
 #define TRANSLATOR_H_H
 
-#include "Context.h"
+#include <GnssMetadata/Xml/Context.h>
 #include <tinyxml2.h>
 #include <list>
+#include "XmlDefs.h"
 
 namespace GnssMetadata
 {
@@ -106,7 +107,7 @@ namespace GnssMetadata
 			const tinyxml2::XMLElement* pelem = elem.FirstChildElement(pszName); 
 			for( ;pelem != NULL; pelem = pelem->NextSiblingElement(pszName)) 
 			{ 
-                ListAdaptor<A> adapt( list );
+				ListAdaptor<A> adapt( list );
 				bRetVal &= ReadElement( *(ctxt.pContainer), ctxt, *pelem, &adapt); 
 			} 
 			return bRetVal;
@@ -116,16 +117,17 @@ namespace GnssMetadata
 		 * Helper function writes a list of attributed elements.
 		 */
 		template< typename A>
-        void WriteList( const std::list<A>& list, const char* pszName, 
+		void WriteList( const std::list<A>& list, const char* pszName, 
 			Context& ctxt, tinyxml2::XMLElement & elem)
 		{
-            typename  std::list<A> ::const_iterator iter = list.begin();
+			typename  std::list<A> ::const_iterator iter = list.begin();
 
-            for(; iter != list.end(); iter++)
+			for(; iter != list.end(); iter++)
 			{
 				WriteElement( &(*iter), pszName, ctxt, elem);
 			}
 		}
+
 
 
 	private:

@@ -118,6 +118,8 @@ namespace GnssMetadata
 	private:
 		List& _list;
 	};
+	
 
+	
 }
 #endif

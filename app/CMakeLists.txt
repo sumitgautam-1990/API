@@ -18,4 +18,4 @@
 # Add subdirectories
 ##############################################################
 ADD_SUBDIRECTORY(TestApp)
-
+ADD_SUBDIRECTORY(TestAppIfenConvert)

@@ -20,9 +20,10 @@
  */
 
 
+#include "XmlDefs.h"
 #include "BlockTranslator.h"
 #include <GnssMetadata/Block.h>
-#include "XmlDefs.h"
+
 #include <string.h>
 #include <stdlib.h>
 

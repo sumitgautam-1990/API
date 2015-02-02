@@ -45,7 +45,7 @@ String AttributedObject::toString( const String & /*sFormat*/  )
  */
 size_t AttributedObject::FindObject( 
 	SearchItem::List& listResults, const String& sid, 
-	const AttributedObject* pparent, bool bExcludeReference, int nDepth )const
+    const AttributedObject* pparent, bool bExcludeReference, int /*nDepth*/ )const
 {
 	size_t count = 0;
 

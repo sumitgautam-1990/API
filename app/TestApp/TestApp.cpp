@@ -103,7 +103,7 @@ void WriteXmlFile(const char* pszFilename)
 	//UTC:    30-Dec-2014 22:38:54
 	//GPS:    1825/254334.906
 	Date dt0( 254334.906, 1825);
-	size_t offset = 588;
+    //size_t offset = 588;
     String sfile = "141230-gps-4msps.bds";
     String sfilemd = pszFilename;
 

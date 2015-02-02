@@ -157,7 +157,7 @@ namespace GnssMetadata
 		 */
 		 template<typename Type> 
 		 static size_t SearchList( SearchItem::List& listResults, 
-			 const std::list<typename Type>&, const String& sid, const AttributedObject* pparent, bool bExcludeReference, int nDepth );
+			 const std::list<Type>&, const String& sid, const AttributedObject* pparent, bool bExcludeReference, int nDepth );
 
 
 	private:
@@ -171,8 +171,8 @@ namespace GnssMetadata
 	 *Helper function searches a std list with specified search parameters.
 	 */
 	 template<typename Type> 
-	 static size_t AttributedObject::SearchList( SearchItem::List& listResults, 
-		 const std::list<typename Type>& listsrc, const String& sid, const AttributedObject* pparent, bool bExcludeReference, int nDepth )
+	 size_t AttributedObject::SearchList( SearchItem::List& listResults, 
+		 const std::list<Type>& listsrc, const String& sid, const AttributedObject* pparent, bool bExcludeReference, int nDepth )
 	 {
 		 //Don't search on zero depth.
 		 if( nDepth == 0) return 0;
@@ -180,7 +180,7 @@ namespace GnssMetadata
 		 nDepth--;
 			
 		 size_t count =0;
-		 std::list<Type>::const_iterator iter = listsrc.begin();
+		 typename std::list< Type>::const_iterator iter = listsrc.begin();
 		 for( ; iter != listsrc.end(); iter++)
 		 {
 			 //Search object for matching ID.

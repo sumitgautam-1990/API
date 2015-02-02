@@ -19,10 +19,9 @@
  * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "BandTranslator.h"
 #include <GnssMetadata/Band.h>
-#include "XmlDefs.h"
+
 #include <string.h>
 #include <stdlib.h>
 
