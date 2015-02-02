@@ -45,7 +45,7 @@
 using namespace GnssMetadata;
 using namespace tinyxml2;
 
-#if defined(WINDOWS) || defined(WIN32)
+#if defined(_WIN32) || defined (_WIN64)
 #define snprintf _snprintf
 #endif
 
