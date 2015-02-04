@@ -27,7 +27,7 @@ using namespace GnssMetadata;
 /**
  * Returns a string representation of the object.
  */
-String Source::toString( const String & /*sFormat*/ )
+String Source::toString( const String & /*sFormat*/ ) const
 {
 	return String("Source toString not implmented yet.");
 }

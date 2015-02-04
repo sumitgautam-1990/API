@@ -59,7 +59,7 @@ namespace GnssMetadata
 		 *  Returns a string representation of the object.
 		 *  
 		 */
-		virtual String toString( const String & sFormat = DefaultFormat );
+		virtual String toString( const String & sFormat = DefaultFormat ) const;
 	protected:
 		/**
 		 * Processes the current element within the context of the attributed object.

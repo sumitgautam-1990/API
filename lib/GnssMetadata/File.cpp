@@ -28,7 +28,7 @@ using namespace GnssMetadata;
 /**
  * Returns a string representation of the object.
  */
-String File::toString( const String & sFormat )
+String File::toString( const String & sFormat ) const
 {
 	return AttributedObject::toString(sFormat);
 }
@@ -51,7 +51,7 @@ size_t File::FindObject(
 /**
  * Returns a string representation of the object.
  */
-String FileSet::toString( const String & sFormat )
+String FileSet::toString( const String & sFormat ) const
 {
 	return AttributedObject::toString(sFormat);
 }

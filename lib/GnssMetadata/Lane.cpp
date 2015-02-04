@@ -27,7 +27,7 @@ using namespace GnssMetadata;
 /**
  * Returns a string representation of the object.
  */
-String Lane::toString( const String & /*sFormat*/ )
+String Lane::toString( const String & /*sFormat*/ ) const
 {
 	return String("Lane toString not implmented yet.");
 }

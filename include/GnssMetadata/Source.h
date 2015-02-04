@@ -131,7 +131,7 @@ namespace GnssMetadata
 		/**
 		 * Returns a string representation of the object.
 		 */
-		virtual String toString( const String & sFormat = DefaultFormat );
+		virtual String toString( const String & sFormat = DefaultFormat ) const;
 
 	private:
 		SourceType _type;

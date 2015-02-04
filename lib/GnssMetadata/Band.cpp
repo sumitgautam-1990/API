@@ -25,7 +25,7 @@ using namespace GnssMetadata;
 /**
  * Returns a string representation of the object.
  */
-String Band::toString( const String & sFormat )
+String Band::toString( const String & sFormat ) const
 {
 	return AttributedObject::toString(sFormat);
 }

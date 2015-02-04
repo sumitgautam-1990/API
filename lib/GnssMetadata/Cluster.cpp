@@ -27,7 +27,7 @@ using namespace GnssMetadata;
 /**
  * Returns a string representation of the object.
  */
-String Cluster::toString( const String & /*sFormat*/ )
+String Cluster::toString( const String & /*sFormat*/ ) const
 {
 	return String("Cluster toString not implmented yet.");
 }

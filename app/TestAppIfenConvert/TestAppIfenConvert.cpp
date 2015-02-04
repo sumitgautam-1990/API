@@ -8,15 +8,18 @@
  * The program demonstrates the converion of IFEN internal meta data 
  * structures to/from the ION standard.
  *  
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * This Metadata API is free software; you can redistribute it and/or
+ * modify it under the terms of the Lesser GNU General Public License
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Lesser GNU General Public License for more details.
+ *
+ * You should have received a copy of the Lesser GNU General Public License
+ * along with Metadata API.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // standard C++ include files
@@ -24,6 +27,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 using namespace std;
 
 // include files for ION GNSS metadata standard
@@ -168,36 +172,40 @@ Metadata convertFromIfen( const DSamplePacketInfo si )
 	Lane lane;
 	File file;
 	FileSet fileset;
+	std::ostringstream out;
 
-	// extract TOA
+	// extract time-of-applicability (corresponding to our best time estimate of the first recorded IF sample)
 	Date dt0( fmod(si.ptCoarseStartTime.nTime+si.ptCoarseStartTime.dTime, 86400.*7 ), int( ( si.ptCoarseStartTime.nTime + si.ptCoarseStartTime.dTime)/(86400*7) ) );
 	size_t offset = 0;
 
-	// Define the Session.
+	// Define the session
 	Session sess("");
 	sess.Scenario("");
 	sess.Campaign("");
 	sess.Contact("");
 	sess.Toa( dt0 );
-	sess.AddComment("Two spatially spitted files (multi-file recording)");
+	sess.AddComment("Multi-file recording");
 
 	//Define the System, Sources, and cluster.
-	System sys("MySystem");
+	System sys("IfenRecordingSystem");
 	sys.BaseFrequency( Frequency( 40, Frequency::MHz));
 	sys.Equipment( string( "IFEN frontend type: " ) + string( fe_type[si.nSource] ) );
 
 	// first prepare file set
-	fileset = FileSet( "MyFileSet" );
+	fileset = FileSet( "MyMultiFileRecording" );
 
+	// loop over all frequency bands
 	for( i = 0; i < si.nStreams; i++ )
 	{
-		std::ostringstream out;
+		// Define frequency band parameters
+		out = ostringstream( );
 		out << "RfBand" << si.vnRfBandNo[i] << "_Band" << si.vnBandNo[i]; 
 		band=Band( out.str( ) );
 		band.CenterFrequency(Frequency( si.vdCarrierFrequency[i]/1e6, Frequency::MHz));
 		band.TranslatedFrequency(Frequency( si.vdIntermediateFrequency[i]/1e6, Frequency::MHz));
 		
-		stream=Stream("MyStream");
+		// each band is exactly one stream, with 2-bit quantization and IF sampling (more format conversions to be done later)
+		stream=Stream( );
 		stream.RateFactor(1);
 		stream.Quantization(2);
 		stream.Packedbits(8);
@@ -205,31 +213,39 @@ Metadata convertFromIfen( const DSamplePacketInfo si )
 		stream.Format(Stream::IF);
 		stream.Bands().push_back( band );
 		
+		// each band is exactly one lump
 		lump=Lump( "" );
 		lump.Streams().push_back( stream );
 
+		// each band is exaclty one chunk
 		chunk=Chunk("");
 		chunk.SizeWord(1);
 		chunk.CountWords(1);
 		chunk.Lumps().push_back( lump );
-		chunk.Endian( Chunk::WordEndian::Big );
+		chunk.Endian( Chunk::Big );
 
+		// each band is exactly one block
 		block=Block("");
 		block.Chunks().push_back( chunk );
 	
-		lane=Lane("MyLane");
+		// each band is exactly one lane
+		out = ostringstream( );
+		out << "Lane" << si.vnRfBandNo[i] << "_Band" << si.vnBandNo[i]; 
+		lane=Lane( out.str() );
 		lane.Sessions().push_back( sess );
 		lane.Systems( ).push_back( sys );
 		lane.Blocks().push_back( block );
 
-
-		file=File(si.vstrFileNames[i] );
+		// each band is stored in exactly one file
+		file=File( si.vstrFileNames[i] );
 		file.Url( si.vstrFileNames[i] );
-		file.TimeStamp( dt0 );
+		file.TimeStamp( dt0 ); // time of first sample
 		file.Lane( lane, true );
 
+		// all files in one fileset
 		fileset.FileUrls( ).push_back( file.toString( ) );
 
+		// accumulate lane and files in the GNSS metadata structure
 		md.Lanes( ).push_back( lane );
 		md.Files( ).push_back( file );
 	}
@@ -248,6 +264,24 @@ Metadata convertFromIfen( const DSamplePacketInfo si )
 DSamplePacketInfo convertToIfen( const Metadata md )
 {
 	DSamplePacketInfo mySampInfo;
+	int i;
+	FileList::const_iterator it;
+	LaneList::const_iterator itl;
+
+	// a Metadata lane is what is actually processed in receiver
+	mySampInfo.nStreams = md.Lanes().size();
+	i = 0;
+	for( it = md.Files( ).begin( ); it !=  md.Files( ).end( ); it++ )
+	{	
+		double f0;
+
+		// fundamental frequency
+		itl = find( md.Lanes( ).begin( ), md.Lanes( ).end( ), it->Lane() );
+		f0 = itl->Systems( ).front( ).BaseFrequency( ).toHertz( );
+
+		mySampInfo.vstrFileNames[i] = it->Url( ).toString( );
+	};
+
 
 	return mySampInfo;
 }
@@ -261,7 +295,6 @@ int main(int argc, char** argv)
 {
 	DSamplePacketInfo mySamples1, mySamples2; // IFEN struct
 	Metadata md1, md2, md3;
-	int i;
 
 	printf("GNSS Metadata XML <-> IFEN conversion test\n");
 	printf("Test successful, if output file 'fe0.setx' matches 'fe0_1.setx" );
@@ -302,10 +335,9 @@ int main(int argc, char** argv)
 
 	WriteXmlFile( md1, "fe0.setx" );
     md2 = ReadXmlFile( "fe0.setx" );
-	WriteXmlFile( md2, "fe0_1.setx" );
-	//mySamples2 = convertToIfen( md2 );
-	//md3 = convertFromIfen( mySamples2 );
-    //WriteXmlFile( md3, file2 );
+	mySamples2 = convertToIfen( md2 );
+	md3 = convertFromIfen( mySamples2 );
+    WriteXmlFile( md3, "fe0_1.setx" );
 
 	return 0;
 }

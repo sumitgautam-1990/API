@@ -27,7 +27,7 @@ using namespace GnssMetadata;
 /**
  * Returns a string representation of the object.
  */
-String Lump::toString( const String & /*sFormat*/ )
+String Lump::toString( const String & /*sFormat*/ ) const
 {
 	return String("Lump toString not implmented yet.");
 }

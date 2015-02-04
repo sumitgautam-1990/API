@@ -80,6 +80,11 @@ namespace GnssMetadata
 			return *this;
 		}
 
+		bool operator==( const Lane rhs) const
+		{
+			return Id()==rhs.Id();
+		}
+
 		const GnssMetadata::SessionList& Sessions( ) const
 		{
 			return _sessionlist;
@@ -143,7 +148,7 @@ namespace GnssMetadata
 		/**
 		 * Returns a string representation of the object.
 		 */
-		virtual String toString( const String & sFormat = DefaultFormat );
+		virtual String toString( const String & sFormat = DefaultFormat ) const;
 
 		/**
 		 * Virtual function traverses collections of attributed objects looking for object with the

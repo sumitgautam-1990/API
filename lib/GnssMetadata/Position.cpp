@@ -40,7 +40,7 @@ bool Position::IsDefined() const
 /**
  * Returns a string representation of the object.
  */
-String Position::toString( const String& sFormat )
+String Position::toString( const String& sFormat ) const
 {
 	char buff[256];
 	const String& sfmt = (sFormat == DefaultFormat) ? "%0.7lf deg., %0.7lf deg., %0.3lf m" : sFormat;

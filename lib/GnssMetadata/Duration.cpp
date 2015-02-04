@@ -31,7 +31,7 @@ using namespace GnssMetadata;
  *  Returns a string representation of the object.
  *  
  */
-String Duration::toString( const String & sFormat )
+String Duration::toString( const String & sFormat ) const
 {
 	const char* szFormat[]={"sec.", "msec.", "usec.", "nsec.", "psec."};
 	char buff[255];

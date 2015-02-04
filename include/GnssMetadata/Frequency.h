@@ -86,8 +86,13 @@ namespace GnssMetadata
 		/**
 		 * Returns a string representation of the object.
 		 */
-		virtual String toString( const String& sFormat =  DefaultFormat );
-		
+		virtual String toString( const String& sFormat =  DefaultFormat ) const;
+
+		/**
+		 * Returns a frequency value in Hertz
+		 */
+		virtual double toHertz( void ) const;
+
 	private:
 		/**
 		 * The frequency value.

@@ -32,7 +32,7 @@ using namespace GnssMetadata;
 /**
  * Returns a string representation of the object.
  */
-String Frequency::toString( const String& sFormat )
+String Frequency::toString( const String& sFormat ) const
 {
 	const char* szFormat[] = { "Hz", "MHz", "GHz", "Ratio"};
 
@@ -53,4 +53,30 @@ String Frequency::toString( const String& sFormat )
 		break;
 	}
 	return String( buff);
+}
+
+
+
+/**
+ * Returns a double in Hertz representation of the frequency value.
+ */
+double Frequency::toHertz( void ) const
+{
+	double unit[] = { 1.0, 1.e6, 1.e9, 1.};
+	double val;
+
+	switch (_format)
+	{
+	case Ratio:
+	{
+		val=unit[int(_format)]*double(_value.ratioVal.numerator)/double(_value.ratioVal.denominator);
+	}
+		break;
+	default:
+	{
+		val=unit[int(_format)]*_value.doubleVal;
+	}
+		break;
+	}
+	return val;
 }

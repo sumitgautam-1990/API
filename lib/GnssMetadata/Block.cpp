@@ -27,7 +27,7 @@ using namespace GnssMetadata;
 /**
  * Returns a string representation of the object.
  */
-String Block::toString( const String & /*sFormat*/ )
+String Block::toString( const String & /*sFormat*/ ) const
 {
 	return String("Block toString not implmented yet.");
 }

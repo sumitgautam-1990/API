@@ -149,7 +149,7 @@ const Date& Date::operator=( const Date& rhs)
 /**
  * Returns a string representation of the object.
  */
-String Date::toString( const String & /*sFormat*/ )
+String Date::toString( const String & /*sFormat*/ ) const
 {
 	char buff[64];
 	struct tm utc;

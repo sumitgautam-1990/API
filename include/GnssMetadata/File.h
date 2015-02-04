@@ -174,7 +174,7 @@ namespace GnssMetadata
 		 *  Returns a string representation of the object.
 		 *  
 		 */
-		virtual String toString( const String & sFormat = DefaultFormat );
+		virtual String toString( const String & sFormat = DefaultFormat ) const;
 		
 		/**
 		 * Virtual function traverses collections of attributed objects looking for object with the
@@ -257,7 +257,7 @@ namespace GnssMetadata
 		 *  Returns a string representation of the object.
 		 *  
 		 */
-		virtual String toString( const String & sFormat = DefaultFormat );
+		virtual String toString( const String & sFormat = DefaultFormat ) const;
 		
 	private:
 		AnyUriList _files;

@@ -25,7 +25,7 @@ using namespace GnssMetadata;
 /**
  * Returns a string representation of the object.
  */
-String Chunk::toString( const String & /*sFormat*/ )
+String Chunk::toString( const String & /*sFormat*/ ) const
 {
 	return String("Chunk toString not implmented yet.");
 }

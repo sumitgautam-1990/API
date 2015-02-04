@@ -125,7 +125,7 @@ TranslatorId TranslatorIdFromElemName( const char* szNodeName, NodeEntry* pNodes
 /**
  * Returns a string representation of the object.
  */
-String XmlProcessor::toString( const String & /*sFormat*/ )
+String XmlProcessor::toString( const String & /*sFormat*/ ) const
 {
 	return "XmlProcessor";
 }

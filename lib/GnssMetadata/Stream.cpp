@@ -26,7 +26,7 @@ using namespace GnssMetadata;
 /**
  * Returns a string representation of the object.
  */
-String Stream::toString( const String & sFormat )
+String Stream::toString( const String & sFormat ) const
 {
 	return AttributedObject::toString(sFormat);
 }
