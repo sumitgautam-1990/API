@@ -188,7 +188,7 @@ Metadata convertFromIfen( const DSamplePacketInfo si )
 
 	//Define the System, Sources, and cluster.
 	System sys("IfenRecordingSystem");
-	sys.BaseFrequency( Frequency( 40, Frequency::MHz));
+	sys.BaseFrequency( Frequency( 20.48, Frequency::MHz));
 	sys.Equipment( string( "IFEN frontend type: " ) + string( fe_type[si.nSource] ) );
 
 	// first prepare file set
@@ -297,47 +297,47 @@ int main(int argc, char** argv)
 	Metadata md1, md2, md3;
 
 	printf("GNSS Metadata XML <-> IFEN conversion test\n");
-	printf("Test successful, if output file 'fe0.setx' matches 'fe0_1.setx" );
+	printf("Test successful, if output file 'RoofTop.setx' matches 'RoofTop_1.setx'" );
     printf("\n");
 
 	// setup IFEN internal struct
 	mySamples1.nStreams = 2;
-	mySamples1.nSource = DSamplePacketInfo::NavPort5USB;
-	mySamples1.ptCoarseStartTime.nTime =1915*86400*7; // GPS week 1915, DOW: 3, TOD: 8:00:00
-	mySamples1.ptCoarseStartTime.dTime =86400*3+8*3600;
+	mySamples1.nSource = DSamplePacketInfo::NavPort4USB;
+	mySamples1.ptCoarseStartTime.nTime =1069665009; // GPS week 1768, TOW: 378609.451949954
+	mySamples1.ptCoarseStartTime.dTime =0.45195;
 	// stream 1
-	mySamples1.vdCarrierFrequency[0] = 1.57542e9;
-	mySamples1.vdIntermediateFrequency[0] = 19.942e6;
+	mySamples1.vdCarrierFrequency[0] = 1575420000.00000;
+	mySamples1.vdIntermediateFrequency[0] = 5499998.47412109;
 	mySamples1.vnSampleRateN[0] = 1;
-	mySamples1.vnSampleRateZ[0] = 40000000;
+	mySamples1.vnSampleRateZ[0] = 20480000;
 	mySamples1.vnAntennaId[0] = 0;
 	mySamples1.vnBandNo[0] = 0;
 	mySamples1.vnRfBandNo[0] = 0;
 	mySamples1.vnFrontendNo[0] = 0;
-	mySamples1.vnFileFormat[0] = 0;
-	mySamples1.vstrFileNames[0] = "fe0_band0.stream";
+	mySamples1.vnFileFormat[0] = 7;
+	mySamples1.vstrFileNames[0] = "RoofTop_FE0_Band0.stream";
 	// stream 2
-	mySamples1.vdCarrierFrequency[1] = 1.602e9;
-	mySamples1.vdIntermediateFrequency[1] = 19.912e6;
+	mySamples1.vdCarrierFrequency[1] = 1227600000.00000;
+	mySamples1.vdIntermediateFrequency[1] = 5679999.23706055;
 	mySamples1.vnSampleRateN[1] = 1;
-	mySamples1.vnSampleRateZ[1] = 40000000;
+	mySamples1.vnSampleRateZ[1] = 20480000;
 	mySamples1.vnAntennaId[1] = 0;
 	mySamples1.vnBandNo[1] = 1;
-	mySamples1.vnRfBandNo[1] = 0;
+	mySamples1.vnRfBandNo[1] = 1;
 	mySamples1.vnFrontendNo[1] = 0;
-	mySamples1.vnFileFormat[1] = 0;
-	mySamples1.vstrFileNames[1] = "fe0_band1.stream";
+	mySamples1.vnFileFormat[1] = 7;
+	mySamples1.vstrFileNames[1] = "RoofTop_FE0_Band1.stream";
 
 
 
 
 	md1 = convertFromIfen( mySamples1 );
 
-	WriteXmlFile( md1, "fe0.setx" );
-    md2 = ReadXmlFile( "fe0.setx" );
+	WriteXmlFile( md1, "RoofTop.setx" );
+    md2 = ReadXmlFile( "RoofTop.setx" );
 	mySamples2 = convertToIfen( md2 );
 	md3 = convertFromIfen( mySamples2 );
-    WriteXmlFile( md3, "fe0_1.setx" );
+    WriteXmlFile( md3, "RoofTop_1.setx" );
 
 	return 0;
 }
